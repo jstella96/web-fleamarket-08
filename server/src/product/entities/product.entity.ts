@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Category } from 'src/category/entities/category.entity';
 import { ChatRoom } from 'src/chat/entities/chat-room.entity';
 import { Region } from 'src/region/entities/region.entity';
@@ -27,12 +28,15 @@ export class Product {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @ApiProperty()
   @Column({ type: 'char', length: 30 })
   title: string;
 
+  @ApiProperty()
   @Column({ type: 'decimal' })
   price: number;
 
+  @ApiProperty()
   @Column({ type: 'varchar', length: 500 })
   content: string;
 
@@ -51,6 +55,7 @@ export class Product {
   @ManyToOne(() => Region, (region) => region.products)
   region: Region;
 
+  @ApiProperty()
   @OneToMany(() => ProductImage, (productImage) => productImage.product)
   images: ProductImage[];
 
