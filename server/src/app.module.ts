@@ -9,6 +9,7 @@ import { RegionModule } from './region/region.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { ChatModule } from './chat/chat.module';
+import { SocialLoginModule } from './social-login/social-login.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ChatModule } from './chat/chat.module';
     CategoryModule,
     ProductModule,
     ChatModule,
+    SocialLoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],

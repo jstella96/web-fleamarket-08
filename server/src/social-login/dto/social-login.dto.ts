@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateChatDto {
+export class SocialLoginDto {
   @ApiProperty()
-  content: string;
+  authorizationCode: string;
 }
