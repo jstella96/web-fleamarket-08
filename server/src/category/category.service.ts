@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Category } from './entities/category.entity';
 
 @Injectable()
 export class CategoryService {
-  findAll() {
-    return [{ code: '', name: '', iconUrl: '' }];
+  async findAll() {
+    return await Category.find();
   }
 }

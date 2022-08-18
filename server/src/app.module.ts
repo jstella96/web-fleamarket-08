@@ -26,7 +26,7 @@ import { SocialLoginModule } from './social-login/social-login.module';
         synchronize: true, //프로덕션에서는 사용하면 안됨.
         namingStrategy: new SnakeNamingStrategy(),
         autoLoadEntities: true,
-        dropSchema: true,
+        // dropSchema: true,
       }),
       inject: [ConfigService],
     }),
