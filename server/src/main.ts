@@ -5,15 +5,18 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('/api');
+  app.enableCors({
+    origin: process.env.CLIENT_URL,
+  });
 
-  const config = new DocumentBuilder()
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('Flea Market')
     .setDescription('우아한 중고거래 API')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  const swaggerdocument = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, swaggerdocument);
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 5000);
 }
 bootstrap();

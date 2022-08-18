@@ -1,15 +1,15 @@
 import { ChatContent } from 'src/chat/entities/chat-content.entity';
 import { ChatRoom } from 'src/chat/entities/chat-room.entity';
 import { Product } from 'src/product/entities/product.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserRegion } from './user-region.entity';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
+export class User extends BaseEntity {
+  @PrimaryColumn()
   id: number;
 
-  @Column({ type: 'char', length: 10 })
+  @Column({ type: 'char', length: 20 })
   name: string;
 
   @OneToMany(() => Product, (product) => product.user)
