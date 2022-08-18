@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { GithubUser } from 'src/types';
 import { User } from 'src/user/entities/user.entity';
@@ -7,8 +7,8 @@ import { SocialLoginDto } from './dto/social-login.dto';
 @Injectable()
 export class SocialLoginService {
   async login(socialLoginDto: SocialLoginDto) {
+    //try {
     const { authorizationCode } = socialLoginDto;
-
     const githubUser = await getGitHubUser(authorizationCode);
     const { id, name, login } = githubUser;
 
@@ -19,6 +19,9 @@ export class SocialLoginService {
     }
 
     return user;
+    // } catch (error) {
+    //   throw new HttpException('깃헙 로그인 실패', HttpStatus.UNAUTHORIZED);
+    // }
   }
 }
 

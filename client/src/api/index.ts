@@ -6,7 +6,14 @@ const apiInstance = axios.create({
 
 const api = {
   socialLogin: (authorizationCode: string) =>
-    apiInstance.post('/social-login', { authorizationCode }),
+    apiInstance.post(
+      '/social-login',
+      { authorizationCode },
+      { withCredentials: true }
+    ),
+
+  socialLoginTest: () =>
+    apiInstance.get('/social-login', { withCredentials: true }),
 };
 
 export default api;
