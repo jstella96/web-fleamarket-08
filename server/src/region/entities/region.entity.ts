@@ -1,9 +1,9 @@
 import { Product } from 'src/product/entities/product.entity';
 import { UserRegion } from 'src/user/entities/user-region.entity';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class Region {
+export class Region extends BaseEntity {
   @PrimaryColumn()
   code: number;
 

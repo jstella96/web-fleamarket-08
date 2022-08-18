@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Region } from './entities/region.entity';
 
 @Injectable()
 export class RegionService {
-  findAll() {
-    return `This action returns all region`;
+  async findAll() {
+    return await Region.find();
   }
 }
