@@ -23,10 +23,11 @@ import { SocialLoginModule } from './social-login/social-login.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        synchronize: true, //프로덕션에서는 사용하면 안됨.
+        synchronize: false, //프로덕션에서는 사용하면 안됨.
         namingStrategy: new SnakeNamingStrategy(),
         autoLoadEntities: true,
         // dropSchema: true,
+        logging: true,
       }),
       inject: [ConfigService],
     }),

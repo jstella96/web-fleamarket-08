@@ -1,16 +1,38 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { AuthGuard } from 'src/guards/auth.guards';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 
+@UseGuards(AuthGuard)
 @ApiTags('chats')
 @Controller('chats')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Get()
-  findChatRooms() {
-    return this.chatService.findChatRooms();
+  findChatRooms(@Req() request: Request) {
+    const userId = request['userId'];
+    return this.chatService.findChatRooms(userId);
+  }
+
+  @Post()
+  async createChatRoom(
+    @Body() createChatDto: CreateChatDto,
+    @Req() request: Request
+  ) {
+    const userId = request['userId'];
+    const { id } = await this.chatService.createChatRoom(userId, createChatDto);
+    return this.chatService.createContent(id, userId, createChatDto);
   }
 
   @Get(':id')
@@ -19,7 +41,12 @@ export class ChatController {
   }
 
   @Post(':id')
-  createContent(@Param('id') id: number, @Body() createChatDto: CreateChatDto) {
-    return this.chatService.createContent(id, createChatDto);
+  createContent(
+    @Param('id') id: number,
+    @Body() createChatDto: CreateChatDto,
+    @Req() request: Request
+  ) {
+    const userId = request['userId'];
+    return this.chatService.createContent(id, userId, createChatDto);
   }
 }

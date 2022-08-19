@@ -4,6 +4,7 @@ import { ChatRoom } from 'src/chat/entities/chat-room.entity';
 import { Region } from 'src/region/entities/region.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -18,7 +19,7 @@ import { Status } from '../enums/status.enum';
 import { ProductImage } from './product-image.entity';
 
 @Entity()
-export class Product {
+export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

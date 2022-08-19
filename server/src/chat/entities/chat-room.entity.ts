@@ -1,6 +1,7 @@
 import { Product } from 'src/product/entities/product.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
+  BaseEntity,
   Column,
   Entity,
   ManyToOne,
@@ -10,7 +11,7 @@ import {
 import { ChatContent } from './chat-content.entity';
 
 @Entity()
-export class ChatRoom {
+export class ChatRoom extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -35,6 +36,10 @@ export class ChatRoom {
   @ManyToOne(() => Product, (product) => product.chatRooms)
   product: Product;
 
-  @OneToMany(() => ChatContent, (chatContent) => chatContent.chatRoom)
+  @OneToMany(() => ChatContent, (chatContent) => chatContent.chatRoom, {
+    eager: true,
+  })
   chatContents: ChatContent[];
+
+  unReadContents: ChatContent[];
 }
