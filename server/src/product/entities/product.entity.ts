@@ -8,8 +8,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -17,6 +15,7 @@ import {
 } from 'typeorm';
 import { Status } from '../enums/status.enum';
 import { ProductImage } from './product-image.entity';
+import { ProductLike } from './product-like.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -41,10 +40,15 @@ export class Product extends BaseEntity {
   @Column({ type: 'varchar', length: 500 })
   content: string;
 
-  @Column({ type: 'enum', enum: Status, nullable: true })
+  @Column({
+    type: 'enum',
+    enum: Status,
+    nullable: true,
+    default: Status.판매중,
+  })
   status: string;
 
-  @Column()
+  @Column({ default: 0 })
   views: number;
 
   @ManyToOne(() => User, (user) => user.products)
@@ -63,11 +67,32 @@ export class Product extends BaseEntity {
   @OneToMany(() => ChatRoom, (chatRoom) => chatRoom.product)
   chatRooms: ChatRoom[];
 
-  @ManyToMany(() => User)
-  @JoinTable({
-    name: 'product_like',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'product_id', referencedColumnName: 'id' },
-  })
-  likedUsers: User[];
+  @OneToMany(() => ProductLike, (productLike) => productLike.product)
+  productLikes: ProductLike[];
+
+  static getProductQuery(userId: number) {
+    return this.createQueryBuilder('product')
+      .leftJoinAndMapOne(
+        'product.author',
+        'product.user',
+        'author',
+        'author.id=product.user_id'
+      )
+      .loadRelationCountAndMap('product.chatCount', 'product.chatRooms')
+      .loadRelationCountAndMap('product.likeCount', 'product.productLikes')
+      .leftJoinAndMapOne(
+        'product.thumbnail',
+        'product.images',
+        'thumbnail',
+        'thumbnail.id=(SELECT min(id) FROM product_image WHERE product_image.product_id=product.id)'
+      )
+      .leftJoinAndMapOne(
+        'product.isLiked',
+        'product.productLikes',
+        'isLiked',
+        `isLiked.user_id=${userId}`
+      )
+      .leftJoinAndSelect('product.images', 'images')
+      .select(['product', 'author', 'thumbnail', 'isLiked', 'images']);
+  }
 }

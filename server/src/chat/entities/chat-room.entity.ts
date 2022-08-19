@@ -33,7 +33,9 @@ export class ChatRoom extends BaseEntity {
   @ManyToOne(() => User, (user) => user.buyerChatRooms)
   buyer: User;
 
-  @ManyToOne(() => Product, (product) => product.chatRooms)
+  @ManyToOne(() => Product, (product) => product.chatRooms, {
+    onDelete: 'CASCADE',
+  })
   product: Product;
 
   @OneToMany(() => ChatContent, (chatContent) => chatContent.chatRoom, {

@@ -1,5 +1,6 @@
 import { ChatContent } from 'src/chat/entities/chat-content.entity';
 import { ChatRoom } from 'src/chat/entities/chat-room.entity';
+import { ProductLike } from 'src/product/entities/product-like.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserRegion } from './user-region.entity';
@@ -26,4 +27,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => UserRegion, (userRegion) => userRegion.user)
   userRegions: UserRegion[];
+
+  @OneToMany(() => ProductLike, (productLike) => productLike.user)
+  productLikes: ProductLike[];
+
+  primaryRegion: UserRegion;
 }
