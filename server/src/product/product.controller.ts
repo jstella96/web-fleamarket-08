@@ -54,4 +54,10 @@ export class ProductController {
     const userId = request['userId'];
     return this.productService.remove(id, userId);
   }
+
+  @Post(':id/like')
+  like(@Param('id') id: number, @Req() request: Request) {
+    const userId = request['userId'];
+    return this.productService.like(id, userId);
+  }
 }

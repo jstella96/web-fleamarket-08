@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 import { ProductDto } from './dto/product.dto';
 import { ProductImage } from './entities/product-image.entity';
+import { ProductLike } from './entities/product-like.entity';
 import { Product } from './entities/product.entity';
 
 @Injectable()
@@ -109,8 +110,38 @@ export class ProductService {
     return product;
   }
 
-  async remove(id: number, userId) {
+  async remove(id: number, userId: number) {
     const result = await Product.delete({ id });
+
+    return result;
+  }
+
+  async like(id: number, userId: number) {
+    // FIXME
+    const tempUserId = 76844355;
+
+    const productLike = await ProductLike.findOneBy({
+      product: { id },
+      user: { id: tempUserId },
+    });
+
+    let result;
+    if (productLike) {
+      result = await ProductLike.createQueryBuilder()
+        .delete()
+        .from(ProductLike)
+        .where(`product_id=${id} and user_id=${tempUserId}`)
+        .execute();
+    } else {
+      result = await ProductLike.createQueryBuilder()
+        .insert()
+        .into(ProductLike)
+        .values({
+          product: { id },
+          user: { id: tempUserId },
+        })
+        .execute();
+    }
 
     return result;
   }
