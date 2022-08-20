@@ -1,13 +1,21 @@
 import { Link } from 'react-router-dom';
 import api from 'src/api';
+import { Add } from 'src/assets/icons';
+import MainHeader from 'src/components/main/MainHeader';
+import ProductItem from 'src/components/ProductItem';
+
 export default function Home() {
   const sessionTest = () => {
     api.socialLoginTest();
   };
   return (
     <div>
-      <Link to="/login">로그인 페이지로 이동</Link>
-      <button onClick={sessionTest}></button>
+      <MainHeader />
+      <button onClick={sessionTest}>test</button>
+      <ProductItem />
+      <Link to="/write">
+        <Add />
+      </Link>
     </div>
   );
 }

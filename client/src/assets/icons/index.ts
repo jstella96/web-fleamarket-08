@@ -11,6 +11,6 @@ export { ReactComponent as LogOut } from './log-out.svg';
 export { ReactComponent as MapPin } from './map-pin.svg';
 export { ReactComponent as Menu } from './menu.svg';
 export { ReactComponent as Message } from './message-square.svg';
-export { ReactComponent as More } from './more-vertical.svg';
+export { ReactComponent as MoreVertical } from './more-vertical.svg';
 export { ReactComponent as Send } from './send.svg';
 export { ReactComponent as User } from './user.svg';

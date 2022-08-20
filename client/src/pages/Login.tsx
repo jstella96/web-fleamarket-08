@@ -2,8 +2,15 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from 'src/api';
 
-export default function SocialLogin() {
+export default function Login() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    //FIXME
+    // const user = 'star';
+    // if (user) navigate('/');
+  }, [navigate]);
+
   useEffect(() => {
     const login = async () => {
       try {
