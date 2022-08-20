@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateChatDto {
+export class CreateChatContentDto {
   @ApiProperty()
   content: string;
-
-  @ApiProperty()
-  productId: number;
 }

@@ -23,11 +23,13 @@ export class ProductService {
       .where(`user.id=${tempUserId}`)
       .getOne();
 
-    const images = imageUrls.map((imageUrl) =>
+    const images = imageUrls?.map((imageUrl) =>
       ProductImage.create({ imageUrl })
     );
 
-    await Promise.all(images.map((image) => image.save()));
+    if (images) {
+      await Promise.all(images.map((image) => image.save()));
+    }
 
     const product = Product.create({
       title,

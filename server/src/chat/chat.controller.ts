@@ -11,7 +11,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { ChatService } from './chat.service';
-import { CreateChatDto } from './dto/create-chat.dto';
+import { CreateChatRoomDto } from './dto/create-chat-room.dto';
 
 @UseGuards(AuthGuard)
 @ApiTags('chats')
@@ -27,7 +27,7 @@ export class ChatController {
 
   @Post()
   async createChatRoom(
-    @Body() createChatDto: CreateChatDto,
+    @Body() createChatDto: CreateChatRoomDto,
     @Req() request: Request
   ) {
     const userId = request['userId'];
@@ -43,7 +43,7 @@ export class ChatController {
   @Post(':id')
   createContent(
     @Param('id') id: number,
-    @Body() createChatDto: CreateChatDto,
+    @Body() createChatDto: CreateChatRoomDto,
     @Req() request: Request
   ) {
     const userId = request['userId'];

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from 'src/product/entities/product.entity';
-import { CreateChatDto } from './dto/create-chat.dto';
+import { CreateChatContentDto } from './dto/create-chat-content.dto';
+import { CreateChatRoomDto } from './dto/create-chat-room.dto';
 import { ChatContent } from './entities/chat-content.entity';
 import { ChatRoom } from './entities/chat-room.entity';
 
@@ -76,11 +77,11 @@ export class ChatService {
   async createContent(
     id: number,
     userId: number,
-    createChatDto: CreateChatDto
+    createChatContentDto: CreateChatContentDto
   ) {
     //FIXME
     if (!userId) userId = 49304239;
-    const { content } = createChatDto;
+    const { content } = createChatContentDto;
     const chatContent = ChatContent.create({
       chatRoom: { id },
       user: { id: userId },
@@ -89,7 +90,7 @@ export class ChatService {
     return await chatContent.save();
   }
 
-  async createChatRoom(buyerId: number, createChatDto: CreateChatDto) {
+  async createChatRoom(buyerId: number, createChatDto: CreateChatRoomDto) {
     //FIXME
     if (!buyerId) buyerId = 49304239;
     const { productId } = createChatDto;

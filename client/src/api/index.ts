@@ -1,19 +1,38 @@
 import axios from 'axios';
+import { Category, ChatDetail, ChatRoom, Product, ProductDetail, Region } from 'src/types';
+import { CreateChatContentDto, CreateChatRoomDto, ProductDto } from 'src/types/dto';
 
-const apiInstance = axios.create({
+const instance = axios.create({
   baseURL: process.env.REACT_APP_API_ENDPOINT,
+  withCredentials: true,
 });
 
 const api = {
-  socialLogin: (authorizationCode: string) =>
-    apiInstance.post(
-      '/social-login',
-      { authorizationCode },
-      { withCredentials: true }
-    ),
+  setUserRegion: (regionCode: number) => instance.post('/user/region', { regionCode }),
+  deleteUserRegion: (regionCode: number) => instance.delete(`/user/region/${regionCode}`),
+  changeUserPrimaryRegion: (regionCode: number) => instance.post(`/user/region/${regionCode}/primary`),
 
-  socialLoginTest: () =>
-    apiInstance.get('/social-login', { withCredentials: true }),
+  getRegions: () => instance.get<Region[]>('/regions'),
+
+  getCategories: () => instance.get<Category[]>('/categories'),
+
+  createProduct: (product: ProductDto) => instance.post<ProductDetail>('/products', product),
+  getProducts: () => instance.get<Product[]>('/products'),
+  getProduct: (productId: number) => instance.get<ProductDetail>(`/products/${productId}`),
+  updateProduct: (productId: number, product: Partial<ProductDto>) =>
+    instance.patch<ProductDetail>(`/products/${productId}`, product),
+  deleteProudct: (productId: number) => instance.delete(`products/${productId}`),
+  likeProduct: (productId: number) => instance.post(`/products/${productId}/like`),
+
+  getChatRooms: () => instance.get<ChatRoom[]>('/chats'),
+  createChatRoom: (chatRoom: CreateChatRoomDto) => instance.post('/chats', chatRoom),
+  getChats: (chatRoomId: number) => instance.get<ChatDetail[]>(`/chats/${chatRoomId}`),
+  createChat: (chatRoomId: number, chat: CreateChatContentDto) =>
+    instance.post<ChatDetail>(`/chats/${chatRoomId}`, chat),
+
+  socialLogin: (authorizationCode: string) => instance.post('/social-login', { authorizationCode }),
+
+  socialLoginTest: () => instance.get('/social-login'),
 };
 
 export default api;
