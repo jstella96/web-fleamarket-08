@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a,
+button {
+  color: inherit;
+}
+
+a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
