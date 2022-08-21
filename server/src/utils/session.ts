@@ -1,3 +1,7 @@
+import { Response } from 'express';
+import { ACCESS_SESSION_ID } from 'src/constants/session';
+import { User } from 'src/user/entities/user.entity';
+
 const sessionStore = new Map();
 const sessionTimeOut = 60 * 1000;
 
@@ -27,6 +31,16 @@ const updateSessionDate = (sessionId) => {
   const session = { ...sessionStore.get(sessionId) };
   session.updateAt = new Date();
   sessionStore.set(sessionId, session);
+};
+
+export const sendSessionResponse = (user: User, res: Response) => {
+  const sessionId = createSessionId(user.id);
+  res.cookie(ACCESS_SESSION_ID, sessionId, {
+    expires: new Date(new Date().getTime() + 1000 * 60 * 60),
+    sameSite: 'strict',
+    httpOnly: true,
+  });
+  return res.send(user);
 };
 
 const removeExpiredSession = async () => {

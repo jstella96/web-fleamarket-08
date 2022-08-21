@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { Response } from 'express';
 import { Product } from 'src/product/entities/product.entity';
+import { User } from 'src/user/entities/user.entity';
+import { emitChat, getChatEmitter, setChatEmitter } from 'src/utils/chat';
 import { CreateChatContentDto } from './dto/create-chat-content.dto';
 import { CreateChatRoomDto } from './dto/create-chat-room.dto';
 import { ChatContent } from './entities/chat-content.entity';
@@ -46,6 +49,9 @@ export class ChatService {
           user: 'chatContent.user',
         },
       },
+      order: {
+        createdAt: 'DESC',
+      },
     });
 
     const chatRoom = await ChatRoom.findOne({
@@ -75,24 +81,31 @@ export class ChatService {
   }
 
   async createContent(
-    id: number,
+    chatRoomId: number,
     userId: number,
     createChatContentDto: CreateChatContentDto
   ) {
-    //FIXME
-    if (!userId) userId = 49304239;
     const { content } = createChatContentDto;
-    const chatContent = ChatContent.create({
-      chatRoom: { id },
-      user: { id: userId },
+
+    const user = await User.createQueryBuilder()
+      .select()
+      .where(`id=${userId}`)
+      .getOne();
+
+    const chatContent = await ChatContent.create({
+      chatRoom: { id: chatRoomId },
+      user,
       content,
-    });
-    return await chatContent.save();
+    }).save();
+
+    delete chatContent.chatRoom;
+
+    emitChat(chatRoomId, chatContent);
+
+    return chatContent;
   }
 
   async createChatRoom(buyerId: number, createChatDto: CreateChatRoomDto) {
-    //FIXME
-    if (!buyerId) buyerId = 49304239;
     const { productId } = createChatDto;
     const product = await Product.findOne({
       where: { id: productId },
@@ -113,5 +126,21 @@ export class ChatService {
       buyerLastActiveTime: nowDate,
     });
     return await chatRoom.save();
+  }
+
+  async createConnection(chatRoomId: number, res: Response) {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream; charset=utf-8',
+      'Cache-Control': 'no-cache',
+    });
+
+    let emitter = getChatEmitter(chatRoomId);
+    if (!emitter) {
+      emitter = setChatEmitter(chatRoomId);
+    }
+
+    emitter.on(`${chatRoomId}`, (data) => {
+      res.write('data: ' + JSON.stringify(data) + '\n\n');
+    });
   }
 }

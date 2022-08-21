@@ -93,6 +93,7 @@ export class Product extends BaseEntity {
         `isLiked.user_id=${userId}`
       )
       .leftJoinAndSelect('product.images', 'images')
+      .orderBy('product.id', 'ASC')
       .select(['product', 'author', 'thumbnail', 'isLiked', 'images']);
   }
 }

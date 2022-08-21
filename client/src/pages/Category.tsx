@@ -14,6 +14,7 @@ export default function Category() {
       <Header title="카테고리" />
       {categories.map(({ id, name }) => (
         <button
+          key={id}
           onClick={() => {
             navigate('/');
           }}

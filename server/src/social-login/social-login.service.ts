@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { GithubUser } from 'src/types';
 import { User } from 'src/user/entities/user.entity';
@@ -12,7 +12,11 @@ export class SocialLoginService {
     const githubUser = await getGitHubUser(authorizationCode);
     const { id, name, login } = githubUser;
 
-    let user = await User.findOneBy({ id });
+    let user = await User.createQueryBuilder()
+      .select()
+      .where(`id=${id}`)
+      .getOne();
+
     if (!user) {
       user = User.create({ id, name: name || login });
       await user.save();

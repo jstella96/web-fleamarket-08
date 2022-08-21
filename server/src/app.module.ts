@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { CategoryModule } from './category/category.module';
 import { ChatModule } from './chat/chat.module';
+import { LoginModule } from './login/login.module';
 import { ProductModule } from './product/product.module';
 import { RegionModule } from './region/region.module';
 import { SocialLoginModule } from './social-login/social-login.module';
@@ -35,6 +36,7 @@ import { UserModule } from './user/user.module';
     ProductModule,
     ChatModule,
     SocialLoginModule,
+    LoginModule,
   ],
 })
 export class AppModule {}

@@ -76,8 +76,16 @@ export interface ChatRoom {
 
 export interface ChatDetail {
   content: string;
-  chatRoom: ChatRoom;
   user: User;
   id: number;
   createdAt: string;
+}
+
+export interface ChatsResponse {
+  contents: ChatDetail[];
+  id: number;
+  title: string;
+  price: string;
+  status: string;
+  thumbnail: string;
 }

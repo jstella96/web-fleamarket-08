@@ -5,13 +5,15 @@ import {
   Param,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { ChatService } from './chat.service';
 import { CreateChatRoomDto } from './dto/create-chat-room.dto';
+import { ChatRoom } from './entities/chat-room.entity';
 
 @UseGuards(AuthGuard)
 @ApiTags('chats')
@@ -30,9 +32,19 @@ export class ChatController {
     @Body() createChatDto: CreateChatRoomDto,
     @Req() request: Request
   ) {
+    // FIXME: 배달이와의 채팅을 위해 임시로 구현한 코드 수정하기
     const userId = request['userId'];
-    const { id } = await this.chatService.createChatRoom(userId, createChatDto);
-    return this.chatService.createContent(id, userId, createChatDto);
+    const { productId } = createChatDto;
+
+    const chatRoom = await ChatRoom.findOneBy({
+      seller: { id: 1 },
+      product: { id: productId },
+    });
+
+    if (chatRoom) return chatRoom;
+
+    return await this.chatService.createChatRoom(userId, createChatDto);
+    // return this.chatService.createContent(id, userId, createChatDto);
   }
 
   @Get(':id')
@@ -48,5 +60,10 @@ export class ChatController {
   ) {
     const userId = request['userId'];
     return this.chatService.createContent(id, userId, createChatDto);
+  }
+
+  @Get(':id/connect')
+  createConnection(@Param('id') id: number, @Res() res: Response) {
+    this.chatService.createConnection(id, res);
   }
 }

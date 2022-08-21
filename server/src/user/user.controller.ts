@@ -1,16 +1,31 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { AuthGuard } from 'src/guards/auth.guards';
 import { CreateUserRegionDto } from './dto/create-user-region.dto';
 import { UserService } from './user.service';
 
+@UseGuards(AuthGuard)
 @ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/region')
-  async createRegion(@Body() createUserRegionDto: CreateUserRegionDto) {
-    return this.userService.createRegion(createUserRegionDto);
+  async createRegion(
+    @Body() createUserRegionDto: CreateUserRegionDto,
+    @Req() request: Request
+  ) {
+    const userId = request['userId'];
+    return this.userService.createRegion(createUserRegionDto, userId);
   }
 
   @Delete('/region/:code')

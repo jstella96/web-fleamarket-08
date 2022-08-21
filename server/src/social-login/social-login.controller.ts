@@ -9,9 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { ACCESS_SESSION_ID } from 'src/constants/session';
 import { AuthGuard } from 'src/guards/auth.guards';
-import { createSessionId } from 'src/utils/session';
+import { sendSessionResponse } from 'src/utils/session';
 import { SocialLoginDto } from './dto/social-login.dto';
 import { SocialLoginService } from './social-login.service';
 
@@ -26,13 +25,7 @@ export class SocialLoginController {
     @Res({ passthrough: true }) res: Response
   ) {
     const user = await this.socialLoginService.login(socialLoginDto);
-    const sessionId = createSessionId(user.id);
-    res.cookie(ACCESS_SESSION_ID, sessionId, {
-      expires: new Date(new Date().getTime() + 100 * 1000),
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-    return res.send(user);
+    return sendSessionResponse(user, res);
   }
 
   @UseGuards(AuthGuard)

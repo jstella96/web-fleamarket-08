@@ -10,9 +10,6 @@ export class ProductService {
   async create(productDto: ProductDto, userId: number) {
     const { title, content, imageUrls, price, categoryId } = productDto;
 
-    // FIXME
-    const tempUserId = 76844355;
-
     const user = await User.createQueryBuilder('user')
       .leftJoinAndMapOne(
         'user.primaryRegion',
@@ -20,7 +17,7 @@ export class ProductService {
         'region',
         'region.isPrimary=true'
       )
-      .where(`user.id=${tempUserId}`)
+      .where(`user.id=${userId}`)
       .getOne();
 
     const images = imageUrls?.map((imageUrl) =>
@@ -65,10 +62,7 @@ export class ProductService {
   }
 
   async findOne(id: number, userId: number) {
-    // FIXME
-    const tempUserId = 76844355;
-
-    const product = await Product.getProductQuery(tempUserId)
+    const product = await Product.getProductQuery(userId)
       .select(['product', 'author', 'isLiked', 'images'])
       .where(`product.id=${id}`)
       .getOne();

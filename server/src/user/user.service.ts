@@ -7,10 +7,11 @@ const MAX_REGION_COUNT = 2;
 
 @Injectable()
 export class UserService {
-  async createRegion(@Body() createUserRegionDto: CreateUserRegionDto) {
+  async createRegion(
+    @Body() createUserRegionDto: CreateUserRegionDto,
+    user_id: number
+  ) {
     const { regionCode: region_code } = createUserRegionDto;
-    // FIXME: 실제 유저 id로 변경
-    const user_id = 76844355;
     const values = { user_id, region_code, isPrimary: true };
 
     const userRegion = await UserRegion.findOneBy({ user_id, region_code });

@@ -20,3 +20,5 @@ VALUES
   (3, '길동'),
   (4, '둔촌동'),
   (5, '천호동');
+
+INSERT INTO user VALUES (1, '배달이');

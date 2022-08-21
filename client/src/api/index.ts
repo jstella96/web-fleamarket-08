@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Category, ChatDetail, ChatRoom, Product, ProductDetail, Region } from 'src/types';
+import { Category, ChatDetail, ChatRoom, ChatsResponse, Product, ProductDetail, Region, User } from 'src/types';
 import { CreateChatContentDto, CreateChatRoomDto, ProductDto } from 'src/types/dto';
 
 const instance = axios.create({
@@ -25,14 +25,17 @@ const api = {
   likeProduct: (productId: number) => instance.post(`/products/${productId}/like`),
 
   getChatRooms: () => instance.get<ChatRoom[]>('/chats'),
-  createChatRoom: (chatRoom: CreateChatRoomDto) => instance.post('/chats', chatRoom),
-  getChats: (chatRoomId: number) => instance.get<ChatDetail[]>(`/chats/${chatRoomId}`),
+  createChatRoom: (chatRoom: CreateChatRoomDto) => instance.post<ChatRoom>('/chats', chatRoom),
+  getChats: (chatRoomId: number) => instance.get<ChatsResponse>(`/chats/${chatRoomId}`),
   createChat: (chatRoomId: number, chat: CreateChatContentDto) =>
     instance.post<ChatDetail>(`/chats/${chatRoomId}`, chat),
 
   socialLogin: (authorizationCode: string) => instance.post('/social-login', { authorizationCode }),
 
   socialLoginTest: () => instance.get('/social-login'),
+
+  checkLogin: () => instance.get<User>('/login/check'),
+  mockLogin: () => instance.post<User>('/login/mock'),
 };
 
 export default api;
