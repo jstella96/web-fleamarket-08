@@ -36,6 +36,8 @@ const api = {
 
   checkLogin: () => instance.get<User>('/login/check'),
   mockLogin: () => instance.post<User>('/login/mock'),
+
+  logout: () => instance.post('/logout'),
 };
 
 export default api;

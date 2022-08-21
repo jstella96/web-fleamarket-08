@@ -9,6 +9,7 @@ import { ProductModule } from './product/product.module';
 import { RegionModule } from './region/region.module';
 import { SocialLoginModule } from './social-login/social-login.module';
 import { UserModule } from './user/user.module';
+import { LogoutModule } from './logout/logout.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { UserModule } from './user/user.module';
     ChatModule,
     SocialLoginModule,
     LoginModule,
+    LogoutModule,
   ],
 })
 export class AppModule {}

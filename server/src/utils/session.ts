@@ -33,6 +33,10 @@ const updateSessionDate = (sessionId) => {
   sessionStore.set(sessionId, session);
 };
 
+export const deleteSession = (sessionId: string) => {
+  sessionStore.delete(sessionId);
+};
+
 export const sendSessionResponse = (user: User, res: Response) => {
   const sessionId = createSessionId(user.id);
   res.cookie(ACCESS_SESSION_ID, sessionId, {
@@ -50,7 +54,7 @@ const removeExpiredSession = async () => {
     const sessionValue = sessionStore.get(sessionId);
     const updateAt = new Date(sessionValue.updateAt).getTime();
     if (nowDate - updateAt > sessionTimeOut) {
-      sessionStore.delete(sessionId);
+      deleteSession(sessionId);
     }
   });
 };
