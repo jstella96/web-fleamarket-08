@@ -5,6 +5,7 @@ export { ReactComponent as Chevron } from './chevron-down.svg';
 export { ReactComponent as ChevronLeft } from './chevron-left.svg';
 export { ReactComponent as ChevronRight } from './chevron-right.svg';
 export { ReactComponent as Close } from './close.svg';
+export { ReactComponent as GitHub } from './github.svg';
 export { ReactComponent as Heart } from './heart.svg';
 export { ReactComponent as Image } from './image.svg';
 export { ReactComponent as LogOut } from './log-out.svg';
