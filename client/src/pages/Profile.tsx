@@ -10,19 +10,17 @@ export default function Profile() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
 
+  const handleClickLogout = async () => {
+    await api.logout();
+    setUser(null);
+    navigate('/');
+  };
+
   return (
     <Layout title="프로필">
       <Container>
         <Name>{user?.name}</Name>
-        <Button
-          onClick={async () => {
-            await api.logout();
-            setUser(null);
-            navigate('/');
-          }}
-        >
-          로그아웃
-        </Button>
+        <Button onClick={handleClickLogout}>로그아웃</Button>
       </Container>
     </Layout>
   );

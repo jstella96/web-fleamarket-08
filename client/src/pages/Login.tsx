@@ -38,6 +38,11 @@ export default function Login() {
     login();
   }, [isLoading, navigate, setUser]);
 
+  const handleClickMockLoginButton = async () => {
+    const { data } = await api.mockLogin();
+    setUser(data);
+  };
+
   if (isLoading) return <p>로그인 중입니다. 잠시만 기다려주세요.</p>;
 
   return (
@@ -49,14 +54,7 @@ export default function Login() {
           <GitHub />
           GitHub 계정으로 로그인
         </GitHubLoginLink>
-        <Button
-          onClick={async () => {
-            const { data } = await api.mockLogin();
-            setUser(data);
-          }}
-        >
-          배달이로 로그인
-        </Button>
+        <Button onClick={handleClickMockLoginButton}>배달이로 로그인</Button>
       </Container>
     </Layout>
   );
