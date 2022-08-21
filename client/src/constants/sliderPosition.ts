@@ -1,0 +1,7 @@
+enum SLIDER_POSITION {
+  CENTER,
+  TO_LEFT,
+  FROM_RIGHT,
+}
+
+export { SLIDER_POSITION };

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from 'src/api';
@@ -6,6 +7,7 @@ import { ChatDetail, ChatRoom } from 'src/types';
 import styled from 'styled-components/macro';
 
 export default function Chat() {
+
   const [chatInput, setChatInput] = useState('');
   const [chats, setChats] = useState<ChatDetail[]>([]);
   const [chatRoom, setChatRoom] = useState<ChatRoom>();

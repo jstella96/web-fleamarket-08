@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Header from 'src/components/common/Header';
+import styled from 'styled-components';
 
 export default function Category() {
   const categories = [
@@ -10,7 +11,7 @@ export default function Category() {
   const navigate = useNavigate();
 
   return (
-    <>
+    <Container>
       <Header title="카테고리" />
       {categories.map(({ id, name }) => (
         <button
@@ -22,6 +23,9 @@ export default function Category() {
           {name}
         </button>
       ))}
-    </>
+    </Container>
   );
 }
+const Container = styled.div`
+  background: #555555;
+`;

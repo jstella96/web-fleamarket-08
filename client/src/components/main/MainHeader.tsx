@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { Category, MapPin, Menu, User } from 'src/assets/icons';
 import colors from 'src/constants/colors';
@@ -7,10 +7,10 @@ import styled from 'styled-components/macro';
 
 export default function Header() {
   const user = useRecoilValue(userState);
-
+  let location = useLocation();
   return (
     <Container>
-      <Link to="/category">
+      <Link to="/category"  state={{ backgroundLocation: location }}> 
         <Category />
       </Link>
       <Location>
@@ -18,10 +18,10 @@ export default function Header() {
         장소
       </Location>
       <RightPanel>
-        <Link to={`${user ? '/profile' : '/login'}`}>
+        <Link to={`${user ? '/profile' : '/login'}`}  state={{ backgroundLocation: location }}>
           <User />
         </Link>
-        <Link to="/mypage">
+        <Link to="/mypage"  state={{ backgroundLocation: location }}>
           <Menu />
         </Link>
       </RightPanel>
