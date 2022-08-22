@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { Category, MapPin, Menu, User } from 'src/assets/icons';
@@ -5,21 +6,29 @@ import COLORS from 'src/constants/colors';
 import { categoryState } from 'src/recoil/atoms/category';
 import { userState } from 'src/recoil/atoms/user';
 import styled from 'styled-components/macro';
+import RegionSelectModal from '../region/RegionSelectModal';
 
 export default function Header() {
+  const [showRegionSelectModal, setShowRegionSelectModal] = useState(false);
   const user = useRecoilValue(userState);
   const category = useRecoilValue(categoryState);
   let location = useLocation();
 
   return (
     <Container>
-      <CategoryLink to="/category" state={{ backgroundLocation: location }}>
+
+      <Link to="/category" state={{ backgroundLocation: location }}>
         <Category />
-        {category && <p>{category.name}</p>}
-      </CategoryLink>
-      <Location>
-        <MapPin /> 장소
+      </Link>
+
+      <Location
+        onClick={() => setShowRegionSelectModal(!showRegionSelectModal)}
+      >
+        <MapPin />
+        장소
+
       </Location>
+
       <RightPanel>
         <Link
           to={`${user ? '/profile' : '/login'}`}
@@ -31,6 +40,12 @@ export default function Header() {
           <Menu />
         </Link>
       </RightPanel>
+      <RegionSelectModal
+        isOpen={showRegionSelectModal}
+        close={() => {
+          setShowRegionSelectModal(false);
+        }}
+      />
     </Container>
   );
 }
