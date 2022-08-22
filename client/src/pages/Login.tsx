@@ -5,7 +5,7 @@ import api from 'src/api';
 import { GitHub } from 'src/assets/icons';
 import Button from 'src/components/common/Button';
 import Layout from 'src/components/common/Layout';
-import colors from 'src/constants/colors';
+import COLORS from 'src/constants/colors';
 import { userState } from 'src/recoil/atoms/user';
 import styled from 'styled-components/macro';
 
@@ -69,10 +69,11 @@ const Container = styled.div`
 
 const GitHubLoginLink = styled.a`
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
   padding: 0.75rem;
   border-radius: 0.5rem;
   background-color: #171515;
-  color: ${colors.white};
+  color: ${COLORS.white};
 `;

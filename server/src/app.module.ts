@@ -26,6 +26,7 @@ import { LogoutModule } from './logout/logout.module';
         synchronize: true, //프로덕션에서는 사용하면 안됨.
         namingStrategy: new SnakeNamingStrategy(),
         autoLoadEntities: true,
+        timezone: 'Asia/Seoul',
         // dropSchema: true,
         logging: true,
       }),

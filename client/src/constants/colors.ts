@@ -1,4 +1,4 @@
-const colors = {
+const COLORS = {
   titleActive: '#222222',
   grey1: '#888888',
   grey2: '#bbbbbb',
@@ -11,4 +11,4 @@ const colors = {
   error: '#f45452',
 };
 
-export default colors;
+export default COLORS;

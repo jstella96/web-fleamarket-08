@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import colors from 'src/constants/colors';
+import COLORS from 'src/constants/colors';
 import styled from 'styled-components/macro';
 
 interface ButtonProps {
@@ -16,6 +16,6 @@ const Container = styled.button`
   padding: 0.75rem;
   border-radius: 0.5rem;
   border: 0;
-  background-color: ${colors.primary1};
-  color: ${colors.white};
+  background-color: ${COLORS.primary1};
+  color: ${COLORS.white};
 `;

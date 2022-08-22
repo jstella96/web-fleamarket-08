@@ -5,8 +5,10 @@ import api from 'src/api';
 import { Add } from 'src/assets/icons';
 import MainHeader from 'src/components/main/MainHeader';
 import ProductItem from 'src/components/ProductItem';
+import SIZES from 'src/constants/sizes';
 import { userState } from 'src/recoil/atoms/user';
 import { Product } from 'src/types';
+import styled from 'styled-components/macro';
 
 export default function Home() {
   const user = useRecoilValue(userState);
@@ -27,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <Container>
       <MainHeader />
       <button onClick={sessionTest}>test</button>
       {user && (
@@ -51,20 +53,17 @@ export default function Home() {
           </button>
         </>
       )}
-      {products.reverse().map((product) => (
-        <div key={product.id}>
-          <span>
-            {product.author.name}의 글, 제목: {product.title}
-          </span>
-          {product.author.name === '배달이' && (
-            <Link to={`/chat/${product.id}`}>배달이와 채팅하기</Link>
-          )}
-        </div>
+      {products.map((product) => (
+        <ProductItem key={product.id} product={product} />
       ))}
-      <ProductItem />
       <Link to="/write">
         <Add />
       </Link>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  position: relative;
+  padding-top: ${SIZES.mainHeaderHeight};
+`;

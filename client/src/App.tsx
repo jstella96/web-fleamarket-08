@@ -1,8 +1,8 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { RecoilRoot, useSetRecoilState } from 'recoil';
-import TransitionLayout from './components/Slider/TransitionLayout';
 import { useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import api from './api';
+import TransitionLayout from './components/Slider/TransitionLayout';
 import Unauthorized from './components/Unauthorized';
 import Category from './pages/Category';
 import Chat from './pages/Chat';
@@ -21,7 +21,7 @@ function App() {
   const setUser = useSetRecoilState(userState);
   const location = useLocation();
   let state = location.state as { backgroundLocation?: Location };
-  
+
   useEffect(() => {
     const initUser = async () => {
       const { data } = await api.checkLogin();
@@ -32,7 +32,7 @@ function App() {
   }, [setUser]);
 
   return (
-     <RecoilRoot>
+    <>
       <Routes location={state?.backgroundLocation || location}>
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
@@ -57,7 +57,7 @@ function App() {
           </Route>
         </Routes>
       )}
-    </RecoilRoot>
+    </>
   );
 }
 

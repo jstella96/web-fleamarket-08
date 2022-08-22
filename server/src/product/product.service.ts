@@ -48,11 +48,8 @@ export class ProductService {
   }
 
   async findAll(userId: number) {
-    // FIXME
-    const tempUserId = 76844355;
-
-    const products = await Product.getProductQuery(tempUserId)
-      .select(['product', 'author', 'thumbnail', 'isLiked'])
+    const products = await Product.getProductQuery(userId)
+      .select(['product', 'author', 'thumbnail', 'isLiked', 'region'])
       .getMany();
 
     return products.map((product) => ({
@@ -63,7 +60,7 @@ export class ProductService {
 
   async findOne(id: number, userId: number) {
     const product = await Product.getProductQuery(userId)
-      .select(['product', 'author', 'isLiked', 'images'])
+      .select(['product', 'author', 'isLiked', 'images', 'region'])
       .where(`product.id=${id}`)
       .getOne();
 
@@ -97,7 +94,7 @@ export class ProductService {
       .execute();
 
     const product = await Product.getProductQuery(tempUserId)
-      .select(['product', 'author', 'isLiked', 'images'])
+      .select(['product', 'author', 'isLiked', 'images', 'region'])
       .where(`product.id=${id}`)
       .getOne();
 

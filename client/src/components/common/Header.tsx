@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'src/assets/icons';
-import colors from 'src/constants/colors';
+import COLORS from 'src/constants/colors';
 import styled from 'styled-components/macro';
 
 interface HeaderProps {
@@ -24,11 +24,14 @@ export default function Header({ title, rightButton }: HeaderProps) {
 }
 
 const Container = styled.header`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   padding: 0.75rem;
-  background-color: ${colors.offWhite};
-  border-bottom: 1px solid ${colors.grey3};
+  background-color: ${COLORS.offWhite};
+  border-bottom: 1px solid ${COLORS.grey3};
 `;
 
 const BackButton = styled.button`

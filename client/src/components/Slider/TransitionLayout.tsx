@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useOutlet } from 'react-router-dom';
 import { SLIDER_POSITION } from 'src/constants/sliderPosition';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import PageSlider from './PageSlider';
 
 export default function TransitionLayout() {
   const newPage = useOutlet();
   const animationCallback = () => {};
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   return (
     <Animation>
@@ -21,7 +29,7 @@ export default function TransitionLayout() {
 }
 const Animation = styled.div`
   z-index: 100;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

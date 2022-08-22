@@ -15,9 +15,3 @@ button {
   font-size: inherit;
   text-decoration: none;
 }
-
-a {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-}
