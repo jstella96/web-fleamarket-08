@@ -40,6 +40,7 @@ export const useUserRigionState = () => {
   };
 
   const getPrimaryRegionName = () => {
+    if (!user?.userRegions) return '장소';
     const primaryRegion = user?.userRegions.find(
       (region) => region.isPrimary === true
     );

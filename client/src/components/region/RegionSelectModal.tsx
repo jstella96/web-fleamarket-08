@@ -15,7 +15,6 @@ export default function RegionSelectModal({
   isOpen,
   close,
 }: RegionSelectModalProps) {
-
   const { changePrimaryRegion } = useUserRigionState();
   const user = useRecoilValue(userState);
 
@@ -27,18 +26,19 @@ export default function RegionSelectModal({
       }}
     >
       <Section>
-        {user?.userRegions.map(({ region }) => (
-          <button
-            key={region.code}
-            onClick={(e) => {
-              e.preventDefault();
-              changePrimaryRegion(region.code);
-              close();
-            }}
-          >
-            {region.name}
-          </button>
-        ))}
+        {user &&
+          user.userRegions.map(({ region }) => (
+            <button
+              key={region.code}
+              onClick={(e) => {
+                e.preventDefault();
+                changePrimaryRegion(region.code);
+                close();
+              }}
+            >
+              {region.name}
+            </button>
+          ))}
         <Link to="/region">
           <button>내 동네 설정하기</button>
         </Link>
@@ -48,7 +48,6 @@ export default function RegionSelectModal({
 }
 
 const Modal = styled.div<{ isOpen: Boolean }>`
-
   color: ${colors.titleActive};
   display: none;
   position: fixed;
@@ -66,7 +65,6 @@ const Modal = styled.div<{ isOpen: Boolean }>`
       `;
     }
   }}
-
 `;
 const Section = styled.div`
   background: ${colors.offWhite};
