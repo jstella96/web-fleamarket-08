@@ -8,11 +8,12 @@ const instance = axios.create({
 });
 
 const api = {
+  getUser: () => instance.get<User>('/user'),
   setUserRegion: (regionCode: number) => instance.post('/user/region', { regionCode }),
   deleteUserRegion: (regionCode: number) => instance.delete(`/user/region/${regionCode}`),
   changeUserPrimaryRegion: (regionCode: number) => instance.post(`/user/region/${regionCode}/primary`),
 
-  getRegions: () => instance.get<Region[]>('/regions'),
+  getRegions: (value: string) => instance.get<Region[]>(`/regions?value=${value}`),
 
   getCategories: () => instance.get<Category[]>('/categories'),
 

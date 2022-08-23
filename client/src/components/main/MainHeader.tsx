@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { Category, MapPin, Menu, User } from 'src/assets/icons';
+
+import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import COLORS from 'src/constants/colors';
 import { categoryState } from 'src/recoil/atoms/category';
+
 import { userState } from 'src/recoil/atoms/user';
 import styled from 'styled-components/macro';
 import RegionSelectModal from '../region/RegionSelectModal';
@@ -13,6 +16,10 @@ export default function Header() {
   const user = useRecoilValue(userState);
   const category = useRecoilValue(categoryState);
   let location = useLocation();
+
+  const { getPrimaryRegionName } = useUserRigionState();
+
+
 
   return (
     <Container>
@@ -25,8 +32,7 @@ export default function Header() {
         onClick={() => setShowRegionSelectModal(!showRegionSelectModal)}
       >
         <MapPin />
-        장소
-
+        {getPrimaryRegionName()}
       </Location>
 
       <RightPanel>

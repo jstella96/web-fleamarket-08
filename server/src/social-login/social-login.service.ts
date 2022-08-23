@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { GithubUser } from 'src/types';
 import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 import { SocialLoginDto } from './dto/social-login.dto';
 
 @Injectable()
 export class SocialLoginService {
+  userService = new UserService();
+
   async login(socialLoginDto: SocialLoginDto) {
     //try {
     const { authorizationCode } = socialLoginDto;
@@ -22,7 +25,13 @@ export class SocialLoginService {
       await user.save();
     }
 
-    return user;
+    user = await User.findOne({
+      where: { id: user.id },
+      relations: { userRegions: true },
+    });
+    console.log('user', user);
+
+    return this.userService.findUser(user.id);
     // } catch (error) {
     //   throw new HttpException('깃헙 로그인 실패', HttpStatus.UNAUTHORIZED);
     // }

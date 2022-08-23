@@ -3,6 +3,13 @@ export interface Region {
   name: string;
 }
 
+export interface UserRegion {
+  regionCode: number;
+  name: string;
+  isPrimary: boolean;
+  region: Region;
+}
+
 export interface Category {
   id: number;
   name: string;
@@ -12,6 +19,7 @@ export interface Category {
 export interface User {
   id: number;
   name: string;
+  userRegions: UserRegion[];
 }
 
 export interface Thumbnail {

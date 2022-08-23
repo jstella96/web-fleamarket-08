@@ -6,6 +6,7 @@ import {
   Post,
   Req,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -19,6 +20,12 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('')
+  async findUser(@Req() request: Request) {
+    const userId = request['userId'];
+    return this.userService.findUser(userId);
+  }
+
   @Post('/region')
   async createRegion(
     @Body() createUserRegionDto: CreateUserRegionDto,
@@ -29,12 +36,14 @@ export class UserController {
   }
 
   @Delete('/region/:code')
-  async deleteRegion(@Param('code') code: number) {
-    return this.userService.deleteRegion(code);
+  async deleteRegion(@Param('code') code: number, @Req() request: Request) {
+    const userId = request['userId'];
+    return this.userService.deleteRegion(code, userId);
   }
 
   @Post('/region/:code/primary')
-  async setRegionPrimary(@Param('code') code: number) {
-    return this.userService.setRegionPrimary(code);
+  async setRegionPrimary(@Param('code') code: number, @Req() request: Request) {
+    const userId = request['userId'];
+    return this.userService.setRegionPrimary(code, userId);
   }
 }

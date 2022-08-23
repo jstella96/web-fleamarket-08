@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { RegionService } from './region.service';
 
@@ -8,7 +8,7 @@ export class RegionController {
   constructor(private readonly regionService: RegionService) {}
 
   @Get('')
-  findAll() {
-    return this.regionService.findAll();
+  findAll(@Query('value') value: string) {
+    return this.regionService.findAll(value);
   }
 }

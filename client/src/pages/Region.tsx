@@ -1,47 +1,76 @@
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import api from 'src/api';
 import { Add, Close } from 'src/assets/icons';
+import Alert from 'src/components/common/Alert';
 import Header from 'src/components/common/Header';
 import RegionInputModal from 'src/components/region/RegionInputModal';
 import colors from 'src/constants/colors';
+import { useUserRigionState } from 'src/hooks/useUserRegionState';
+import { userState } from 'src/recoil/atoms/user';
 import styled from 'styled-components';
 
-export default function Region() {
+export default function MyRegion() {
+  const user = useRecoilValue(userState);
   const [showRegionInputModal, setShowRegionInputModal] = useState(false);
-  const tempRegion = [
-    {
-      code: 1,
-      name: '역삼동',
-      isPrimary: true,
-    },
-  ];
+  const [showAlert, setShowAlert] = useState(false);
+
+  const { deleteRegion, changePrimaryRegion } = useUserRigionState();
+  const handleDeleteRegion = (regionCode: number) => {
+    if (user?.userRegions.length === 1) {
+      setShowAlert(true);
+      return;
+    }
+    deleteRegion(regionCode);
+  };
 
   return (
     <Container>
       <Header title="내 동네 설정하기" />
       <Text>
-        지역은 최소 1개 이상
+        내 동네는 최소 1개 이상
+
         <br />
         최대 2개까지 설정 가능해요
       </Text>
       <ButtonWrapper>
-        {tempRegion.map(({ code, name, isPrimary }) => (
-          <button key={code} className={isPrimary ? 'isPrimary' : ''}>
-            {name}
-            <Close />
+
+        {user?.userRegions.map(({ region, name, isPrimary }) => (
+          <button
+            onClick={() => changePrimaryRegion(region.code)}
+            key={region.code}
+            className={isPrimary ? 'isPrimary' : ''}
+          >
+            {region.name}
+            <Close
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeleteRegion(region.code);
+              }}
+            />
           </button>
         ))}
-        {tempRegion.length !== 2 && (
+        {user?.userRegions.length !== 2 && (
+
           <button className="add" onClick={() => setShowRegionInputModal(true)}>
             <Add />
           </button>
         )}
       </ButtonWrapper>
-      <RegionInputModal
-        isOpen={showRegionInputModal}
-        close={() => {
-          setShowRegionInputModal(false);
-        }}
-      />
+
+      {showRegionInputModal && (
+        <RegionInputModal
+          close={() => setShowRegionInputModal(false)}
+          nowRegion={user?.userRegions[0]}
+        />
+      )}
+      {showAlert && (
+        <Alert
+          close={() => setShowAlert(false)}
+          message="내 동네가 1개 이상은 존재해야합니다"
+        />
+      )}
+
     </Container>
   );
 }

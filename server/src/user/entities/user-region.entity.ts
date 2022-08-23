@@ -15,17 +15,15 @@ export class UserRegion extends BaseEntity {
   id: number;
 
   @Column()
-  user_id: number;
+  userId: number;
 
   @Column()
-  region_code: number;
+  regionCode: number;
 
   @ManyToOne(() => User, (user) => user.userRegions)
-  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ManyToOne(() => Region, (region) => region.userRegions)
-  @JoinColumn({ name: 'region_code' })
   region: Region;
 
   @Column()

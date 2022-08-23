@@ -37,7 +37,7 @@ export class ProductService {
         id: categoryId,
       },
       region: {
-        code: user.primaryRegion.region_code,
+        code: user.primaryRegion.regionCode,
       },
       images,
     });

@@ -1,31 +1,54 @@
 import { Link } from 'react-router-dom';
+
+import { useRecoilValue } from 'recoil';
 import colors from 'src/constants/colors';
-import styled from 'styled-components';
+import { useUserRigionState } from 'src/hooks/useUserRegionState';
+import { userState } from 'src/recoil/atoms/user';
+import styled, { css } from 'styled-components';
 
 interface RegionSelectModalProps {
   isOpen: boolean;
-  close: any;
+  close: () => void;
 }
 
 export default function RegionSelectModal({
   isOpen,
   close,
 }: RegionSelectModalProps) {
-  const closeModal = () => {
-    close();
-  };
+
+  const { changePrimaryRegion } = useUserRigionState();
+  const user = useRecoilValue(userState);
+
   return (
-    <Modal className={isOpen ? 'openModal modal' : 'modal'}>
+    <Modal
+      isOpen={isOpen}
+      onClick={() => {
+        close();
+      }}
+    >
       <Section>
-        <button onClick={closeModal}>역삼동</button>
+        {user?.userRegions.map(({ region }) => (
+          <button
+            key={region.code}
+            onClick={(e) => {
+              e.preventDefault();
+              changePrimaryRegion(region.code);
+              close();
+            }}
+          >
+            {region.name}
+          </button>
+        ))}
         <Link to="/region">
-          <button onClick={closeModal}>내 동네 설정하기</button>
+          <button>내 동네 설정하기</button>
         </Link>
       </Section>
     </Modal>
   );
 }
-const Modal = styled.div`
+
+const Modal = styled.div<{ isOpen: Boolean }>`
+
   color: ${colors.titleActive};
   display: none;
   position: fixed;
@@ -34,10 +57,16 @@ const Modal = styled.div`
   bottom: 0;
   left: 0;
   z-index: 100;
+  background: rgba(34, 34, 34, 0.3);
   padding-top: 3rem;
-  &.openModal {
-    display: flex;
-  }
+  ${({ isOpen }) => {
+    if (isOpen) {
+      return css`
+        display: flex;
+      `;
+    }
+  }}
+
 `;
 const Section = styled.div`
   background: ${colors.offWhite};
