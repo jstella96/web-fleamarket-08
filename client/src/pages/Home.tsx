@@ -36,22 +36,6 @@ export default function Home() {
       {user && (
         <>
           <p>현재 로그인한 유저: {user.name}</p>
-          <button
-            onClick={async () => {
-              try {
-                await api.setUserRegion(1);
-              } catch (err) {}
-              await api.createProduct({
-                title: 'string',
-                price: 0,
-                content: 'string',
-                imageUrls: ['string'],
-                categoryId: 1,
-              });
-            }}
-          >
-            (임시) 유저 초기 설정(동네 등록, 상품 하나 추가)
-          </button>
         </>
       )}
       {products.map((product) => (

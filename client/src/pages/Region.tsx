@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Add, Close } from 'src/assets/icons';
 import Alert from 'src/components/common/Alert';
-import Header from 'src/components/common/Header';
+import Layout from 'src/components/common/Layout';
 import RegionInputModal from 'src/components/region/RegionInputModal';
 import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
@@ -24,8 +24,7 @@ export default function MyRegion() {
   };
 
   return (
-    <Container>
-      <Header title="내 동네 설정하기" />
+    <Layout title="내 동네 설정하기">
       <Text>
         내 동네는 최소 1개 이상
         <br />
@@ -54,26 +53,22 @@ export default function MyRegion() {
         )}
       </ButtonWrapper>
 
-      {showRegionInputModal && (
-        <RegionInputModal
-          close={() => setShowRegionInputModal(false)}
-          nowRegion={user?.userRegions[0]}
-        />
-      )}
       {showAlert && (
         <Alert
           close={() => setShowAlert(false)}
           message="내 동네가 1개 이상은 존재해야합니다"
         />
       )}
-    </Container>
+      {showRegionInputModal && (
+        <RegionInputModal
+          close={() => setShowRegionInputModal(false)}
+          nowRegion={user?.userRegions[0]}
+        />
+      )}
+    </Layout>
   );
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 const Text = styled.p`
   width: 100%;
   text-align: center;

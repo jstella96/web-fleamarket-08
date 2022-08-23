@@ -4,6 +4,7 @@ export interface ProductDto {
   content: string;
   imageUrls: string[];
   categoryId: number;
+  regionCode: number;
 }
 
 export interface CreateChatRoomDto {

@@ -1,16 +1,16 @@
 import React from 'react';
 import COLORS from 'src/constants/colors';
 import styled from 'styled-components';
+import Modal from './Modal';
 
 interface AlertProps {
   message: string;
   close: () => void;
 }
 
-//타입주기, 디자인 css
 export default function Alert({ message, close }: AlertProps) {
   return (
-    <Modal>
+    <Modal close={close}>
       <Section>
         <Message>{message}</Message>
         <Button onClick={close}>확인</Button>
@@ -19,18 +19,6 @@ export default function Alert({ message, close }: AlertProps) {
   );
 }
 
-const Modal = styled.div`
-  color: ${COLORS.titleActive};
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  background: rgba(34, 34, 34, 0.3);
-  display: flex;
-  align-items: center;
-`;
 const Section = styled.div`
   font-size: 0.875rem;
   padding: 1rem;

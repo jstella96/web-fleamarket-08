@@ -33,10 +33,11 @@ export const useUserRigionState = () => {
   };
   //이게 selecter
   const getPrimaryRegionCode = () => {
+    if (!user?.userRegions) return 0;
     const primaryRegion = user?.userRegions.find(
       (region) => region.isPrimary === true
     );
-    return primaryRegion?.region.code;
+    return primaryRegion?.region.code || 0;
   };
 
   const getPrimaryRegionName = () => {
@@ -53,5 +54,6 @@ export const useUserRigionState = () => {
     deleteRegion,
     submitRegion,
     getPrimaryRegionName,
+    getPrimaryRegionCode,
   };
 };
