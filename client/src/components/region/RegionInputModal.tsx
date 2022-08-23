@@ -1,7 +1,6 @@
-
 import { useEffect, useState } from 'react';
 import api from 'src/api';
-import colors from 'src/constants/colors';
+import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { Region, UserRegion } from 'src/types';
 import styled from 'styled-components';
@@ -81,7 +80,7 @@ export default function RegionInputModal({
 }
 
 const Modal = styled.div`
-  color: ${colors.titleActive};
+  color: ${COLORS.titleActive};
 
   position: fixed;
   top: 0;
@@ -93,21 +92,19 @@ const Modal = styled.div`
 
   display: flex;
   align-items: center;
-
 `;
 const Section = styled.div`
   font-size: 0.875rem;
   padding: 1rem;
-  background: ${colors.offWhite};
+  background: ${COLORS.offWhite};
   width: 18rem;
 
   margin: 0 auto;
-  background: ${colors.white};
+  background: ${COLORS.white};
   display: flex;
   flex-direction: column;
   border-radius: 0.6rem;
   justify-content: space-between;
-
 `;
 const SearchResult = styled.main`
   padding: 0.25rem;
@@ -119,10 +116,10 @@ const Title = styled.p`
 `;
 const Input = styled.input`
   width: 100%;
-  color: ${colors.titleActive};
+  color: ${COLORS.titleActive};
   border-radius: 0.5rem;
   padding: 0.5rem;
-  border: 1px solid ${colors.grey3};
+  border: 1px solid ${COLORS.grey3};
 `;
 const Footer = styled.div`
   padding: 0 0.25rem;
@@ -135,7 +132,7 @@ const Footer = styled.div`
     padding: 0;
   }
   button:nth-child(1) {
-    color: ${colors.grey1};
+    color: ${COLORS.grey1};
   }
 `;
 const Regions = styled.ul`
@@ -145,21 +142,20 @@ const Regions = styled.ul`
 `;
 const RegionItem = styled.li`
   line-height: 1.5;
-  border-bottom: 1px solid ${colors.grey3};
+  border-bottom: 1px solid ${COLORS.grey3};
   padding: 0.85rem 0;
   &.duplicate {
-    background: ${colors.grey3};
+    background: ${COLORS.grey3};
     pointer-events: none;
   }
 `;
 const Warning = styled.p`
   padding-top: 2rem;
   line-height: 1.5;
-  color: ${colors.grey1};
+  color: ${COLORS.grey1};
   text-align: center;
 `;
 const Result = styled.p`
   margin-top: 0.2rem;
   font-weight: 600;
 `;
-

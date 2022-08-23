@@ -11,8 +11,6 @@ import { ChatRoom } from './entities/chat-room.entity';
 @Injectable()
 export class ChatService {
   async findChatRooms(userId: number) {
-    //FIXME
-    if (!userId) userId = 49304239;
     const chatRooms = await ChatRoom.createQueryBuilder('chatRoom')
       .where('seller_id = :userId OR buyer_id = :userId ', { userId })
       .leftJoinAndMapOne(

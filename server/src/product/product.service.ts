@@ -72,9 +72,6 @@ export class ProductService {
   async update(id: number, productDto: ProductDto, userId: number) {
     const { title, content, imageUrls, price, categoryId } = productDto;
 
-    // FIXME
-    const tempUserId = 76844355;
-
     // const images = imageUrls.map((imageUrl) =>
     //   ProductImage.update({ imageUrl })
     // );
@@ -93,7 +90,7 @@ export class ProductService {
       .where(`product.id=${id}`)
       .execute();
 
-    const product = await Product.getProductQuery(tempUserId)
+    const product = await Product.getProductQuery(userId)
       .select(['product', 'author', 'isLiked', 'images', 'region'])
       .where(`product.id=${id}`)
       .getOne();
@@ -110,12 +107,9 @@ export class ProductService {
   }
 
   async like(id: number, userId: number) {
-    // FIXME
-    const tempUserId = 76844355;
-
     const productLike = await ProductLike.findOneBy({
       product: { id },
-      user: { id: tempUserId },
+      user: { id: userId },
     });
 
     let result;
@@ -123,7 +117,7 @@ export class ProductService {
       result = await ProductLike.createQueryBuilder()
         .delete()
         .from(ProductLike)
-        .where(`product_id=${id} and user_id=${tempUserId}`)
+        .where(`product_id=${id} and user_id=${userId}`)
         .execute();
     } else {
       result = await ProductLike.createQueryBuilder()
@@ -131,7 +125,7 @@ export class ProductService {
         .into(ProductLike)
         .values({
           product: { id },
-          user: { id: tempUserId },
+          user: { id: userId },
         })
         .execute();
     }

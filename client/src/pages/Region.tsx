@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import api from 'src/api';
 import { Add, Close } from 'src/assets/icons';
 import Alert from 'src/components/common/Alert';
 import Header from 'src/components/common/Header';
 import RegionInputModal from 'src/components/region/RegionInputModal';
-import colors from 'src/constants/colors';
+import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
 import styled from 'styled-components';
@@ -29,12 +28,10 @@ export default function MyRegion() {
       <Header title="내 동네 설정하기" />
       <Text>
         내 동네는 최소 1개 이상
-
         <br />
         최대 2개까지 설정 가능해요
       </Text>
       <ButtonWrapper>
-
         {user?.userRegions.map(({ region, name, isPrimary }) => (
           <button
             onClick={() => changePrimaryRegion(region.code)}
@@ -51,7 +48,6 @@ export default function MyRegion() {
           </button>
         ))}
         {user?.userRegions.length !== 2 && (
-
           <button className="add" onClick={() => setShowRegionInputModal(true)}>
             <Add />
           </button>
@@ -70,7 +66,6 @@ export default function MyRegion() {
           message="내 동네가 1개 이상은 존재해야합니다"
         />
       )}
-
     </Container>
   );
 }
@@ -82,7 +77,7 @@ const Container = styled.div`
 const Text = styled.p`
   width: 100%;
   text-align: center;
-  color: ${colors.grey1};
+  color: ${COLORS.grey1};
   font-size: 1rem;
   line-height: 1.5;
   padding: 2rem;
@@ -93,9 +88,9 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   button {
     cursor: pointer;
-    background: ${colors.white};
-    border: 1px solid ${colors.primary1};
-    color: ${colors.primary1};
+    background: ${COLORS.white};
+    border: 1px solid ${COLORS.primary1};
+    color: ${COLORS.primary1};
     width: 8.5rem;
     height: 2.25rem;
     border-radius: 0.5rem;
@@ -106,16 +101,16 @@ const ButtonWrapper = styled.div`
     padding: 1rem;
     font-size: 0.875rem;
     &.isPrimary {
-      background: ${colors.primary1};
-      border: 1px solid ${colors.white};
-      color: ${colors.white};
+      background: ${COLORS.primary1};
+      border: 1px solid ${COLORS.white};
+      color: ${COLORS.white};
     }
     &.add {
       justify-content: center;
     }
   }
   svg {
-    color: ${colors.primary2};
+    color: ${COLORS.primary2};
     width: 1rem;
     height: 1rem;
   }

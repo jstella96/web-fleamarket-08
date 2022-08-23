@@ -1,5 +1,5 @@
 import React from 'react';
-import colors from 'src/constants/colors';
+import COLORS from 'src/constants/colors';
 import styled from 'styled-components';
 
 interface AlertProps {
@@ -20,7 +20,7 @@ export default function Alert({ message, close }: AlertProps) {
 }
 
 const Modal = styled.div`
-  color: ${colors.titleActive};
+  color: ${COLORS.titleActive};
   position: fixed;
   top: 0;
   right: 0;
@@ -34,10 +34,10 @@ const Modal = styled.div`
 const Section = styled.div`
   font-size: 0.875rem;
   padding: 1rem;
-  background: ${colors.offWhite};
+  background: ${COLORS.offWhite};
   width: 18rem;
   margin: 0 auto;
-  background: ${colors.white};
+  background: ${COLORS.white};
   display: flex;
   flex-direction: column;
   border-radius: 0.6rem;
@@ -49,9 +49,9 @@ const Message = styled.p`
 `;
 const Button = styled.button`
   border: none;
-  background: ${colors.primary1};
+  background: ${COLORS.primary1};
   padding: 0.5rem;
   border-radius: 0.6rem;
-  color: ${colors.white};
+  color: ${COLORS.white};
   margin-bottom: 0.2rem;
 `;

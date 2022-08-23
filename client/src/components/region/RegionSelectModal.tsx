@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { useRecoilValue } from 'recoil';
-import colors from 'src/constants/colors';
+import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
 import styled, { css } from 'styled-components';
@@ -48,7 +48,7 @@ export default function RegionSelectModal({
 }
 
 const Modal = styled.div<{ isOpen: Boolean }>`
-  color: ${colors.titleActive};
+  color: ${COLORS.titleActive};
   display: none;
   position: fixed;
   top: 0;
@@ -67,10 +67,10 @@ const Modal = styled.div<{ isOpen: Boolean }>`
   }}
 `;
 const Section = styled.div`
-  background: ${colors.offWhite};
+  background: ${COLORS.offWhite};
   font-size: 0.875rem;
   font-weight: 500;
-  color: ${colors.titleActive};
+  color: ${COLORS.titleActive};
   width: 10.32rem;
   margin: 0 auto;
   display: flex;
@@ -85,6 +85,6 @@ const Section = styled.div`
     border: none;
     background: none;
     padding: 0;
-    border-bottom: 1px solid ${colors.grey3};
+    border-bottom: 1px solid ${COLORS.grey3};
   }
 `;
