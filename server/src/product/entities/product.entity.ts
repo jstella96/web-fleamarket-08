@@ -94,6 +94,7 @@ export class Product extends BaseEntity {
       )
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.region', 'region')
+      .leftJoinAndSelect('product.category', 'category')
       .orderBy('product.createdAt', 'DESC')
       .select([
         'product',
@@ -102,6 +103,7 @@ export class Product extends BaseEntity {
         'isLiked',
         'images',
         'region',
+        'category',
       ]);
   }
 }

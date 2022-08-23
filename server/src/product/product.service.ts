@@ -60,7 +60,7 @@ export class ProductService {
 
   async findOne(id: number, userId: number) {
     const product = await Product.getProductQuery(userId)
-      .select(['product', 'author', 'isLiked', 'images', 'region'])
+      .select(['product', 'author', 'isLiked', 'images', 'region', 'category'])
       .where(`product.id=${id}`)
       .getOne();
 

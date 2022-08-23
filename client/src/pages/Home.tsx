@@ -5,6 +5,7 @@ import api from 'src/api';
 import { Add } from 'src/assets/icons';
 import MainHeader from 'src/components/main/MainHeader';
 import ProductItem from 'src/components/ProductItem';
+import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
 import { userState } from 'src/recoil/atoms/user';
 import { Product } from 'src/types';
@@ -56,9 +57,9 @@ export default function Home() {
       {products.map((product) => (
         <ProductItem key={product.id} product={product} />
       ))}
-      <Link to="/write">
+      <WriteLink to="/write">
         <Add />
-      </Link>
+      </WriteLink>
     </Container>
   );
 }
@@ -66,4 +67,15 @@ export default function Home() {
 const Container = styled.div`
   position: relative;
   padding-top: ${SIZES.mainHeaderHeight};
+`;
+
+const WriteLink = styled(Link)`
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  padding: 1rem;
+  border-radius: 100%;
+  background-color: ${COLORS.primary1};
+  color: ${COLORS.white};
 `;

@@ -37,6 +37,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/product/:id" element={<Product />} />
         <Route path="" element={<Unauthorized />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/category" element={<Category />} />
@@ -45,13 +46,13 @@ function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/chat/:id" element={<ChatContent />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/product/:id" element={<Product />} />
         </Route>
       </Routes>
       {state?.backgroundLocation && (
         <Routes>
           <Route path="" element={<TransitionLayout />}>
             <Route path="/category" element={<Category />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/mypage" element={<MyPage />} />
           </Route>

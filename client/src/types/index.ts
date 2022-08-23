@@ -61,6 +61,8 @@ export interface ProductDetail {
   author: User;
   isLiked: boolean;
   images: Image[];
+  region: Region;
+  category: Category;
   chatCount: number;
   likeCount: number;
 }

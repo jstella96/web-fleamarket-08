@@ -1,27 +1,14 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import api from 'src/api';
 import Layout from 'src/components/common/Layout';
-import COLORS from 'src/constants/colors';
-import SIZES from 'src/constants/sizes';
+import useCategories from 'src/components/hooks/useCategories';
 import { categoryState } from 'src/recoil/atoms/category';
-import { Category as CategoryType } from 'src/types';
 import styled from 'styled-components/macro';
 
 export default function Category() {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const categories = useCategories();
   const setCategory = useSetRecoilState(categoryState);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const initCategories = async () => {
-      const { data } = await api.getCategories();
-      setCategories(data);
-    };
-
-    initCategories();
-  }, []);
 
   return (
     <Layout title="카테고리">
@@ -64,8 +51,6 @@ const Container = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem 1rem;
   padding: 1rem;
-  background: ${COLORS.white};
-  height: calc(100vh - ${SIZES.headerHegight});
 `;
 
 const CategoryButton = styled.button`
