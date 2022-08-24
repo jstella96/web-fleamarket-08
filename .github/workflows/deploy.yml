@@ -1,0 +1,27 @@
+name: deploy
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run scripts in server
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd ~/web-fleemarket-08
+            git reset --hard
+            git pull origin dev
+            cd ~/web-fleemarket-08/client
+            npm install
+            npm run build
+            cd ~/web-fleemarket-08/server
+            npm install
+            npm run build
+            pm2 reload server
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
