@@ -3,6 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 import * as cookieParser from 'cookie-parser';
+import { ACCESS_SESSION_ID } from './constants/session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Flea Market')
     .setDescription('우아한 중고거래 API')
+    .addCookieAuth(ACCESS_SESSION_ID)
     .build();
 
   const swaggerdocument = SwaggerModule.createDocument(app, swaggerConfig);

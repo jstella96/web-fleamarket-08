@@ -4,16 +4,17 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { ChatService } from './chat.service';
+import { CreateChatContentDto } from './dto/create-chat-content.dto';
 import { CreateChatRoomDto } from './dto/create-chat-room.dto';
-import { ChatRoom } from './entities/chat-room.entity';
 
 @UseGuards(AuthGuard)
 @ApiTags('chats')
@@ -21,45 +22,42 @@ import { ChatRoom } from './entities/chat-room.entity';
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Get()
-  findChatRooms(@Req() request: Request) {
-    const userId = request['userId'];
-    return this.chatService.findChatRooms(userId);
-  }
-
   @Post()
   async createChatRoom(
-    @Body() createChatDto: CreateChatRoomDto,
+    @Body() createChatRoomDto: CreateChatRoomDto,
     @Req() request: Request
   ) {
-    // FIXME: 배달이와의 채팅을 위해 임시로 구현한 코드 수정하기
     const userId = request['userId'];
-    const { productId } = createChatDto;
-
-    const chatRoom = await ChatRoom.findOneBy({
-      seller: { id: 1 },
-      product: { id: productId },
-    });
-
-    if (chatRoom) return chatRoom;
-
-    return await this.chatService.createChatRoom(userId, createChatDto);
-    // return this.chatService.createContent(id, userId, createChatDto);
+    return await this.chatService.createChatRoom(userId, createChatRoomDto);
   }
 
-  @Get(':id')
-  findContent(@Param('id') id: number) {
-    return this.chatService.findContent(id);
+  @ApiQuery({ name: 'productId', type: Number, required: false })
+  @Get()
+  findChatRooms(
+    @Req() request: Request,
+    @Query('productId') productId?: number
+  ) {
+    const userId = request['userId'];
+    return this.chatService.findChatRooms(userId, productId);
+  }
+
+  @Get('/detail/:productId')
+  findChatDetail(
+    @Req() request: Request,
+    @Param('productId') productId: number
+  ) {
+    const userId = request['userId'];
+    return this.chatService.findChatDetail(userId, productId);
   }
 
   @Post(':id')
   createContent(
     @Param('id') id: number,
-    @Body() createChatDto: CreateChatRoomDto,
+    @Body() createChatContentDto: CreateChatContentDto,
     @Req() request: Request
   ) {
     const userId = request['userId'];
-    return this.chatService.createContent(id, userId, createChatDto);
+    return this.chatService.createContent(id, userId, createChatContentDto);
   }
 
   @Get(':id/connect')

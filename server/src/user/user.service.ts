@@ -9,10 +9,13 @@ const MAX_REGION_COUNT = 2;
 @Injectable()
 export class UserService {
   async findUser(userId: number) {
-    const user = await User.findOne({
-      where: { id: userId },
-      relations: { userRegions: { region: true } },
-    });
+    const user = await User.createQueryBuilder('user')
+      .select()
+      .where(`user.id=${userId}`)
+      .leftJoinAndSelect('user.userRegions', 'userRegions')
+      .leftJoinAndSelect('userRegions.region', 'region')
+      .getOne();
+
     return user;
   }
 
@@ -22,12 +25,12 @@ export class UserService {
   ) {
     const { regionCode: regionCode } = createUserRegionDto;
     const values = { userId, regionCode, isPrimary: true };
-    console.log(userId);
+
     const userRegion = await UserRegion.findOneBy({
       userId: userId,
       regionCode,
     });
-    console.log(userRegion);
+
     if (userRegion) {
       throw new HttpException(
         `이미 존재하는 동네입니다.`,

@@ -32,4 +32,16 @@ export class User extends BaseEntity {
   productLikes: ProductLike[];
 
   primaryRegion: UserRegion;
+
+  static async getUserWithPrimaryRegion(userId: number) {
+    return await User.createQueryBuilder('user')
+      .leftJoinAndMapOne(
+        'user.primaryRegion',
+        'user.userRegions',
+        'region',
+        'region.isPrimary=true'
+      )
+      .where(`user.id=${userId}`)
+      .getOne();
+  }
 }

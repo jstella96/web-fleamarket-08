@@ -83,20 +83,18 @@ export interface ChatRoom {
   unReadContents: Chat[];
   seller: User;
   buyer: User;
+  product: Product;
 }
 
-export interface ChatDetail {
+export interface ChatContent {
   content: string;
   user: User;
   id: number;
   createdAt: string;
 }
 
-export interface ChatsResponse {
-  contents: ChatDetail[];
-  id: number;
-  title: string;
-  price: string;
-  status: string;
-  thumbnail: string;
+export interface ChatDetail {
+  chatContents: ChatContent[];
+  chatRoom: ChatRoom;
+  product: Product;
 }

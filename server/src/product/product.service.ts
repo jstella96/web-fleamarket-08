@@ -10,15 +10,7 @@ export class ProductService {
   async create(productDto: ProductDto, userId: number) {
     const { title, content, imageUrls, price, categoryId } = productDto;
 
-    const user = await User.createQueryBuilder('user')
-      .leftJoinAndMapOne(
-        'user.primaryRegion',
-        'user.userRegions',
-        'region',
-        'region.isPrimary=true'
-      )
-      .where(`user.id=${userId}`)
-      .getOne();
+    const user = await User.getUserWithPrimaryRegion(userId);
 
     const images = imageUrls?.map((imageUrl) =>
       ProductImage.create({ imageUrl })
@@ -44,7 +36,7 @@ export class ProductService {
 
     await product.save();
 
-    return product;
+    return await Product.getOne(product.id, userId);
   }
 
   async findAll(userId: number) {
@@ -59,14 +51,7 @@ export class ProductService {
   }
 
   async findOne(id: number, userId: number) {
-    const product = await Product.getProductQuery(userId)
-      .select(['product', 'author', 'isLiked', 'images', 'region', 'category'])
-      .where(`product.id=${id}`)
-      .getOne();
-
-    product['isLiked'] = product['isLiked'] ? true : false;
-
-    return product;
+    return await Product.getOne(id, userId);
   }
 
   async update(id: number, productDto: ProductDto, userId: number) {
@@ -90,14 +75,7 @@ export class ProductService {
       .where(`product.id=${id}`)
       .execute();
 
-    const product = await Product.getProductQuery(userId)
-      .select(['product', 'author', 'isLiked', 'images', 'region'])
-      .where(`product.id=${id}`)
-      .getOne();
-
-    product['isLiked'] = product['isLiked'] ? true : false;
-
-    return product;
+    return Product.getOne(id, userId);
   }
 
   async remove(id: number, userId: number) {

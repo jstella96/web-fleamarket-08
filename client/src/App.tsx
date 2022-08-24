@@ -6,7 +6,7 @@ import TransitionLayout from './components/Slider/TransitionLayout';
 import Unauthorized from './components/Unauthorized';
 import Category from './pages/Category';
 import Chat from './pages/Chat';
-import ChatContent from './pages/ChatContent';
+import ChatDetail from './pages/ChatDetail';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import MyPage from './pages/MyPage';
@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     const initUser = async () => {
-      const { data } = await api.checkLogin();
+      const { data } = await api.getUser();
       setUser(data);
     };
 
@@ -43,8 +43,8 @@ function App() {
           <Route path="/category" element={<Category />} />
           <Route path="/region" element={<Region />} />
           <Route path="/write" element={<Write />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/chat/:id" element={<ChatContent />} />
+          <Route path="/chat/:productId" element={<Chat />} />
+          <Route path="/chat-detail/:productId" element={<ChatDetail />} />
           <Route path="/mypage" element={<MyPage />} />
         </Route>
       </Routes>

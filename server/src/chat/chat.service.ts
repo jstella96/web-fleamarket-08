@@ -10,101 +10,8 @@ import { ChatRoom } from './entities/chat-room.entity';
 
 @Injectable()
 export class ChatService {
-  async findChatRooms(userId: number) {
-    const chatRooms = await ChatRoom.createQueryBuilder('chatRoom')
-      .where('seller_id = :userId OR buyer_id = :userId ', { userId })
-      .leftJoinAndMapOne(
-        'chatRoom.lastChat',
-        'chatRoom.chatContents',
-        'contents',
-        'contents.id=(SELECT max(id) FROM chat_content where chat_content.chat_room_id = chatRoom.id)'
-      )
-      .leftJoinAndMapMany(
-        'chatRoom.unReadContents',
-        'chatRoom.chatContents',
-        'chatContents',
-        `chatContents.chat_room_id = chatRoom.id and ( 
-          (chatRoom.seller_id = ${userId}) and ( chatContents.createdAt >  chatRoom.seller_last_active_time) )  
-           or (  chatRoom.buyer_id = ${userId}) and  (chatContents.createdAt > chatRoom.buyer_last_active_time)`
-      )
-      .leftJoinAndSelect('chatRoom.seller', 'seller')
-      .leftJoinAndSelect('chatRoom.buyer', 'buyer')
-      .getMany();
-
-    return chatRooms;
-  }
-
-  async findContent(chatRoomId: number) {
-    const chatContents = await ChatContent.find({
-      where: {
-        chatRoom: {
-          id: chatRoomId,
-        },
-      },
-      join: {
-        alias: 'chatContent',
-        leftJoinAndSelect: {
-          user: 'chatContent.user',
-        },
-      },
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-
-    const chatRoom = await ChatRoom.findOne({
-      where: { id: chatRoomId },
-      relations: { product: true },
-    });
-
-    const product = await Product.findOne({
-      select: {
-        id: true,
-        title: true,
-        price: true,
-        status: true,
-        images: true,
-      },
-      where: { id: chatRoom.product.id },
-      relations: { images: true },
-      order: {
-        images: {
-          id: 'ASC',
-        },
-      },
-    });
-    product['thumbnail'] = product.images[0]?.imageUrl || '';
-    delete product.images;
-    return { contents: [...chatContents], ...product };
-  }
-
-  async createContent(
-    chatRoomId: number,
-    userId: number,
-    createChatContentDto: CreateChatContentDto
-  ) {
-    const { content } = createChatContentDto;
-
-    const user = await User.createQueryBuilder()
-      .select()
-      .where(`id=${userId}`)
-      .getOne();
-
-    const chatContent = await ChatContent.create({
-      chatRoom: { id: chatRoomId },
-      user,
-      content,
-    }).save();
-
-    delete chatContent.chatRoom;
-
-    emitChat(chatRoomId, chatContent);
-
-    return chatContent;
-  }
-
-  async createChatRoom(buyerId: number, createChatDto: CreateChatRoomDto) {
-    const { productId } = createChatDto;
+  async createChatRoom(buyerId: number, createChatRoomDto: CreateChatRoomDto) {
+    const { productId } = createChatRoomDto;
     const product = await Product.findOne({
       where: { id: productId },
       relations: { user: true },
@@ -123,7 +30,67 @@ export class ChatService {
       sellerLastActiveTime: nowDate,
       buyerLastActiveTime: nowDate,
     });
-    return await chatRoom.save();
+    await chatRoom.save();
+    return await ChatRoom.getChatRoomQuery({
+      productId,
+      userId: buyerId,
+    }).getOne();
+  }
+
+  async findChatRooms(userId: number, productId?: number) {
+    const chatRooms = await ChatRoom.getChatRoomQuery({
+      productId,
+      userId,
+    }).getMany();
+    return chatRooms;
+  }
+
+  async findChatDetail(userId: number, productId: number) {
+    const chatRoom = await ChatRoom.getChatRoomQuery({
+      productId,
+      userId,
+    }).getOne();
+
+    const chatContents = await ChatContent.createQueryBuilder('chatContent')
+      .where(`chatContent.chatRoom.id=${chatRoom?.id || null}`)
+      .leftJoinAndSelect('chatContent.user', 'user')
+      .orderBy('chatContent.createdAt', 'ASC')
+      .getMany();
+
+    const product = await Product.getOne(productId);
+
+    return {
+      chatContents,
+      chatRoom,
+      product,
+    };
+  }
+
+  async createContent(
+    chatRoomId: number,
+    userId: number,
+    createChatContentDto: CreateChatContentDto
+  ) {
+    const { content } = createChatContentDto;
+
+    const user = await User.createQueryBuilder()
+      .select()
+      .where(`id=${userId}`)
+      .getOne();
+
+    if (!user) return;
+
+    const chatContent = await ChatContent.create({
+      chatRoom: { id: chatRoomId },
+      user,
+      content,
+    }).save();
+
+    delete chatContent.chatRoom;
+
+    emitChat(chatRoomId, chatContent);
+
+    return chatContent;
   }
 
   async createConnection(chatRoomId: number, res: Response) {

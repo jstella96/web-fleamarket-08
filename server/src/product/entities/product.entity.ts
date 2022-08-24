@@ -70,7 +70,7 @@ export class Product extends BaseEntity {
   @OneToMany(() => ProductLike, (productLike) => productLike.product)
   productLikes: ProductLike[];
 
-  static getProductQuery(userId: number) {
+  static getProductQuery(userId?: number) {
     return this.createQueryBuilder('product')
       .leftJoinAndMapOne(
         'product.author',
@@ -90,7 +90,7 @@ export class Product extends BaseEntity {
         'product.isLiked',
         'product.productLikes',
         'isLiked',
-        `isLiked.user_id=${userId}`
+        `isLiked.user_id=${userId || null}`
       )
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.region', 'region')
@@ -105,5 +105,16 @@ export class Product extends BaseEntity {
         'region',
         'category',
       ]);
+  }
+
+  static async getOne(id: number, userId?: number) {
+    const product = await Product.getProductQuery(userId)
+      .select(['product', 'author', 'isLiked', 'images', 'region', 'category'])
+      .where(`product.id=${id}`)
+      .getOne();
+
+    product['isLiked'] = product['isLiked'] ? true : false;
+
+    return product;
   }
 }

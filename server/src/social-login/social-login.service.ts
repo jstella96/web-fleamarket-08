@@ -29,9 +29,8 @@ export class SocialLoginService {
       where: { id: user.id },
       relations: { userRegions: true },
     });
-    console.log('user', user);
 
-    return this.userService.findUser(user.id);
+    return await this.userService.findUser(user.id);
     // } catch (error) {
     //   throw new HttpException('깃헙 로그인 실패', HttpStatus.UNAUTHORIZED);
     // }

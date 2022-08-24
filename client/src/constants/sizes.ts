@@ -4,6 +4,8 @@ const SIZES = {
   productImage: '20rem',
   productFooter: '4.28125rem',
   writeFooter: '3.625rem',
+  chatFooter: '4.125rem',
+  chatProductInfo: '4.5625rem',
 };
 
 export default SIZES;

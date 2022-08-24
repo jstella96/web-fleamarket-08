@@ -1,105 +1,99 @@
-
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import api from 'src/api';
-import Header from 'src/components/common/Header';
-import { ChatDetail, ChatRoom } from 'src/types';
+import Layout from 'src/components/common/Layout';
+import ProductImage from 'src/components/common/ProductImage';
+import COLORS from 'src/constants/colors';
+import { ChatRoom } from 'src/types';
+import { getRelativeTime } from 'src/utils/date';
 import styled from 'styled-components/macro';
 
 export default function Chat() {
-
-  const [chatInput, setChatInput] = useState('');
-  const [chats, setChats] = useState<ChatDetail[]>([]);
-  const [chatRoom, setChatRoom] = useState<ChatRoom>();
-  const { id: productId } = useParams();
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>();
+  const { productId } = useParams();
 
   useEffect(() => {
-    let eventSource: EventSource;
-
-    const initChats = async () => {
-      if (productId === undefined) return;
-      const { data: chatRoomData } = await api.createChatRoom({
-        content: '',
-        productId: Number(productId),
-      });
-
-      setChatRoom(chatRoomData);
-
-      const { data: chatContentsData } = await api.getChats(chatRoomData.id);
-      setChats(chatContentsData.contents);
-
-      eventSource = new EventSource(
-        `${process.env.REACT_APP_API_ENDPOINT}/chats/${chatRoomData.id}/connect`
-      );
-
-      eventSource.onmessage = function (event: MessageEvent<string>) {
-        const data: ChatDetail = JSON.parse(event.data);
-        setChats((prev) => [data, ...prev]);
-      };
+    const initChatRooms = async () => {
+      if (productId === undefined) return null;
+      const { data } = await api.getChatRooms(Number(productId));
+      setChatRooms(data);
     };
 
-    initChats();
-
-    return () => {
-      eventSource.close();
-    };
+    initChatRooms();
   }, [productId]);
 
   return (
-    <div>
-      <Header title="채팅하기" />
-      <p>배달이와의 채팅 - 임시 구현</p>
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          if (!chatInput) return;
-          if (!chatRoom) return;
-
-          await api.createChat(chatRoom.id, { content: chatInput });
-          setChatInput('');
-        }}
-      >
-        <input
-          placeholder="채팅 입력"
-          value={chatInput}
-          onChange={(event) => setChatInput(event.target.value)}
-        />
-        <button type="submit">입력</button>
-      </form>
-      <ul>
-        {chats?.map((chat) => (
-          <li key={chat.id}>
-            <Content>
-              <p>
-                <span>{chat.user.name}: </span>
-                <span>{chat.content}</span>
-              </p>
-              <ContentDate>
-                {new Date(chat.createdAt).toLocaleDateString('ko', {
-                  hour12: false,
-                  hour: 'numeric',
-                  minute: '2-digit',
-                  second: '2-digit',
-                })}
-              </ContentDate>
-            </Content>
-          </li>
-        ))}
-      </ul>
-      {/* <Link to="/chat/2">채팅방</Link> */}
-    </div>
+    <Layout title="채팅 목록">
+      {chatRooms?.map((chatRoom) => (
+        <ChatRoomLink
+          key={chatRoom.id}
+          to={`/chat-detail/${chatRoom.product.id}`}
+        >
+          <LeftPanel>
+            <UserName>{chatRoom.buyer.name}</UserName>
+            <LastChat>{chatRoom.lastChat.content}</LastChat>
+          </LeftPanel>
+          <RightPanel>
+            <div>
+              <p>{getRelativeTime(chatRoom.lastChat.createdAt)}</p>
+              <UnreadContentsCount>
+                {chatRoom.unReadContents.length}
+              </UnreadContentsCount>
+            </div>
+            <ProductImage src={chatRoom.product.thumbnail.imageUrl} />
+          </RightPanel>
+        </ChatRoomLink>
+      ))}
+    </Layout>
   );
 }
 
-const Content = styled.p`
+const ChatRoomLink = styled(Link)`
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding-right: 0.5rem;
-  word-break: break-all;
-  line-height: 1.5rem;
+  padding: 1rem;
+  border-bottom: 1px solid ${COLORS.grey3};
 `;
 
-const ContentDate = styled.span`
-  min-width: 9rem;
+const LeftPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const UserName = styled.p`
+  font-weight: 600;
+`;
+
+const LastChat = styled.p`
+  max-width: 14rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: ${COLORS.grey1};
+`;
+
+const RightPanel = styled.div`
+  display: flex;
+  gap: 1rem;
+  color: ${COLORS.grey1};
+
+  div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+`;
+
+const UnreadContentsCount = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  border-radius: 100%;
+  background-color: ${COLORS.primary3};
+  color: ${COLORS.white};
 `;

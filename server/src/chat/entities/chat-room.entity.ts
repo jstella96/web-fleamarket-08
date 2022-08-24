@@ -44,4 +44,64 @@ export class ChatRoom extends BaseEntity {
   chatContents: ChatContent[];
 
   unReadContents: ChatContent[];
+
+  static getChatRoomQuery({
+    userId,
+    productId,
+  }: {
+    userId: number;
+    productId?: number;
+  }) {
+    const userCondition = `seller_id=${userId} OR buyer_id=${userId}`;
+
+    return this.createQueryBuilder('chatRoom')
+      .leftJoinAndSelect('chatRoom.product', 'product')
+      .leftJoinAndSelect('chatRoom.seller', 'seller')
+      .leftJoinAndSelect('chatRoom.buyer', 'buyer')
+      .where(
+        productId !== undefined
+          ? `(${userCondition}) AND (product.id=${productId})`
+          : userCondition
+      )
+      .leftJoinAndMapOne(
+        'chatRoom.lastChat',
+        'chatRoom.chatContents',
+        'contents',
+        'contents.id=(SELECT max(id) FROM chat_content where chat_content.chat_room_id = chatRoom.id)'
+      )
+      .leftJoinAndMapMany(
+        'chatRoom.unReadContents',
+        'chatRoom.chatContents',
+        'chatContents',
+        `chatContents.chat_room_id = chatRoom.id and (
+          ${
+            userId
+              ? '(chatContents.createdAt > chatRoom.buyer_last_active_time)'
+              : '(chatContents.createdAt > chatRoom.seller_last_active_time)'
+          }
+          )
+        `
+      )
+      .leftJoinAndMapOne(
+        'product.author',
+        'product.user',
+        'author',
+        'author.id=product.user_id'
+      )
+      .loadRelationCountAndMap('product.chatCount', 'product.chatRooms')
+      .loadRelationCountAndMap('product.likeCount', 'product.productLikes')
+      .leftJoinAndMapOne(
+        'product.thumbnail',
+        'product.images',
+        'thumbnail',
+        'thumbnail.id=(SELECT min(id) FROM product_image WHERE product_image.product_id=product.id)'
+      )
+      .leftJoinAndMapOne(
+        'product.isLiked',
+        'product.productLikes',
+        'isLiked',
+        `isLiked.user_id=${userId || null}`
+      )
+      .leftJoinAndSelect('product.region', 'region');
+  }
 }

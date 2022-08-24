@@ -78,9 +78,13 @@ export default function Product() {
               <Heart />
             </LikeButton>
             <p>{Number(product.price).toLocaleString()}원</p>
-            {/* <Link to={`${isSeller ? '/chat' : `/chat:${product.id}`}`}> */}
-            <ChatButton>{isSeller ? '채팅목록보기' : '문의하기'}</ChatButton>
-            {/* </Link> */}
+            <ChatLink
+              to={`${
+                isSeller ? `/chat/${product.id}` : `/chat-detail/${product.id}`
+              }`}
+            >
+              {isSeller ? '채팅목록보기' : '문의하기'}
+            </ChatLink>
           </Footer>
         </>
       )}
@@ -171,7 +175,7 @@ const LikeButton = styled.button`
   background: 0;
 `;
 
-const ChatButton = styled.button`
+const ChatLink = styled(Link)`
   flex-grow: 1;
   padding: 0.75rem 1rem;
   border: 0;

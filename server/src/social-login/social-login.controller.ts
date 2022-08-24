@@ -25,7 +25,6 @@ export class SocialLoginController {
     @Res({ passthrough: true }) res: Response
   ) {
     const user = await this.socialLoginService.login(socialLoginDto);
-    console.log(user);
     return sendSessionResponse(user, res);
   }
 
