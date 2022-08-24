@@ -10,6 +10,7 @@ import { RegionModule } from './region/region.module';
 import { SocialLoginModule } from './social-login/social-login.module';
 import { UserModule } from './user/user.module';
 import { LogoutModule } from './logout/logout.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { LogoutModule } from './logout/logout.module';
     SocialLoginModule,
     LoginModule,
     LogoutModule,
+    AwsModule,
   ],
 })
 export class AppModule {}

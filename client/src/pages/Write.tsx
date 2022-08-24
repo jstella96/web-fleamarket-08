@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from 'src/api';
 import { ChevronRight, MapPin } from 'src/assets/icons';
 import Layout from 'src/components/common/Layout';
+import ImageUploader from 'src/components/common/ImageUploader';
 import useCategories from 'src/components/hooks/useCategories';
 import CategoryModal from 'src/components/write/categoryModal';
 import COLORS from 'src/constants/colors';
@@ -18,7 +19,11 @@ export default function Write() {
   const [price, setPrice] = useState<number>();
   const [content, setContent] = useState('');
   const navigate = useNavigate();
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const { getPrimaryRegionCode, getPrimaryRegionName } = useUserRigionState();
+
+
   const isFormValid = useMemo(
     () => (title && selectedCategory && content ? true : false),
     [title, selectedCategory, content]
@@ -33,7 +38,9 @@ export default function Write() {
       price: price || 0,
       content,
       categoryId: selectedCategory.id,
-      imageUrls: [],
+
+      imageUrls: imageUrls,
+
       regionCode: getPrimaryRegionCode(),
     });
     navigate(`/product/${data.id}`, { replace: true });
@@ -43,6 +50,7 @@ export default function Write() {
     if (!selectedCategory) return <span>카테고리 선택</span>;
     return <span>{selectedCategory.name}</span>;
   };
+
   return (
     <Layout
       title="글쓰기"
@@ -59,6 +67,12 @@ export default function Write() {
           value={title}
           onChange={({ target: { value } }) => setTitle(value)}
         />
+
+        <ImageUploader
+          imageUrls={imageUrls}
+          setImageUrls={setImageUrls}
+        ></ImageUploader>
+
         <CategoryButton onClick={() => setShowCategoryModal(true)}>
           {printCategoryName()}
           <ChevronRight />

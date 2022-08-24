@@ -39,6 +39,8 @@ const api = {
   mockLogin: () => instance.post<User>('/login/mock'),
 
   logout: () => instance.post('/logout'),
+
+  getSignedUrl: () => instance.get('/aws/signed-url'),
 };
 
 export default api;
