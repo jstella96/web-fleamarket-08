@@ -21,14 +21,12 @@ export default function Write() {
   const navigate = useNavigate();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const { getPrimaryRegionCode, getPrimaryRegionName } = useUserRigionState();
-
+  const { getPrimaryRegionName } = useUserRigionState();
 
   const isFormValid = useMemo(
     () => (title && selectedCategory && content ? true : false),
     [title, selectedCategory, content]
   );
-  const { getPrimaryRegionCode, getPrimaryRegionName } = useUserRigionState();
 
   const handleClickSubmitButton = async () => {
     if (!selectedCategory) return;
@@ -40,8 +38,6 @@ export default function Write() {
       categoryId: selectedCategory.id,
 
       imageUrls: imageUrls,
-
-      regionCode: getPrimaryRegionCode(),
     });
     navigate(`/product/${data.id}`, { replace: true });
   };
