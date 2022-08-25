@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Message } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
@@ -7,23 +8,26 @@ import styled from 'styled-components/macro';
 
 interface ProductItemProps {
   product: Product;
+  rightButton?: ReactNode;
 }
 
 const DEFAULT_IMAGE =
   'https://mblogthumb-phinf.pstatic.net/MjAxOTA1MTdfMjg5/MDAxNTU4MDU5MjY3NzI0.La9iCTKSS9Cue6MbMeNSJADSkjSr0VMPlAsIdQYGjoYg.q_VK0tw6okzVQOBJbXGKFFGJkLJUqLVT26CZ9qe29Xcg.PNG.smartbaedal/%ED%97%A4%ED%97%A4%EB%B0%B0%EB%8B%AC%EC%9D%B4_%EC%9E%90%EB%A5%B8%EA%B2%83.png?type=w800';
 
-export default function ProductItem({ product }: ProductItemProps) {
+export default function ProductItem({
+  product,
+  rightButton,
+}: ProductItemProps) {
   const {
     id,
     title,
     region,
     createdAt,
     price,
-    likeCount,
     chatCount,
     thumbnail,
+    likeCount,
   } = product;
-  console.log(thumbnail);
   return (
     <Container to={`/product/${id}`}>
       <ImageContainer>
@@ -37,9 +41,7 @@ export default function ProductItem({ product }: ProductItemProps) {
       <RightPanel>
         <TitleContainer>
           <Title>{title}</Title>
-          <LikeButton>
-            <Heart />
-          </LikeButton>
+          <RightButton>{rightButton}</RightButton>
         </TitleContainer>
         <RegionAndDate>
           <span>{region.name}</span>
@@ -105,7 +107,7 @@ const Title = styled.p`
   font-size: 1.25rem;
 `;
 
-const LikeButton = styled.button`
+const RightButton = styled.button`
   display: inline-flex;
   border: 0;
   background: 0;

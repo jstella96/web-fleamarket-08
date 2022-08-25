@@ -47,7 +47,7 @@ const Container = styled.div<{
 }>`
   background: inherit;
   will-change: transform;
-  transition: transform 2s;
+  transition: transform 0.35s;
   ${({ pagePosition }) => {
     switch (pagePosition) {
       case SLIDER_POSITION.TO_LEFT:

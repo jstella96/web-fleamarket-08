@@ -39,15 +39,23 @@ export class ProductService {
     return await Product.getOne(product.id, userId);
   }
 
-  async findAll(userId: number) {
+  async findAll(userId: number, isSale?: boolean) {
     const products = await Product.getProductQuery(userId)
       .select(['product', 'author', 'thumbnail', 'isLiked', 'region'])
+      .where(isSale ? `author.id=${userId}` : '')
       .getMany();
 
     return products.map((product) => ({
       ...product,
       isLiked: product['isLiked'] ? true : false,
     }));
+  }
+
+  async findLikedProduct(userId: number) {
+    const products = await Product.getProductQuery(userId)
+      .select(['product', 'author', 'thumbnail', 'isLiked', 'region'])
+      .getMany();
+    return products.filter((product) => product['isLiked']);
   }
 
   async findOne(id: number, userId: number) {

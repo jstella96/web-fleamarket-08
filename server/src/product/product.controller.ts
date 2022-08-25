@@ -8,10 +8,11 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { Request } from 'express';
 
@@ -27,10 +28,20 @@ export class ProductController {
     return this.productService.create(productDto, userId);
   }
 
+  @ApiQuery({ name: 'type', type: String, required: false })
   @Get('')
-  findAll(@Req() request: Request) {
+  findAll(@Query('type') type: string, @Req() request: Request) {
     const userId = request['userId'];
-    return this.productService.findAll(userId);
+    if (type === 'like') {
+      return this.productService.findLikedProduct(userId);
+    }
+    return this.productService.findAll(userId, type === 'sale');
+  }
+
+  @Get('')
+  findLikedProduct(@Query('value') value: string, @Req() request: Request) {
+    const userId = request['userId'];
+    return this.productService.findLikedProduct(userId);
   }
 
   @Get(':id')
