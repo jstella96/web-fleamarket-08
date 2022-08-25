@@ -19,11 +19,8 @@ export default function Header() {
 
   const { getPrimaryRegionName } = useUserRigionState();
 
-
-
   return (
     <Container>
-
       <Link to="/category" state={{ backgroundLocation: location }}>
         <Category />
       </Link>
@@ -42,7 +39,7 @@ export default function Header() {
         >
           <User />
         </Link>
-        <Link to="/mypage" state={{ backgroundLocation: location }}>
+        <Link to="/mypage">
           <Menu />
         </Link>
       </RightPanel>

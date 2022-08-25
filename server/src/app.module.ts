@@ -29,7 +29,7 @@ import { AwsModule } from './aws/aws.module';
         autoLoadEntities: true,
         timezone: 'Asia/Seoul',
         // dropSchema: true,
-        logging: true,
+        //  logging: true,
       }),
       inject: [ConfigService],
     }),

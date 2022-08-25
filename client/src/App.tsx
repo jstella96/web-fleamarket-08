@@ -38,6 +38,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<Product />} />
+
         <Route path="" element={<Unauthorized />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/category" element={<Category />} />
@@ -45,6 +46,7 @@ function App() {
           <Route path="/write" element={<Write />} />
           <Route path="/chat/:productId" element={<Chat />} />
           <Route path="/chat-detail/:productId" element={<ChatDetail />} />
+
           <Route path="/mypage" element={<MyPage />} />
         </Route>
       </Routes>
@@ -54,7 +56,6 @@ function App() {
             <Route path="/category" element={<Category />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/mypage" element={<MyPage />} />
           </Route>
         </Routes>
       )}

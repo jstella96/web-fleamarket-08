@@ -32,6 +32,5 @@ export class SocialLoginController {
   @Get()
   test(@Req() request: Request) {
     const userId = request['userId'];
-    console.log(userId);
   }
 }
