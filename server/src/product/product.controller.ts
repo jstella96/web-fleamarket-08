@@ -9,6 +9,8 @@ import {
   UseGuards,
   Req,
   Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
@@ -74,6 +76,11 @@ export class ProductController {
   @Post(':id/like')
   like(@Param('id') id: number, @Req() request: Request) {
     const userId = request['userId'];
+    if (!userId)
+      throw new HttpException(
+        `userId 가 없으면 좋아요를 클릭할 수 없습니다.`,
+        HttpStatus.METHOD_NOT_ALLOWED
+      );
     return this.productService.like(id, userId);
   }
 }
