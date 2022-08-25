@@ -7,6 +7,7 @@ import RegionInputModal from 'src/components/region/RegionInputModal';
 import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
+import { flexRow } from 'src/styles/common';
 import styled from 'styled-components';
 
 export default function MyRegion() {
@@ -79,9 +80,10 @@ const Text = styled.p`
 `;
 
 const ButtonWrapper = styled.div`
-  display: flex;
+  ${flexRow};
   justify-content: center;
   button {
+    ${flexRow};
     cursor: pointer;
     background: ${COLORS.white};
     border: 1px solid ${COLORS.primary1};
@@ -90,7 +92,6 @@ const ButtonWrapper = styled.div`
     height: 2.25rem;
     border-radius: 0.5rem;
     margin: 0 1rem;
-    display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem;

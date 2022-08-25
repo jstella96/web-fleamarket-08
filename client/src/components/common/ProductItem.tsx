@@ -88,7 +88,7 @@ const ImageContainer = styled.div`
 const RightPanel = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
   width: 100%;
 `;
 
@@ -105,7 +105,7 @@ const Title = styled.p`
   font-size: 1.25rem;
 `;
 
-const RightButton = styled.button`
+const RightButton = styled.div`
   display: inline-flex;
   border: 0;
   background: 0;
@@ -124,6 +124,7 @@ const CountsContainer = styled.div`
 
   span {
     display: flex;
+    align-items: center;
     gap: 0.25rem;
   }
 `;

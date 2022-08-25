@@ -7,6 +7,7 @@ import Layout from 'src/components/common/Layout';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
 import { userState } from 'src/recoil/atoms/user';
+import { fixedBottom, flexColumn, flexRow } from 'src/styles/common';
 import { ProductDetail } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import styled from 'styled-components/macro';
@@ -103,16 +104,14 @@ const ImageContainer = styled.div`
 `;
 
 const Main = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn};
   gap: 1rem;
   padding: 1rem;
   min-height: calc(100% - ${SIZES.productImage} - ${SIZES.productFooter});
 `;
 
 const TitleContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn};
   gap: 0.5rem;
 `;
 
@@ -131,7 +130,7 @@ const Content = styled.p`
 `;
 
 const AuthorInfo = styled.div`
-  display: flex;
+  ${flexRow};
   align-items: center;
   gap: 1rem;
   padding: 1rem;
@@ -153,9 +152,8 @@ const AuthorInfo = styled.div`
 `;
 
 const Footer = styled.div`
-  position: fixed;
-  bottom: 0;
-  display: flex;
+  ${fixedBottom};
+  ${flexRow};
   align-items: center;
   gap: 1rem;
   width: 100%;
@@ -170,7 +168,7 @@ const Footer = styled.div`
 `;
 
 const LikeButton = styled.button`
-  display: flex;
+  ${flexRow}
   border: none;
   background: 0;
 `;

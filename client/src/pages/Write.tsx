@@ -11,6 +11,7 @@ import SIZES from 'src/constants/sizes';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { Category } from 'src/types';
 import styled from 'styled-components/macro';
+import { fixedBottom, flexColumn, flexRow } from 'src/styles/common';
 
 export default function Write() {
   const categories = useCategories();
@@ -115,14 +116,13 @@ const SubmitButton = styled.button`
 `;
 
 const InputsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn};
   padding: 1rem;
   height: calc(100% - ${SIZES.writeFooter});
   input,
   p,
   textarea {
-    display: flex;
+    ${flexRow}
     padding: 1.5rem 0;
     border: none;
     border-bottom: 1px solid ${COLORS.grey3};
@@ -133,19 +133,18 @@ const InputsContainer = styled.div`
     resize: vertical;
   }
   label {
-    display: flex;
+    ${flexRow};
     gap: 0.25rem;
   }
 `;
 const CategoryButton = styled.p`
-  display: flex;
+  ${flexRow};
   justify-content: space-between;
   align-items: center;
 `;
 const Location = styled.div`
-  position: fixed;
-  bottom: 0;
-  display: flex;
+  ${fixedBottom};
+  ${flexRow};
   align-items: center;
   gap: 0.25rem;
   width: 100%;

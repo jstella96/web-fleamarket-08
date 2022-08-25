@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Send } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
+import { fixedBottom, flexRow } from 'src/styles/common';
 import styled from 'styled-components/macro';
 
 interface ChatFormProps {
@@ -33,9 +34,8 @@ export default function ChatForm({ onSubmit }: ChatFormProps) {
 }
 
 const Container = styled.form`
-  position: fixed;
-  bottom: 0;
-  display: flex;
+  ${fixedBottom};
+  ${flexRow};
   gap: 1rem;
   width: 100%;
   padding: 0.75rem 0.5rem;
@@ -50,7 +50,7 @@ const Container = styled.form`
   }
 
   button {
-    display: flex;
+    ${flexRow}
     align-items: center;
     color: ${COLORS.titleActive};
 

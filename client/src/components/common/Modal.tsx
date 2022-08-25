@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { fixedEntire, flexRow } from 'src/styles/common';
 import styled from 'styled-components';
 
 interface ModalProps {
@@ -20,13 +21,9 @@ export default function ChatLeaveModal({ children, close }: ModalProps) {
 }
 
 const ModalContainer = styled.div`
-  position: fixed;
-  display: flex;
+  ${fixedEntire};
+  ${flexRow};
   align-items: center;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   z-index: 100;
   background: rgba(34, 34, 34, 0.3);
 `;

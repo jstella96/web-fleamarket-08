@@ -1,8 +1,9 @@
 import api from 'src/api';
 import { putImage } from 'src/api/aws';
-import { Close, Image } from 'src/assets/icons';
+import { Image } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
-import styled from 'styled-components';
+import { flexRow, FlexboxRow, absoluteBottom } from 'src/styles/common';
+import styled from 'styled-components/macro';
 
 interface ImageUpaloderProps {
   imageUrls: string[];
@@ -38,36 +39,39 @@ export default function ImageUploader({
 
   return (
     <Container>
-      <Box>
-        <UploadBox>
-          <label>
-            <input
-              type="file"
-              onChange={handleUploadFile}
-              accept=".jpg, .jpeg, .png"
-            />
-            <Image></Image>
-            <span>{`${imageUrls.length}/${MAX_IMAGE}`}</span>
-          </label>
-        </UploadBox>
-      </Box>
-      {imageUrls.map((imageUrl, index) => (
-        <Box key={imageUrl}>
-          <CloseWrapper onClick={() => deleteFile(index)}>X</CloseWrapper>
-          <ImageBox>
-            <UploadImage src={imageUrl}></UploadImage>
-            {index === 0 && <PrimaryTag>대표사진</PrimaryTag>}
-          </ImageBox>
+      <FlexboxRow>
+        <Box>
+          <UploadBox>
+            <label>
+              <input
+                type="file"
+                onChange={handleUploadFile}
+                accept=".jpg, .jpeg, .png"
+              />
+              <Image></Image>
+              <span>{`${imageUrls.length}/${MAX_IMAGE}`}</span>
+            </label>
+          </UploadBox>
         </Box>
-      ))}
+        {imageUrls.map((imageUrl, index) => (
+          <Box key={imageUrl}>
+            <CloseWrapper onClick={() => deleteFile(index)}>X</CloseWrapper>
+            <ImageBox>
+              <UploadImage src={imageUrl}></UploadImage>
+              {index === 0 && <PrimaryTag>대표사진</PrimaryTag>}
+            </ImageBox>
+          </Box>
+        ))}
+      </FlexboxRow>
     </Container>
   );
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow}
+  overflow-x: auto;
 `;
+
 const Box = styled.div`
   display: block;
   width: 5rem;
@@ -119,9 +123,8 @@ const UploadBox = styled.div`
   }
 `;
 const PrimaryTag = styled.div`
-  bottom: 0;
+  ${absoluteBottom};
   width: 100%;
-  position: absolute;
   background: ${COLORS.titleActive};
   color: ${COLORS.offWhite};
   text-align: center;
@@ -131,6 +134,9 @@ const PrimaryTag = styled.div`
 `;
 const UploadImage = styled.img`
   width: 100%;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
 `;
 const ImageBox = styled.div`
   border-radius: 0.5rem;

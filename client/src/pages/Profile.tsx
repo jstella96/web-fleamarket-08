@@ -4,6 +4,7 @@ import api from 'src/api';
 import Button from 'src/components/common/Button';
 import Layout from 'src/components/common/Layout';
 import { userState } from 'src/recoil/atoms/user';
+import { flexRow } from 'src/styles/common';
 import styled from 'styled-components/macro';
 
 export default function Profile() {
@@ -27,7 +28,7 @@ export default function Profile() {
 }
 
 const Container = styled.div`
-  display: flex;
+  ${flexRow};
   flex-direction: column;
   gap: 1rem;
   padding: 0.75rem;

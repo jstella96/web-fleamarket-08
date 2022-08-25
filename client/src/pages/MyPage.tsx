@@ -3,6 +3,7 @@ import Layout from 'src/components/common/Layout';
 import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
 import Chat from 'src/components/menu/Chat';
 import COLORS from 'src/constants/colors';
+import { absoluteBottom, flexRow } from 'src/styles/common';
 import styled from 'styled-components';
 enum Menu {
   SalesList = '판매목록',
@@ -32,18 +33,29 @@ export default function MyPage() {
 }
 
 const Nav = styled.nav`
+  ${flexRow};
+
   width: 100%;
-  display: flex;
   background: ${COLORS.offWhite};
 `;
+
 const NavButton = styled.button`
+  position: relative;
   margin: 0.1rem 2rem;
   padding: 0.75rem;
   flex: 1;
   transition: border-bottom 0.2s;
+  white-space: nowrap;
+
   &.selected {
-    color: ${COLORS.primary1};
-    border-bottom: 2px solid ${COLORS.primary1};
+    &:after {
+      content: '';
+      ${absoluteBottom};
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: ${COLORS.primary1};
+    }
   }
 `;
 

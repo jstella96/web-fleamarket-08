@@ -1,4 +1,5 @@
 import COLORS from 'src/constants/colors';
+import { flexColumn, flexRow } from 'src/styles/common';
 import { ChatContent as ChatContentType } from 'src/types';
 import styled, { css } from 'styled-components/macro';
 
@@ -27,7 +28,7 @@ export default function ChatContent({ content, isMe }: ChatContentProps) {
 }
 
 const Container = styled.div<{ isMe?: boolean }>`
-  display: flex;
+  ${flexRow};
   align-items: flex-end;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
@@ -43,8 +44,7 @@ const Container = styled.div<{ isMe?: boolean }>`
 `;
 
 const UserContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn};
   align-items: baseline;
 `;
 

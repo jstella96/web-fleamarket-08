@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useOutlet } from 'react-router-dom';
 import { SLIDER_POSITION } from 'src/constants/sliderPosition';
+import { fixedTop } from 'src/styles/common';
 import styled from 'styled-components/macro';
 import PageSlider from './PageSlider';
 
@@ -29,8 +30,7 @@ export default function TransitionLayout() {
 }
 const Animation = styled.div`
   z-index: 100;
-  position: fixed;
-  top: 0;
+  ${fixedTop};
   left: 0;
   width: 100%;
   height: 100%;

@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
+import { fixedEntire } from 'src/styles/common';
 import styled, { css } from 'styled-components';
 
 interface RegionSelectModalProps {
@@ -48,13 +49,9 @@ export default function RegionSelectModal({
 }
 
 const Modal = styled.div<{ isOpen: Boolean }>`
+  ${fixedEntire};
   color: ${COLORS.titleActive};
   display: none;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   z-index: 100;
   background: rgba(34, 34, 34, 0.3);
   padding-top: 3rem;

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
+import { absoluteCenter, fixedTop } from 'src/styles/common';
 import styled from 'styled-components/macro';
 
 interface HeaderProps {
@@ -29,12 +30,10 @@ export default function Header({
 }
 
 const Container = styled.header<{ transparent?: boolean }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  ${fixedTop};
   display: flex;
   justify-content: space-between;
+  width: 100%;
   padding: 0.75rem;
   background-color: ${({ transparent }) => !transparent && COLORS.white};
   border-bottom: ${({ transparent }) =>
@@ -48,9 +47,6 @@ const BackButton = styled.button`
 `;
 
 const Title = styled.h1`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  ${absoluteCenter};
   font-size: 1rem;
 `;
