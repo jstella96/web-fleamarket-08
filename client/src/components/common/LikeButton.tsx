@@ -1,6 +1,7 @@
 import { Heart } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
 import styled, { css } from 'styled-components/macro';
+
 import api from 'src/api';
 interface LikeButtonProps {
   productId: number;
@@ -22,11 +23,14 @@ export default function LikeButton({
   };
 
   return (
+
     <Container isLike={isLike} onClick={handleLikeButtonClick}>
+
       <Heart></Heart>
     </Container>
   );
 }
+
 
 const Container = styled.button<{
   isLike: Boolean;

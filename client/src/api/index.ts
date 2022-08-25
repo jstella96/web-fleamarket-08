@@ -18,7 +18,8 @@ const api = {
   getCategories: () => instance.get<Category[]>('/categories'),
 
   createProduct: (product: ProductDto) => instance.post<ProductDetail>('/products', product),
-  getProducts: (type?: string) => instance.get<Product[]>('/products', { params: { type } }),
+  getProducts: (type?: string, categoryId?: number) =>
+    instance.get<Product[]>('/products', { params: { type, categoryId } }),
   getProduct: (productId: number) => instance.get<ProductDetail>(`/products/${productId}`),
   updateProduct: (productId: number, product: Partial<ProductDto>) =>
     instance.patch<ProductDetail>(`/products/${productId}`, product),

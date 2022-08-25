@@ -29,13 +29,18 @@ export class ProductController {
   }
 
   @ApiQuery({ name: 'type', type: String, required: false })
+  @ApiQuery({ name: 'categoryId', type: String, required: false })
   @Get('')
-  findAll(@Query('type') type: string, @Req() request: Request) {
+  findAll(
+    @Query('type') type: string,
+    @Query('categoryId') categoryId: number,
+    @Req() request: Request
+  ) {
     const userId = request['userId'];
     if (type === 'like') {
       return this.productService.findLikedProduct(userId);
     }
-    return this.productService.findAll(userId, type === 'sale');
+    return this.productService.findAll(userId, type === 'sale', categoryId);
   }
 
   @Get('')

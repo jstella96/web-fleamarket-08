@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { MoreVertical } from 'src/assets/icons';
+import { categoryState } from 'src/recoil/atoms/category';
+
 import { Product } from 'src/types';
 import ProductItem from '../common/ProductItem';
 import LikeButton from './LikeButton';
@@ -10,6 +13,7 @@ interface ProductItemWrapperProps {
 }
 
 export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
+
   const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
     const initProducts = async () => {
@@ -21,6 +25,7 @@ export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
 
   const clickLikeButton = (productId: number) => {
     setProducts((prevProducts) => {
+
       return prevProducts.map((product) => {
         if (product.id === productId) {
           product.isLiked = !product.isLiked;

@@ -39,10 +39,11 @@ export class ProductService {
     return await Product.getOne(product.id, userId);
   }
 
-  async findAll(userId: number, isSale?: boolean) {
+  async findAll(userId: number, isSale?: boolean, categoryId?: number) {
     const products = await Product.getProductQuery(userId)
       .select(['product', 'author', 'thumbnail', 'isLiked', 'region'])
       .where(isSale ? `author.id=${userId}` : '')
+      .where(!isSale && categoryId ? `category.id=${categoryId}` : '')
       .getMany();
 
     return products.map((product) => ({

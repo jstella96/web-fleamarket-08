@@ -23,6 +23,7 @@ export default function Header() {
     <Container>
       <Link to="/category" state={{ backgroundLocation: location }}>
         <Category />
+        <CategoryName>{category?.name}</CategoryName>
       </Link>
 
       <Location
@@ -80,6 +81,11 @@ const CategoryLink = styled(Link)`
   display: flex;
   align-items: center;
   font-size: 0.875rem;
+`;
+
+const CategoryName = styled.span`
+  font-size: 0.7rem;
+  margin-left: 0.3rem;
 `;
 
 const RightPanel = styled.div`

@@ -12,14 +12,9 @@ import styled from 'styled-components/macro';
 export default function Home() {
   const user = useRecoilValue(userState);
 
-  const sessionTest = () => {
-    api.socialLoginTest();
-  };
-
   return (
     <Container>
       <MainHeader />
-      <button onClick={sessionTest}>test</button>
       {user && (
         <>
           <p>현재 로그인한 유저: {user.name}</p>
