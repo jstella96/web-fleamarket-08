@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Message } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
+import { DEFAULT_IMAGE } from 'src/constants/image';
 import { Product } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import styled from 'styled-components/macro';
@@ -10,9 +11,6 @@ interface ProductItemProps {
   product: Product;
   rightButton?: ReactNode;
 }
-
-const DEFAULT_IMAGE =
-  'https://mblogthumb-phinf.pstatic.net/MjAxOTA1MTdfMjg5/MDAxNTU4MDU5MjY3NzI0.La9iCTKSS9Cue6MbMeNSJADSkjSr0VMPlAsIdQYGjoYg.q_VK0tw6okzVQOBJbXGKFFGJkLJUqLVT26CZ9qe29Xcg.PNG.smartbaedal/%ED%97%A4%ED%97%A4%EB%B0%B0%EB%8B%AC%EC%9D%B4_%EC%9E%90%EB%A5%B8%EA%B2%83.png?type=w800';
 
 export default function ProductItem({
   product,

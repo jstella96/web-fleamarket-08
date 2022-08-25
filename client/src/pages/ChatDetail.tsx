@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { LogOut } from 'src/assets/icons';
 import ChatContent from 'src/components/chat/ChatContent';
 import ChatForm from 'src/components/chat/ChatForm';
+import ChatLeaveModal from 'src/components/chat/ChatLeaveModal';
 import ProductInfo from 'src/components/chat/ProductInfo';
 import Layout from 'src/components/common/Layout';
 import SIZES from 'src/constants/sizes';
@@ -19,20 +20,28 @@ export default function ChatDetail() {
   const [product, setProduct] = useState<Product>();
   const user = useRecoilValue(userState);
   const eventSource = useRef<EventSource>();
+  const [showChatLeaveModal, setShowChatLeaveModal] = useState(false);
 
-  const connectChat = (chatRoomId: Number) => {
+  const closeChat = () => eventSource.current?.close();
+
+  const connectChat = useCallback((chatRoomId: Number) => {
     eventSource.current = new EventSource(
       `${process.env.REACT_APP_API_ENDPOINT}/chats/${chatRoomId}/connect`
     );
 
-    eventSource.current.onmessage = function (event: MessageEvent<string>) {
+    eventSource.current.onmessage = (event: MessageEvent<string>) => {
       const data: ChatContentType = JSON.parse(event.data);
       setChats((prev) => [...(prev || []), data]);
       setTimeout(() => {
         window.scrollTo(0, document.body.scrollHeight);
       }, 0);
     };
-  };
+
+    eventSource.current.addEventListener('bye', () => {
+      closeChat();
+      connectChat(chatRoomId);
+    });
+  }, []);
 
   const partner = useMemo(() => {
     if (!product || !chatRoom) return null;
@@ -55,20 +64,20 @@ export default function ChatDetail() {
     init();
 
     return () => {
-      eventSource.current?.close();
+      closeChat();
     };
-  }, [productId]);
+  }, [productId, connectChat]);
 
   return (
     <Layout
       title={partner?.name}
       rightButton={
-        <Link to="/chat">
+        <button onClick={() => setShowChatLeaveModal(true)}>
           <LogOut />
-        </Link>
+        </button>
       }
     >
-      {chatRoom && <ProductInfo product={chatRoom.product} />}
+      {product && <ProductInfo product={product} />}
       <Container>
         {chats?.map((content) => (
           <ChatContent
@@ -94,6 +103,12 @@ export default function ChatDetail() {
             await api.createChat(chatRoomData.id, { content });
           }}
         />
+        {showChatLeaveModal && (
+          <ChatLeaveModal
+            close={() => setShowChatLeaveModal(false)}
+            chatRoomId={chatRoom?.id}
+          />
+        )}
       </Container>
     </Layout>
   );

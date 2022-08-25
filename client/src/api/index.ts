@@ -29,6 +29,7 @@ const api = {
   createChatRoom: (chatRoom: CreateChatRoomDto) => instance.post<ChatRoom>('/chats', chatRoom),
   getChatRooms: (productId?: number) => instance.get<ChatRoom[]>('/chats', { params: { productId } }),
   getChatDetail: (productId: number) => instance.get<ChatDetail>(`/chats/detail/${productId}`),
+  leaveChatRoom: (chatRoomId: number) => instance.post(`/chats/${chatRoomId}/leave`),
   createChat: (chatRoomId: number, chat: CreateChatContentDto) =>
     instance.post<ChatContent>(`/chats/${chatRoomId}`, chat),
 

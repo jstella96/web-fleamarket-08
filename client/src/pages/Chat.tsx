@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import Layout from 'src/components/common/Layout';
 import ProductImage from 'src/components/common/ProductImage';
 import COLORS from 'src/constants/colors';
+import { userState } from 'src/recoil/atoms/user';
 import { ChatRoom } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import styled from 'styled-components/macro';
@@ -11,6 +13,7 @@ import styled from 'styled-components/macro';
 export default function Chat() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>();
   const { productId } = useParams();
+  const user = useRecoilValue(userState);
 
   useEffect(() => {
     const initChatRooms = async () => {
@@ -21,6 +24,8 @@ export default function Chat() {
 
     initChatRooms();
   }, [productId]);
+
+  if (!user) return <div>유저 로딩 중</div>;
 
   return (
     <Layout title="채팅 목록">
@@ -40,7 +45,7 @@ export default function Chat() {
                 {chatRoom.unReadContents.length}
               </UnreadContentsCount>
             </div>
-            <ProductImage src={chatRoom.product.thumbnail.imageUrl} />
+            <ProductImage src={chatRoom.product.thumbnail?.imageUrl} />
           </RightPanel>
         </ChatRoomLink>
       ))}

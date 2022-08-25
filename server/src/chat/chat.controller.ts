@@ -60,6 +60,12 @@ export class ChatController {
     return this.chatService.createContent(id, userId, createChatContentDto);
   }
 
+  @Post(':id/leave')
+  leaveChatRoom(@Param('id') id: number, @Req() request: Request) {
+    const userId = request['userId'];
+    return this.chatService.leaveChatRoom(id, userId);
+  }
+
   @Get(':id/connect')
   createConnection(@Param('id') id: number, @Res() res: Response) {
     this.chatService.createConnection(id, res);
