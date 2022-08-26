@@ -2,11 +2,11 @@ import React from 'react';
 import { PRODUCT_LIMIT } from 'src/constants/product';
 import {
   ProductContainer,
+  productImage,
   RightPanelContainer,
-  ImageContainer,
-} from 'src/styles/ProductLayouts';
-import styled from 'styled-components/macro';
+} from 'src/styles/productLayouts';
 import SkeletonItem from 'src/styles/skeletonItem';
+import styled from 'styled-components/macro';
 
 const ProductSkeleton = React.forwardRef((props: any, ref: any) => (
   <SkeletonContainer ref={ref}>
