@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import api from 'src/api';
 import COLORS from 'src/constants/colors';
+import { getMyLocation, fillterRegion } from 'src/utils/location';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
-import { Region, UserRegion } from 'src/types';
-import styled from 'styled-components';
+import { KaKaoRegion, Region, UserRegion } from 'src/types';
+import styled, { css } from 'styled-components';
 import Modal from '../common/Modal';
+import Loading from '../common/Loading';
 
 interface RegionInputModalProps {
   close: () => void;
@@ -18,7 +20,7 @@ export default function RegionInputModal({
   const [inputValue, setInputValue] = useState('');
   const [regions, setRegions] = useState<Region[]>([]);
   const { submitRegion } = useUserRigionState();
-
+  const [isLoding, setIsLoding] = useState(false);
   useEffect(() => {
     const requestGetRegions = async () => {
       if (!inputValue) {
@@ -27,6 +29,7 @@ export default function RegionInputModal({
       }
       const regions = await api.getRegions(inputValue);
       setRegions(regions.data);
+      setIsLoding(false);
     };
     requestGetRegions();
   }, [inputValue]);
@@ -44,6 +47,13 @@ export default function RegionInputModal({
       return <Result>'{inputValue}' 검색결과</Result>;
     }
   };
+
+  const regionSerchCb = (result: KaKaoRegion[], status: string) => {
+    const region = fillterRegion(result, status);
+    if (!region) return;
+    setInputValue(region);
+  };
+
   return (
     <Modal close={close}>
       <Section>
@@ -53,23 +63,36 @@ export default function RegionInputModal({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         ></Input>
+        <MyRegionSearchButton
+          onClick={() => {
+            setIsLoding(true);
+            getMyLocation(regionSerchCb);
+          }}
+        >
+          현재 위치로 검색
+        </MyRegionSearchButton>
         <SearchResult>
-          {printResultText()}
+          {!isLoding && printResultText()}
           <Regions>
-            {regions.map((region) => (
-              <RegionItem
-                className={
-                  nowRegion?.regionCode === region.code ? 'duplicate' : ''
-                }
-                key={region.code}
-                onClick={() => {
-                  submitRegion(region);
-                  close();
-                }}
-              >
-                {region.name}
-              </RegionItem>
-            ))}
+            {isLoding ? (
+              <LoadingContainer>
+                <Loading />
+                <span>오래 걸려요....</span>
+              </LoadingContainer>
+            ) : (
+              regions.map((region) => (
+                <RegionItem
+                  isDuplicate={nowRegion?.regionCode === region.code}
+                  key={region.code}
+                  onClick={() => {
+                    submitRegion(region);
+                    close();
+                  }}
+                >
+                  {region.name}
+                </RegionItem>
+              ))
+            )}
           </Regions>
         </SearchResult>
         <Footer>
@@ -91,6 +114,14 @@ const Section = styled.section`
   flex-direction: column;
   border-radius: 0.6rem;
   justify-content: space-between;
+`;
+const MyRegionSearchButton = styled.button`
+  text-align: center;
+  padding-top: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: ${COLORS.primary1};
+  margin: 0.2rem;
 `;
 const SearchResult = styled.main`
   padding: 0.25rem;
@@ -126,14 +157,16 @@ const Regions = styled.ul`
   height: 80%;
   overflow: auto;
 `;
-const RegionItem = styled.li`
+const RegionItem = styled.li<{ isDuplicate: boolean }>`
+  ${(props) =>
+    props.isDuplicate &&
+    css`
+      background: ${COLORS.grey3};
+      pointer-events: none;
+    `}
   line-height: 1.5;
   border-bottom: 1px solid ${COLORS.grey3};
   padding: 0.85rem 0;
-  &.duplicate {
-    background: ${COLORS.grey3};
-    pointer-events: none;
-  }
 `;
 const Warning = styled.p`
   padding-top: 2rem;
@@ -144,4 +177,8 @@ const Warning = styled.p`
 const Result = styled.p`
   margin-top: 0.2rem;
   font-weight: 600;
+`;
+
+const LoadingContainer = styled.div`
+  text-align: center;
 `;

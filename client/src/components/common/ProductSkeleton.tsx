@@ -4,14 +4,14 @@ import {
   ProductContainer,
   RightPanelContainer,
   ImageContainer,
-} from 'src/styles/productLayouts';
+} from 'src/styles/ProductLayouts';
 import styled from 'styled-components/macro';
 import SkeletonItem from './SkeletonItem';
 
-const ProductSkeleton = React.forwardRef((ref: any) => (
+const ProductSkeleton = React.forwardRef((props: any, ref: any) => (
   <SkeletonContainer ref={ref}>
     {new Array(PRODUCT_LIMIT).fill('').map((_, i) => (
-      <ProductContainerSkeleton>
+      <ProductContainerSkeleton key={i}>
         <ImageContainerSkeleton></ImageContainerSkeleton>
         <RightPanelContainerSkeleton>
           <Title></Title>

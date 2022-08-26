@@ -98,3 +98,15 @@ export interface ChatDetail {
   chatRoom: ChatRoom;
   product: Product;
 }
+
+export interface KaKaoRegion {
+  region_type: string;
+  code: string;
+  address_name: string;
+  region_1depth_name: string;
+  region_2depth_name: string;
+  region_3depth_name: string;
+  region_4depth_name: string;
+  x: number;
+  y: number;
+}

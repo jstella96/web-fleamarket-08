@@ -3,7 +3,7 @@ import COLORS from 'src/constants/colors';
 import styled from 'styled-components';
 
 const Loading = React.forwardRef((props: any, ref: any) => (
-  <LoaderContainer ref={ref}>
+  <LoaderContainer>
     <div className="lds-ring">
       <div></div>
       <div></div>
