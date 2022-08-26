@@ -65,6 +65,7 @@ const Container = styled.header`
   background: ${COLORS.primary1};
   border-radius: 0 0 1rem 1rem;
   color: ${COLORS.white};
+  z-index: 100;
 `;
 
 const Location = styled.div`

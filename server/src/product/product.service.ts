@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PRODUCT_LIMIT } from 'src/constants/page';
 import { User } from 'src/user/entities/user.entity';
 import { ProductDto } from './dto/product.dto';
 import { ProductImage } from './entities/product-image.entity';
@@ -39,11 +40,19 @@ export class ProductService {
     return await Product.getOne(product.id, userId);
   }
 
-  async findAll(userId: number, isSale?: boolean, categoryId?: number) {
+  async findAll(
+    userId: number,
+    isSale?: boolean,
+    categoryId?: number,
+    page?: number
+  ) {
     const products = await Product.getProductQuery(userId)
       .select(['product', 'author', 'thumbnail', 'isLiked', 'region'])
       .where(isSale ? `author.id=${userId}` : '')
       .where(!isSale && categoryId ? `category.id=${categoryId}` : '')
+      .skip(page * PRODUCT_LIMIT)
+      .take(PRODUCT_LIMIT)
+      .orderBy('product.id', 'DESC')
       .getMany();
 
     return products.map((product) => ({

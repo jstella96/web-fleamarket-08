@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
@@ -6,20 +7,12 @@ import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
 import MainHeader from 'src/components/main/MainHeader';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
-import { userState } from 'src/recoil/atoms/user';
 import styled from 'styled-components/macro';
 
 export default function Home() {
-  const user = useRecoilValue(userState);
-
   return (
     <Container>
       <MainHeader />
-      {user && (
-        <>
-          <p>현재 로그인한 유저: {user.name}</p>
-        </>
-      )}
       <ProductItemWrapper />
       <WriteLink to="/write">
         <Add />
