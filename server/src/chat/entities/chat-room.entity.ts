@@ -21,10 +21,10 @@ export class ChatRoom extends BaseEntity {
   @Column()
   isBuyerActive: boolean;
 
-  @Column()
+  @Column({ type: 'datetime', precision: 6 })
   sellerLastActiveTime: Date;
 
-  @Column()
+  @Column({ type: 'datetime', precision: 6 })
   buyerLastActiveTime: Date;
 
   @ManyToOne(() => User, (user) => user.sellerChatRooms)
@@ -44,6 +44,7 @@ export class ChatRoom extends BaseEntity {
   chatContents: ChatContent[];
 
   unReadContents: ChatContent[];
+  lastChat: ChatContent;
 
   static getChatRoomQuery({
     userId,
@@ -73,13 +74,10 @@ export class ChatRoom extends BaseEntity {
         'chatRoom.unReadContents',
         'chatRoom.chatContents',
         'chatContents',
-        `chatContents.chat_room_id = chatRoom.id and (
-          ${
-            userId
-              ? '(chatContents.createdAt > chatRoom.buyer_last_active_time)'
-              : '(chatContents.createdAt > chatRoom.seller_last_active_time)'
-          }
-          )
+        `chatContents.chat_room_id = chatRoom.id AND (
+          (seller.id=${userId}) AND (chatContents.createdAt > chatRoom.seller_last_active_time)   
+          OR (buyer.id=${userId}) AND (chatContents.createdAt > chatRoom.buyer_last_active_time)
+        )
         `
       )
       .leftJoinAndMapOne(
@@ -103,5 +101,27 @@ export class ChatRoom extends BaseEntity {
         `isLiked.user_id=${userId || null}`
       )
       .leftJoinAndSelect('product.region', 'region');
+  }
+
+  static async setActive(userId: number, chatRoom: ChatRoom) {
+    if (chatRoom.seller.id === userId) {
+      await ChatRoom.createQueryBuilder('chatRoom')
+        .where(`id=${chatRoom.id}`)
+        .update({
+          isSellerActive: true,
+          isBuyerActive: true,
+          sellerLastActiveTime: new Date(),
+        })
+        .execute();
+    } else {
+      await ChatRoom.createQueryBuilder('chatRoom')
+        .where(`id=${chatRoom.id}`)
+        .update({
+          isSellerActive: true,
+          isBuyerActive: true,
+          buyerLastActiveTime: new Date(),
+        })
+        .execute();
+    }
   }
 }

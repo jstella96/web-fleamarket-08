@@ -22,6 +22,12 @@ export default function ChatDetail() {
   const eventSource = useRef<EventSource>();
   const [showChatLeaveModal, setShowChatLeaveModal] = useState(false);
 
+  const moveScrollToEnd = () => {
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }, 0);
+  };
+
   const closeChat = () => eventSource.current?.close();
 
   const connectChat = useCallback((chatRoomId: Number) => {
@@ -32,9 +38,7 @@ export default function ChatDetail() {
     eventSource.current.onmessage = (event: MessageEvent<string>) => {
       const data: ChatContentType = JSON.parse(event.data);
       setChats((prev) => [...(prev || []), data]);
-      setTimeout(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-      }, 0);
+      moveScrollToEnd();
     };
 
     eventSource.current.addEventListener('bye', () => {
@@ -57,6 +61,7 @@ export default function ChatDetail() {
       setChats(chatContents);
       setChatRoom(chatRoom);
       setProduct(product);
+      moveScrollToEnd();
 
       if (chatRoom) connectChat(chatRoom.id);
     };

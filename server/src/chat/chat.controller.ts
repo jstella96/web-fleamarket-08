@@ -41,7 +41,7 @@ export class ChatController {
     return this.chatService.findChatRooms(userId, productId);
   }
 
-  @Get('/detail/:productId')
+  @Post('/detail/:productId')
   findChatDetail(
     @Req() request: Request,
     @Param('productId') productId: number

@@ -30,6 +30,7 @@ export default function Header({
 }
 
 const Container = styled.header<{ transparent?: boolean }>`
+  z-index: 100;
   ${fixedTop};
   display: flex;
   justify-content: space-between;

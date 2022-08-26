@@ -1,33 +1,30 @@
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import ChatList from 'src/components/common/ChatList';
 import Layout from 'src/components/common/Layout';
 import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
-import Chat from 'src/components/menu/Chat';
 import COLORS from 'src/constants/colors';
+import MyPageTab from 'src/constants/myPageTab';
+import { myPageTabState } from 'src/recoil/atoms/myPageTab';
 import { absoluteBottom, flexRow } from 'src/styles/common';
 import styled from 'styled-components';
-enum Menu {
-  SalesList = '판매목록',
-  Chat = '채팅',
-  WishList = '관심목록',
-}
 
 export default function MyPage() {
-  const [selectedMenu, setSelectedMenu] = useState<Menu>(Menu.SalesList);
+  const [selectedTab, setSelectedTab] = useRecoilState(myPageTabState);
 
   return (
     <Layout title="메뉴">
       <Nav>
-        {Object.values(Menu).map((menuName, index) => (
+        {Object.values(MyPageTab).map((menuName, index) => (
           <NavButton
             key={index}
-            className={selectedMenu === menuName ? 'selected' : ''}
-            onClick={() => setSelectedMenu(menuName)}
+            className={selectedTab === menuName ? 'selected' : ''}
+            onClick={() => setSelectedTab(menuName)}
           >
             {menuName}
           </NavButton>
         ))}
       </Nav>
-      <MyPageMenu menu={selectedMenu} />
+      <MyPageMenu menu={selectedTab} />
     </Layout>
   );
 }
@@ -60,18 +57,18 @@ const NavButton = styled.button`
 `;
 
 interface MyPageMenuProps {
-  menu: Menu;
+  menu: MyPageTab;
 }
 
 function MyPageMenu({ menu }: MyPageMenuProps) {
   switch (menu) {
-    case Menu.SalesList:
+    case MyPageTab.SalesList:
       return <ProductItemWrapper type="sale" />;
 
-    case Menu.Chat:
-      return <Chat />;
+    case MyPageTab.Chat:
+      return <ChatList />;
 
-    case Menu.WishList:
+    case MyPageTab.WishList:
       return <ProductItemWrapper type="like" />;
 
     default:

@@ -5,6 +5,8 @@ const MONTH = 60 * 60 * 24 * 30;
 const YEAR = 60 * 60 * 24 * 365;
 
 export function getRelativeTime(dateString: string) {
+  if (!dateString) return '';
+
   const now = new Date();
   const msDiff = now.getTime() - new Date(dateString).getTime();
   const secDiff = Math.floor(msDiff / 1000);

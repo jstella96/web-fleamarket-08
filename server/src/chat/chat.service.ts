@@ -20,6 +20,8 @@ export class ChatService {
     });
     const { user: seller } = product;
 
+    if (!buyerId) return;
+
     const nowDate = new Date();
     const chatRoom = ChatRoom.create({
       buyer: {
@@ -45,10 +47,17 @@ export class ChatService {
       userId,
     }).getMany();
 
-    return chatRooms.filter((chatRoom) =>
+    const filteredChatRooms = chatRooms.filter((chatRoom) =>
       chatRoom.seller.id === userId
         ? chatRoom.isSellerActive
         : chatRoom.isBuyerActive
+    );
+
+    return filteredChatRooms.sort((a, b) =>
+      (b.lastChat?.createdAt || Number.MAX_SAFE_INTEGER) >
+      (a.lastChat?.createdAt || Number.MAX_SAFE_INTEGER)
+        ? 1
+        : -1
     );
   }
 
@@ -57,6 +66,10 @@ export class ChatService {
       productId,
       userId,
     }).getOne();
+
+    if (chatRoom) {
+      await ChatRoom.setActive(userId, chatRoom);
+    }
 
     const chatContents = await ChatContent.createQueryBuilder('chatContent')
       .where(`chatContent.chatRoom.id=${chatRoom?.id || null}`)
@@ -91,12 +104,15 @@ export class ChatService {
       chatRoom: { id: chatRoomId },
       user,
       content,
+      createdAt: new Date(),
     }).save();
 
-    await ChatRoom.createQueryBuilder('chatRoom')
-      .where(`id=${chatRoomId}`)
-      .update({ isSellerActive: true, isBuyerActive: true })
-      .execute();
+    const chatRoom = await ChatRoom.createQueryBuilder('chatRoom')
+      .where(`chatRoom.id=${chatRoomId}`)
+      .leftJoinAndSelect('chatRoom.seller', 'seller')
+      .getOne();
+
+    await ChatRoom.setActive(userId, chatRoom);
 
     delete chatContent.chatRoom;
 
@@ -139,7 +155,7 @@ export class ChatService {
         result = await ChatRoom.delete({ id: chatRoomId });
       } else {
         result = await ChatRoom.createQueryBuilder('chatRoom')
-          .where(`seller.id=${userId}`)
+          .where(`seller.id=${userId} AND id=${chatRoomId}`)
           .update({ isSellerActive: false })
           .execute();
       }
@@ -148,7 +164,7 @@ export class ChatService {
         result = await ChatRoom.delete({ id: chatRoomId });
       } else {
         result = await ChatRoom.createQueryBuilder('chatRoom')
-          .where(`buyer.id=${userId}`)
+          .where(`buyer.id=${userId} AND id=${chatRoomId}`)
           .update({ isBuyerActive: false })
           .execute();
       }
