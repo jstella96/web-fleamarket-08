@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Heart, Message } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
 import { DEFAULT_IMAGE } from 'src/constants/image';
+import { flexColumn } from 'src/styles/common';
+import { productImage } from 'src/styles/productLayouts';
 import { Product } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import styled from 'styled-components/macro';
@@ -41,12 +43,14 @@ export default function ProductItem({
           <Title>{title}</Title>
           <RightButton>{rightButton}</RightButton>
         </TitleContainer>
-        <RegionAndDate>
-          <span>{region.name}</span>
-          <span>∙</span>
-          <span>{getRelativeTime(createdAt)}</span>
-        </RegionAndDate>
-        <p>{Number(price).toLocaleString()}원</p>
+        <CenterInfo>
+          <RegionAndDate>
+            <span>{region.name}</span>
+            <span>∙</span>
+            <span>{getRelativeTime(createdAt)}</span>
+          </RegionAndDate>
+          <Price>{Number(price).toLocaleString()}원</Price>
+        </CenterInfo>
         <CountsContainer>
           <span>
             <Heart />
@@ -66,35 +70,29 @@ const Container = styled(Link)`
   display: flex;
   width: 100%;
   padding: 1rem;
+  border-bottom: 1px solid ${COLORS.grey3};
 `;
 
 const ImageContainer = styled.div`
-  display: flex;
-  width: 9rem;
-  min-width: 9rem;
-  height: 9rem;
-  overflow: hidden;
-  border-radius: 1rem;
-  background: ${COLORS.grey3};
-  margin-right: 1rem;
-
-  img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
+  ${productImage}
 `;
 
 const RightPanel = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  ${flexColumn};
   width: 100%;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+`;
+
+const CenterInfo = styled.div`
+  ${flexColumn};
+  gap: 0.25rem;
+  flex-grow: 1;
+  margin-top: 0.125rem;
 `;
 
 const Title = styled.p`
@@ -102,7 +100,6 @@ const Title = styled.p`
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 10.5rem;
-  font-size: 1.25rem;
 `;
 
 const RightButton = styled.div`
@@ -110,10 +107,20 @@ const RightButton = styled.div`
   border: 0;
   background: 0;
   color: ${COLORS.grey1};
+
+  button {
+    display: flex;
+    padding: 0;
+  }
 `;
 
 const RegionAndDate = styled.p`
+  font-size: 0.875rem;
   color: ${COLORS.grey1};
+`;
+
+const Price = styled.p`
+  font-size: 0.875rem;
 `;
 
 const CountsContainer = styled.div`
@@ -125,6 +132,13 @@ const CountsContainer = styled.div`
   span {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.125rem;
+    font-size: 0.875rem;
+    min-width: 2rem;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
   }
 `;

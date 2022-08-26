@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { MoreVertical } from 'src/assets/icons';
@@ -11,7 +11,7 @@ import LikeButton from './LikeButton';
 import ProductSkeleton from './ProductSkeleton';
 
 interface ProductItemWrapperProps {
-  type?: string;
+  type?: 'like' | 'sale';
 }
 
 export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
@@ -74,4 +74,3 @@ export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
     </>
   );
 }
-// Loading ref={loader}

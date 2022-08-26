@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-const SkeletonItem = css`
+const skeletonItem = css`
   width: 100%;
   background-color: #f2f2f2;
   position: relative;
@@ -30,4 +30,4 @@ const SkeletonItem = css`
   }
 `;
 
-export default SkeletonItem;
+export default skeletonItem;

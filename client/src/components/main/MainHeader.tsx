@@ -75,12 +75,11 @@ const Location = styled.div`
   display: flex;
   align-items: center;
   gap: 0.25rem;
-`;
 
-const CategoryLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  font-size: 0.875rem;
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 `;
 
 const CategoryName = styled.span`

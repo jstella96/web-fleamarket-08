@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
-import { fixedEntire } from 'src/styles/common';
+import { fixedEntire, flexCenter } from 'src/styles/common';
 import styled, { css } from 'styled-components';
 
 interface RegionSelectModalProps {
@@ -40,9 +40,7 @@ export default function RegionSelectModal({
               {region.name}
             </button>
           ))}
-        <Link to="/region">
-          <button>내 동네 설정하기</button>
-        </Link>
+        <Link to="/region">내 동네 설정하기</Link>
       </Section>
     </Modal>
   );
@@ -77,11 +75,17 @@ const Section = styled.div`
   box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5),
     0px 2px 4px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(4px);
-  button {
+
+  button,
+  a {
+    ${flexCenter};
     height: 3rem;
     border: none;
     background: none;
     padding: 0;
+  }
+
+  button {
     border-bottom: 1px solid ${COLORS.grey3};
   }
 `;

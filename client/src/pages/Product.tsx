@@ -174,6 +174,8 @@ const LikeButton = styled.button`
 `;
 
 const ChatLink = styled(Link)`
+  ${flexRow};
+  justify-content: center;
   flex-grow: 1;
   padding: 0.75rem 1rem;
   border: 0;

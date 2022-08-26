@@ -1,7 +1,4 @@
-import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import api from 'src/api';
 import { Add } from 'src/assets/icons';
 import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
 import MainHeader from 'src/components/main/MainHeader';

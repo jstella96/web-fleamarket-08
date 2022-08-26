@@ -6,7 +6,7 @@ import {
   ImageContainer,
 } from 'src/styles/ProductLayouts';
 import styled from 'styled-components/macro';
-import SkeletonItem from './SkeletonItem';
+import SkeletonItem from 'src/styles/skeletonItem';
 
 const ProductSkeleton = React.forwardRef((props: any, ref: any) => (
   <SkeletonContainer ref={ref}>
@@ -32,7 +32,7 @@ const ProductContainerSkeleton = styled.div`
 
 const ImageContainerSkeleton = styled.div`
   ${SkeletonItem};
-  ${ImageContainer};
+  ${productImage};
 `;
 
 const RightPanelContainerSkeleton = styled.div`

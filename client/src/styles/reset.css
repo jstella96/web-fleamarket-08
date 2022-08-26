@@ -18,12 +18,6 @@ button {
   background: none;
 }
 
-a {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-}
-
 body {
   overflow-x: hidden;
   min-width: 100vw;

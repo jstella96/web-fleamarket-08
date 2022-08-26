@@ -48,6 +48,8 @@ const Container = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem 1rem;
   padding: 1rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
 `;
 
 const CategoryButton = styled.button`
@@ -60,6 +62,6 @@ const CategoryButton = styled.button`
   background: none;
 
   img {
-    width: 3rem;
+    width: 2.5rem;
   }
 `;
