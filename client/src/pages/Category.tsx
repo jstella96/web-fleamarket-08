@@ -5,6 +5,9 @@ import useCategories from 'src/components/hooks/useCategories';
 import { categoryState } from 'src/recoil/atoms/category';
 import styled from 'styled-components/macro';
 
+const DEFAULT_IMAGE =
+  'https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/DWJHQLSEUND3NAEAVQ2F5L2LAA.jpg';
+
 export default function Category() {
   const categories = useCategories();
   const setCategory = useSetRecoilState(categoryState);
@@ -19,10 +22,7 @@ export default function Category() {
             navigate('/');
           }}
         >
-          <img
-            src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/DWJHQLSEUND3NAEAVQ2F5L2LAA.jpg"
-            alt={`전체 선택 이미지`}
-          />
+          <img src={DEFAULT_IMAGE} alt={`전체 선택 이미지`} />
           전체
         </CategoryButton>
 
@@ -30,14 +30,11 @@ export default function Category() {
           <CategoryButton
             key={category.id}
             onClick={() => {
-              setCategory(category);
+              setCategory(category || DEFAULT_IMAGE);
               navigate('/');
             }}
           >
-            <img
-              src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/DWJHQLSEUND3NAEAVQ2F5L2LAA.jpg"
-              alt={`${category.name} 이미지`}
-            />
+            <img src={category.iconUrl} alt={`${category.name} 이미지`} />
             {category.name}
           </CategoryButton>
         ))}
