@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
-import { Heart, MoreVertical } from 'src/assets/icons';
+import { Heart } from 'src/assets/icons';
 import Layout from 'src/components/common/Layout';
+import SwipeImage from 'src/components/common/SwipeImage';
+import ProductHeaderButton from 'src/components/product/ProductHeaderButton';
+import ProductDeleteModal from 'src/components/write/ProductDeleteModal';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
 import { userState } from 'src/recoil/atoms/user';
@@ -20,6 +23,8 @@ export default function Product() {
     () => user?.id === product?.author.id,
     [user, product]
   );
+  const [isShowDeleteAlert, setIsShowDeleteAlert] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const initProduct = async () => {
@@ -31,13 +36,20 @@ export default function Product() {
     initProduct();
   }, [id]);
 
+  const deleteProduct = async () => {
+    if (!id) return;
+    await api.deleteProduct(+id);
+    navigate('/');
+  };
+
   return (
     <Layout
       rightButton={
         isSeller && (
-          <Link to="/write">
-            <MoreVertical />
-          </Link>
+          <ProductHeaderButton
+            id={id}
+            deleteProduct={() => setIsShowDeleteAlert(true)}
+          />
         )
       }
       transparent={true}
@@ -45,10 +57,9 @@ export default function Product() {
       {product && (
         <>
           <ImageContainer>
-            <img
-              src="https://mblogthumb-phinf.pstatic.net/MjAxOTA1MTdfMjg5/MDAxNTU4MDU5MjY3NzI0.La9iCTKSS9Cue6MbMeNSJADSkjSr0VMPlAsIdQYGjoYg.q_VK0tw6okzVQOBJbXGKFFGJkLJUqLVT26CZ9qe29Xcg.PNG.smartbaedal/%ED%97%A4%ED%97%A4%EB%B0%B0%EB%8B%AC%EC%9D%B4_%EC%9E%90%EB%A5%B8%EA%B2%83.png?type=w800"
-              alt={`상품 이미지`}
-            />
+            <SwipeImage
+              imageUrls={product.images.map((image) => image.imageUrl)}
+            ></SwipeImage>
           </ImageContainer>
           <Main>
             <p>{product.status}</p>
@@ -89,18 +100,23 @@ export default function Product() {
           </Footer>
         </>
       )}
+      {isShowDeleteAlert && (
+        <ProductDeleteModal
+          content="정말 삭제하시겠습니까?"
+          close={() => {
+            setIsShowDeleteAlert(false);
+          }}
+          onClickCheckButton={() => {
+            deleteProduct();
+          }}
+        ></ProductDeleteModal>
+      )}
     </Layout>
   );
 }
 
 const ImageContainer = styled.div`
   background: ${COLORS.grey3};
-
-  img {
-    object-fit: contain;
-    width: 100%;
-    max-height: ${SIZES.productImage};
-  }
 `;
 
 const Main = styled.div`

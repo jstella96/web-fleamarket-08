@@ -21,6 +21,7 @@ export default function CategoryModal({
       <CategoryWrapper>
         {categories.map((category) => (
           <CategoryItem
+            key={category.id}
             onClick={() => {
               selectCategory(category);
               close();

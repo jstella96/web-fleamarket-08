@@ -42,6 +42,7 @@ export interface Product {
   region: Region;
   chatCount: number;
   likeCount: number;
+  images?: Image[];
 }
 
 export interface Image {

@@ -17,7 +17,7 @@ interface ProductItemWrapperProps {
 export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const loader = useRef(null);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const category = useRecoilValue(categoryState);
   const [hasScrollFinished, setHasScrollFinished] = useState(true);
 

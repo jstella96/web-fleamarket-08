@@ -18,7 +18,9 @@ export class ProductService {
     );
 
     if (images) {
-      await Promise.all(images.map((image) => image.save()));
+      for (const image of images) {
+        await image.save();
+      }
     }
 
     const product = Product.create({
@@ -75,9 +77,19 @@ export class ProductService {
   async update(id: number, productDto: ProductDto, userId: number) {
     const { title, content, imageUrls, price, categoryId } = productDto;
 
-    // const images = imageUrls.map((imageUrl) =>
-    //   ProductImage.update({ imageUrl })
-    // );
+    const prevImage = await ProductImage.findBy({ product: { id: id } });
+    ProductImage.remove(prevImage);
+
+    const images = imageUrls?.map((imageUrl) =>
+      ProductImage.create({
+        product: { id: id },
+        imageUrl: imageUrl,
+      })
+    );
+
+    for (const image of images) {
+      await image.save();
+    }
 
     await Product.createQueryBuilder('product')
       .update({
@@ -87,8 +99,6 @@ export class ProductService {
         category: {
           id: categoryId,
         },
-        // TODO: image 수정
-        // images,
       })
       .where(`product.id=${id}`)
       .execute();
@@ -97,8 +107,8 @@ export class ProductService {
   }
 
   async remove(id: number, userId: number) {
+    ProductImage.delete({ product: { id: id } });
     const result = await Product.delete({ id });
-
     return result;
   }
 

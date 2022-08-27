@@ -33,7 +33,7 @@ const api = {
   getProduct: (productId: number) => instance.get<ProductDetail>(`/products/${productId}`),
   updateProduct: (productId: number, product: Partial<ProductDto>) =>
     instance.patch<ProductDetail>(`/products/${productId}`, product),
-  deleteProudct: (productId: number) => instance.delete(`products/${productId}`),
+  deleteProduct: (productId: number) => instance.delete(`products/${productId}`),
   likeProduct: (productId: number) => instance.post(`/products/${productId}/like`),
 
   createChatRoom: (chatRoom: CreateChatRoomDto) => instance.post<ChatRoom>('/chats', chatRoom),

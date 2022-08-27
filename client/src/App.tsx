@@ -43,7 +43,9 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/category" element={<Category />} />
           <Route path="/region" element={<Region />} />
+
           <Route path="/write" element={<Write />} />
+          <Route path="/write/:id" element={<Write />} />
           <Route path="/chat/:productId" element={<Chat />} />
           <Route path="/chat-detail/:productId" element={<ChatDetail />} />
 
