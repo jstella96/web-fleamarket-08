@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import ProductImage from 'src/components/common/ProductImage';
@@ -13,6 +13,7 @@ export default function ChatList() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>();
   const { productId } = useParams();
   const user = useRecoilValue(userState);
+  const location = useLocation();
 
   useEffect(() => {
     const initChatRooms = async () => {
@@ -36,6 +37,7 @@ export default function ChatList() {
           <ChatRoomLink
             key={chatRoom.id}
             to={`/chat-detail/${chatRoom.product.id}`}
+            state={location}
           >
             <LeftPanel>
               <UserName>{partner.name}</UserName>

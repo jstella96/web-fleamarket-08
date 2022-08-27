@@ -7,7 +7,7 @@ export class Region extends BaseEntity {
   @PrimaryColumn()
   code: number;
 
-  @Column({ type: 'char', length: 50 })
+  @Column({ type: 'char', length: 100 })
   name: string;
 
   @OneToMany(() => Product, (product) => product.region)

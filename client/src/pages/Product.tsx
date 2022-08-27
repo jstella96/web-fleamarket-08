@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { Heart } from 'src/assets/icons';
 import ConfirmModal from 'src/components/common/ConfirmModal';
+import FormattedPrice from 'src/components/common/FormattedPrice';
 import Layout from 'src/components/common/Layout';
 import SwipeImage from 'src/components/common/SwipeImage';
 import ProductHeaderButton from 'src/components/product/ProductHeaderButton';
@@ -25,6 +26,7 @@ export default function Product() {
   );
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const initProduct = async () => {
@@ -89,11 +91,14 @@ export default function Product() {
             <LikeButton>
               <Heart />
             </LikeButton>
-            <p>{Number(product.price).toLocaleString()}원</p>
+            <p>
+              <FormattedPrice price={product.price} />
+            </p>
             <ChatLink
               to={`${
                 isSeller ? `/chat/${product.id}` : `/chat-detail/${product.id}`
               }`}
+              state={location}
             >
               {isSeller ? '채팅목록보기' : '문의하기'}
             </ChatLink>

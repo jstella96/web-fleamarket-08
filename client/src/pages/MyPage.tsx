@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import ChatList from 'src/components/common/ChatList';
 import Layout from 'src/components/common/Layout';

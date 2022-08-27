@@ -2,6 +2,7 @@ import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
 import { Product } from 'src/types';
 import styled from 'styled-components/macro';
+import FormattedPrice from '../common/FormattedPrice';
 import ProductImage from '../common/ProductImage';
 
 interface ProductInfoProps {
@@ -17,7 +18,9 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         <ProductImage src={thumbnail?.imageUrl} />
         <div>
           <p>{title}</p>
-          <Price>{Number(price).toLocaleString()}원</Price>
+          <Price>
+            <FormattedPrice price={price} />
+          </Price>
         </div>
       </LeftPanel>
       <Status>{status}</Status>

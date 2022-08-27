@@ -37,7 +37,7 @@ export class Product extends BaseEntity {
   price: number;
 
   @ApiProperty()
-  @Column({ type: 'varchar', length: 500 })
+  @Column({ type: 'text' })
   content: string;
 
   @Column({

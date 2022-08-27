@@ -8,6 +8,7 @@ import { productImage } from 'src/styles/productLayouts';
 import { Product } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import styled from 'styled-components/macro';
+import FormattedPrice from './FormattedPrice';
 
 interface ProductItemProps {
   product: Product;
@@ -49,7 +50,9 @@ export default function ProductItem({
             <span>∙</span>
             <span>{getRelativeTime(createdAt)}</span>
           </RegionAndDate>
-          <Price>{Number(price).toLocaleString()}원</Price>
+          <Price>
+            <FormattedPrice price={price} />
+          </Price>
         </CenterInfo>
         <CountsContainer>
           <span>

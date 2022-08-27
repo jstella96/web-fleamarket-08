@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { LogOut } from 'src/assets/icons';
@@ -21,8 +21,8 @@ export default function ChatDetail() {
   const user = useRecoilValue(userState);
   const eventSource = useRef<EventSource>();
   const [showChatLeaveConfirm, setShowChatLeaveConfirm] = useState(false);
-
   const navigate = useNavigate();
+  const location = useLocation();
 
   const moveScrollToEnd = () => {
     setTimeout(() => {
@@ -57,9 +57,8 @@ export default function ChatDetail() {
   }, [user, product, chatRoom]);
 
   const handleClickLeaveButton = async (chatRoomId: number) => {
-    if (chatRoomId === undefined) return;
-    await api.leaveChatRoom(chatRoomId);
-    navigate('/');
+    if (chatRoomId !== undefined) await api.leaveChatRoom(chatRoomId);
+    navigate((location.state as any).pathname || '/');
   };
 
   useEffect(() => {

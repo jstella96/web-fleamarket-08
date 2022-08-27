@@ -10,7 +10,7 @@ export class User extends BaseEntity {
   @PrimaryColumn()
   id: number;
 
-  @Column({ type: 'char', length: 20 })
+  @Column({ type: 'char', length: 30 })
   name: string;
 
   @OneToMany(() => Product, (product) => product.user)

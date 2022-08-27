@@ -41,11 +41,11 @@ export const useUserRigionState = () => {
   };
 
   const getPrimaryRegionName = () => {
-    if (!user?.userRegions) return '장소';
+    if (!user?.userRegions) return '로그인해주세요';
     const primaryRegion = user?.userRegions.find(
       (region) => region.isPrimary === true
     );
-    return primaryRegion?.region.name || '장소';
+    return primaryRegion?.region.name || '동네를 설정해주세요';
   };
 
   return {

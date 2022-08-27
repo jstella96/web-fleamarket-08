@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import api from 'src/api';
-import { GitHub } from 'src/assets/icons';
-import Button from 'src/components/common/Button';
-import Layout from 'src/components/common/Layout';
-import COLORS from 'src/constants/colors';
+import Loading from 'src/components/common/Loading';
 import { userState } from 'src/recoil/atoms/user';
 import styled from 'styled-components/macro';
 
@@ -15,7 +12,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (user) navigate('/');
+    if (user) navigate('/home', { replace: true });
   }, [user, navigate]);
 
   useEffect(() => {
@@ -29,7 +26,7 @@ export default function Login() {
         setIsLoading(true);
         const { data } = await api.socialLogin(code);
         setUser(data);
-        navigate('/');
+        navigate('/home', { replace: true });
       } catch (err) {
         console.error(err);
       }
@@ -38,42 +35,21 @@ export default function Login() {
     login();
   }, [isLoading, navigate, setUser]);
 
-  const handleClickMockLoginButton = async () => {
-    const { data } = await api.mockLogin();
-    setUser(data);
-  };
-
-  if (isLoading) return <p>로그인 중입니다. 잠시만 기다려주세요.</p>;
-
-  return (
-    <Layout title="로그인">
+  if (isLoading) {
+    return (
       <Container>
-        <GitHubLoginLink
-          href={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GITHUB_REDIRECT_URL}`}
-        >
-          <GitHub />
-          GitHub 계정으로 로그인
-        </GitHubLoginLink>
-        <Button onClick={handleClickMockLoginButton}>배달이로 로그인</Button>
+        <p>로그인 중입니다.</p>
+        <p>잠시만 기다려주세요.</p>
+        <Loading />
       </Container>
-    </Layout>
-  );
+    );
+  }
+
+  return <></>;
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 0.75rem;
-`;
-
-const GitHubLoginLink = styled.a`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  background-color: #171515;
-  color: ${COLORS.white};
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
 `;

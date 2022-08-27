@@ -13,6 +13,8 @@ import { Category, ProductDetail } from 'src/types';
 import styled from 'styled-components/macro';
 import { fixedBottom, flexColumn, flexRow } from 'src/styles/common';
 
+const MAX_PRICE = 100000000;
+
 export default function Write() {
   const categories = useCategories();
   const [title, setTitle] = useState('');
@@ -89,6 +91,7 @@ export default function Write() {
           placeholder="글 제목"
           value={title}
           onChange={({ target: { value } }) => setTitle(value)}
+          maxLength={30}
         />
 
         <ImageUploader
@@ -110,10 +113,21 @@ export default function Write() {
         )}
 
         <input
-          type="number"
           placeholder="₩ 가격(선택사항)"
-          value={price || ''}
-          onChange={({ target: { value } }) => setPrice(Number(value))}
+          value={price?.toLocaleString() || ''}
+          onChange={({ target: { value } }) => {
+            const lastCharacter = value[value.length - 1];
+            if (lastCharacter === undefined) {
+              setPrice(undefined);
+              return;
+            }
+
+            if (!/[0-9]/.test(lastCharacter)) return;
+
+            const numValue = Number(value.split(',').join(''));
+            const priceValue = numValue > 100000000 ? MAX_PRICE : numValue;
+            setPrice(priceValue);
+          }}
         />
         <textarea
           rows={10}
