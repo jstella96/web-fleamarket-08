@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Add, Close } from 'src/assets/icons';
 import Alert from 'src/components/common/Alert';
+import ConfirmModal from 'src/components/common/ConfirmModal';
 import Layout from 'src/components/common/Layout';
 import RegionInputModal from 'src/components/region/RegionInputModal';
 import COLORS from 'src/constants/colors';
@@ -14,14 +15,20 @@ export default function MyRegion() {
   const user = useRecoilValue(userState);
   const [showRegionInputModal, setShowRegionInputModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
   const { deleteRegion, changePrimaryRegion } = useUserRigionState();
+
+  const [deleteConfirmInfo, setDeleteConfirmInfo] = useState({
+    showConfirm: false,
+    regionCode: -1,
+  });
+
   const handleDeleteRegion = (regionCode: number) => {
     if (user?.userRegions.length === 1) {
       setShowAlert(true);
       return;
     }
-    deleteRegion(regionCode);
+    //deleteRegion(regionCode);
+    setDeleteConfirmInfo({ showConfirm: true, regionCode: regionCode });
   };
 
   return (
@@ -64,6 +71,18 @@ export default function MyRegion() {
         <RegionInputModal
           close={() => setShowRegionInputModal(false)}
           nowRegion={user?.userRegions[0]}
+        />
+      )}
+      {deleteConfirmInfo.showConfirm && (
+        <ConfirmModal
+          close={() =>
+            setDeleteConfirmInfo({ showConfirm: false, regionCode: -1 })
+          }
+          message="선택한 동네를 삭제하시겠습니까?"
+          onClickConfirmButton={() => {
+            deleteRegion(deleteConfirmInfo.regionCode);
+            setDeleteConfirmInfo({ showConfirm: false, regionCode: -1 });
+          }}
         />
       )}
     </Layout>

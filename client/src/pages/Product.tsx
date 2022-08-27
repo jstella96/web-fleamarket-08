@@ -3,10 +3,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { Heart } from 'src/assets/icons';
+import ConfirmModal from 'src/components/common/ConfirmModal';
 import Layout from 'src/components/common/Layout';
 import SwipeImage from 'src/components/common/SwipeImage';
 import ProductHeaderButton from 'src/components/product/ProductHeaderButton';
-import ProductDeleteModal from 'src/components/write/ProductDeleteModal';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
 import { userState } from 'src/recoil/atoms/user';
@@ -23,7 +23,7 @@ export default function Product() {
     () => user?.id === product?.author.id,
     [user, product]
   );
-  const [isShowDeleteAlert, setIsShowDeleteAlert] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function Product() {
         isSeller && (
           <ProductHeaderButton
             id={id}
-            deleteProduct={() => setIsShowDeleteAlert(true)}
+            deleteProduct={() => setShowDeleteConfirm(true)}
           />
         )
       }
@@ -100,16 +100,16 @@ export default function Product() {
           </Footer>
         </>
       )}
-      {isShowDeleteAlert && (
-        <ProductDeleteModal
-          content="정말 삭제하시겠습니까?"
+      {showDeleteConfirm && (
+        <ConfirmModal
+          message="포스팅을 삭제하시겠습니까?"
           close={() => {
-            setIsShowDeleteAlert(false);
+            setShowDeleteConfirm(false);
           }}
-          onClickCheckButton={() => {
+          onClickConfirmButton={() => {
             deleteProduct();
           }}
-        ></ProductDeleteModal>
+        ></ConfirmModal>
       )}
     </Layout>
   );

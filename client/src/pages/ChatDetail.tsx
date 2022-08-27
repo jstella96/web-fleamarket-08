@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { LogOut } from 'src/assets/icons';
 import ChatContent from 'src/components/chat/ChatContent';
 import ChatForm from 'src/components/chat/ChatForm';
-import ChatLeaveModal from 'src/components/chat/ChatLeaveModal';
 import ProductInfo from 'src/components/chat/ProductInfo';
+import ConfirmModal from 'src/components/common/ConfirmModal';
 import Layout from 'src/components/common/Layout';
 import SIZES from 'src/constants/sizes';
 import { userState } from 'src/recoil/atoms/user';
@@ -20,7 +20,9 @@ export default function ChatDetail() {
   const [product, setProduct] = useState<Product>();
   const user = useRecoilValue(userState);
   const eventSource = useRef<EventSource>();
-  const [showChatLeaveModal, setShowChatLeaveModal] = useState(false);
+  const [showChatLeaveConfirm, setShowChatLeaveConfirm] = useState(false);
+
+  const navigate = useNavigate();
 
   const moveScrollToEnd = () => {
     setTimeout(() => {
@@ -54,6 +56,12 @@ export default function ChatDetail() {
     return user?.id === product.author.id ? chatRoom.seller : chatRoom.buyer;
   }, [user, product, chatRoom]);
 
+  const handleClickLeaveButton = async (chatRoomId: number) => {
+    if (chatRoomId === undefined) return;
+    await api.leaveChatRoom(chatRoomId);
+    navigate('/');
+  };
+
   useEffect(() => {
     const init = async () => {
       if (productId === undefined) return;
@@ -79,7 +87,7 @@ export default function ChatDetail() {
     <Layout
       title={partner?.name}
       rightButton={
-        <button onClick={() => setShowChatLeaveModal(true)}>
+        <button onClick={() => setShowChatLeaveConfirm(true)}>
           <LogOut />
         </button>
       }
@@ -110,11 +118,16 @@ export default function ChatDetail() {
             await api.createChat(chatRoomData.id, { content });
           }}
         />
-        {showChatLeaveModal && (
-          <ChatLeaveModal
-            close={() => setShowChatLeaveModal(false)}
-            chatRoomId={chatRoom?.id}
-          />
+        {showChatLeaveConfirm && (
+          <ConfirmModal
+            message="채팅방을 나가시겠습니까?"
+            close={() => {
+              setShowChatLeaveConfirm(false);
+            }}
+            onClickConfirmButton={() => {
+              handleClickLeaveButton(chatRoom?.id!);
+            }}
+          ></ConfirmModal>
         )}
       </Container>
     </Layout>

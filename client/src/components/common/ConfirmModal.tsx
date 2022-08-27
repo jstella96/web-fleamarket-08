@@ -1,25 +1,25 @@
 import COLORS from 'src/constants/colors';
 import styled from 'styled-components';
-import Modal from '../common/Modal';
+import Modal from './Modal';
 
-interface ProductDeleteModalProps {
-  content: string;
+interface ConfirmModalProps {
+  message: string;
   close: () => void;
-  onClickCheckButton: () => void;
+  onClickConfirmButton: () => void;
 }
 
-export default function ProductDeleteModal({
-  content,
+export default function ConfirmModal({
+  message,
   close,
-  onClickCheckButton,
-}: ProductDeleteModalProps) {
+  onClickConfirmButton,
+}: ConfirmModalProps) {
   return (
     <Modal close={close}>
       <Section>
-        <h3>{content}</h3>
+        <h3>{message}</h3>
         <ButtonsContainer>
           <CancelButton onClick={close}>취소</CancelButton>
-          <DeleteButton onClick={onClickCheckButton}>확인</DeleteButton>
+          <ConfirmButton onClick={onClickConfirmButton}>확인</ConfirmButton>
         </ButtonsContainer>
       </Section>
     </Modal>
@@ -55,7 +55,7 @@ const CancelButton = styled.button`
   border: 1px solid ${COLORS.grey1};
 `;
 
-const DeleteButton = styled.button`
+const ConfirmButton = styled.button`
   background-color: ${COLORS.error};
   color: ${COLORS.white};
 `;

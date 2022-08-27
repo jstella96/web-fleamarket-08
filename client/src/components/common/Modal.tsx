@@ -7,7 +7,7 @@ interface ModalProps {
   close: () => void;
 }
 
-export default function ChatLeaveModal({ children, close }: ModalProps) {
+export default function Modal({ children, close }: ModalProps) {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!(e.target as Element).className.includes('modal-container')) return;
     close();
