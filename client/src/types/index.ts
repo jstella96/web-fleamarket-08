@@ -110,3 +110,8 @@ export interface KaKaoRegion {
   x: number;
   y: number;
 }
+
+export interface AwsUploadInfo {
+  fileName: string;
+  signedUrl: string;
+}

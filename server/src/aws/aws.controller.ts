@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AwsService } from './aws.service';
 import { ApiTags } from '@nestjs/swagger';
 @ApiTags('aws')
@@ -6,8 +6,11 @@ import { ApiTags } from '@nestjs/swagger';
 export class AwsController {
   constructor(private readonly awsService: AwsService) {}
 
-  @Get('/signed-url')
-  async getSignedUrlForProductImage() {
-    return this.awsService.getSignedUrlForImageUpload();
+  @Post('/signed-url')
+  async getSignedUrlForProductImage(
+    @Body()
+    fileNemes: string[]
+  ) {
+    return this.awsService.getSignedUrlForImageUpload(fileNemes);
   }
 }

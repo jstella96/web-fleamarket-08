@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import api from 'src/api';
 import { putImage } from 'src/api/aws';
 import { Image } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
 import { flexRow, FlexboxRow, absoluteBottom } from 'src/styles/common';
 import styled from 'styled-components/macro';
+import ImageLoading from './ImageLoading';
 
 interface ImageUpaloderProps {
   imageUrls: string[];
@@ -17,23 +19,37 @@ export default function ImageUploader({
   imageUrls,
   setImageUrls,
 }: ImageUpaloderProps) {
+  const [lodingImageCount, setLodingImageCount] = useState(0);
   const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (imageUrls.length === MAX_IMAGE) return;
-    const uploadInfo = await api.getSignedUrl();
     const target = e.target as HTMLInputElement;
-    if (!target.files) return;
-    await putImage(uploadInfo.data.signedUrl, target.files[0]);
-    setImageUrls((prev: string[]) => [
-      ...prev,
-      `${S3_BUCKET_URL}${uploadInfo.data.fileName}`,
-    ]);
+    const fileList = Array.from(target.files || []);
+
+    if (!fileList) return;
+    if (fileList.length + imageUrls.length > MAX_IMAGE) {
+      return alert('10개 이상의 파일을 업로드 할 수 없습니다.');
+    }
+    setLodingImageCount(fileList.length);
+    const fileNames = fileList.map((file) => file.name);
+    const { data } = await api.getSignedUrls(fileNames);
+
+    data.forEach(async (AwsUploadInfo, index) => {
+      await putImage(AwsUploadInfo.signedUrl, fileList[index]);
+      const fileUrl = `${S3_BUCKET_URL}${AwsUploadInfo.fileName}`;
+      setImageUrls((prev) => [...prev, fileUrl]);
+      setLodingImageCount((prev) => prev - 1);
+    });
   };
 
   const deleteFile = (index: number) => {
-    setImageUrls((prev: string[]) => [
-      ...prev.filter(
-        (fileName: string, fileIndex: number) => index !== fileIndex
-      ),
+    setImageUrls((prev) => [
+      ...prev.filter((fileName, fileIndex) => index !== fileIndex),
+    ]);
+  };
+
+  const changePrimaryImage = (index: number) => {
+    setImageUrls((prev) => [
+      prev[index],
+      ...prev.filter((fileName, fileIndex) => index !== fileIndex),
     ]);
   };
 
@@ -47,6 +63,7 @@ export default function ImageUploader({
                 type="file"
                 onChange={handleUploadFile}
                 accept=".jpg, .jpeg, .png"
+                multiple
               />
               <Image></Image>
               <span>{`${imageUrls.length}/${MAX_IMAGE}`}</span>
@@ -55,11 +72,23 @@ export default function ImageUploader({
         </Box>
         {imageUrls.map((imageUrl, index) => (
           <Box key={imageUrl}>
-            <CloseWrapper onClick={() => deleteFile(index)}>X</CloseWrapper>
-            <ImageBox>
+            <CloseWrapper
+              onClick={(e) => {
+                e.preventDefault();
+                deleteFile(index);
+              }}
+            >
+              X
+            </CloseWrapper>
+            <ImageBox onClick={() => changePrimaryImage(index)}>
               <UploadImage src={imageUrl}></UploadImage>
               {index === 0 && <PrimaryTag>대표사진</PrimaryTag>}
             </ImageBox>
+          </Box>
+        ))}
+        {new Array(lodingImageCount).fill('').map((_, i) => (
+          <Box key={i}>
+            <ImageLoading />{' '}
           </Box>
         ))}
       </FlexboxRow>

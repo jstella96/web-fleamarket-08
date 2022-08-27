@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import ChatList from 'src/components/common/ChatList';
 import Layout from 'src/components/common/Layout';
@@ -5,7 +6,7 @@ import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
 import COLORS from 'src/constants/colors';
 import MyPageTab from 'src/constants/myPageTab';
 import { myPageTabState } from 'src/recoil/atoms/myPageTab';
-import { flexRow } from 'src/styles/common';
+import { absoluteBottom, flexRow } from 'src/styles/common';
 import styled from 'styled-components';
 
 export default function MyPage() {
@@ -33,7 +34,6 @@ const Nav = styled.nav`
   ${flexRow};
 
   width: 100%;
-  border-bottom: 1px solid ${COLORS.grey3};
   background: ${COLORS.offWhite};
 `;
 
@@ -48,8 +48,7 @@ const NavButton = styled.button`
   &.selected {
     &:after {
       content: '';
-      position: absolute;
-      top: 100%;
+      ${absoluteBottom};
       left: 0;
       width: 100%;
       height: 2px;

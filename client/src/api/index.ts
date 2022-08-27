@@ -1,5 +1,15 @@
 import axios from 'axios';
-import { Category, ChatContent, ChatDetail, ChatRoom, Product, ProductDetail, Region, User } from 'src/types';
+import {
+  AwsUploadInfo,
+  Category,
+  ChatContent,
+  ChatDetail,
+  ChatRoom,
+  Product,
+  ProductDetail,
+  Region,
+  User,
+} from 'src/types';
 import { CreateChatContentDto, CreateChatRoomDto, ProductDto } from 'src/types/dto';
 
 const instance = axios.create({
@@ -41,7 +51,7 @@ const api = {
 
   logout: () => instance.post('/logout'),
 
-  getSignedUrl: () => instance.get('/aws/signed-url'),
+  getSignedUrls: (fileNemes: string[]) => instance.post<AwsUploadInfo[]>('/aws/signed-url', fileNemes),
 };
 
 export default api;

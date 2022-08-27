@@ -1,17 +1,18 @@
-import React from 'react';
 import COLORS from 'src/constants/colors';
 import styled from 'styled-components';
 
-const Loading = React.forwardRef((props: any, ref: any) => (
-  <LoaderContainer>
-    <div className="lds-ring">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  </LoaderContainer>
-));
+export default function Loding() {
+  return (
+    <LoaderContainer>
+      <div className="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </LoaderContainer>
+  );
+}
 
 const LoaderContainer = styled.div`
   text-align: center;
@@ -51,4 +52,3 @@ const LoaderContainer = styled.div`
     }
   }
 `;
-export default Loading;
