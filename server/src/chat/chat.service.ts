@@ -86,61 +86,6 @@ export class ChatService {
     };
   }
 
-  async createContent(
-    chatRoomId: number,
-    userId: number,
-    createChatContentDto: CreateChatContentDto
-  ) {
-    const { content } = createChatContentDto;
-
-    const user = await User.createQueryBuilder()
-      .select()
-      .where(`id=${userId}`)
-      .getOne();
-
-    if (!user) return;
-
-    const chatContent = await ChatContent.create({
-      chatRoom: { id: chatRoomId },
-      user,
-      content,
-      createdAt: new Date(),
-    }).save();
-
-    const chatRoom = await ChatRoom.createQueryBuilder('chatRoom')
-      .where(`chatRoom.id=${chatRoomId}`)
-      .leftJoinAndSelect('chatRoom.seller', 'seller')
-      .getOne();
-
-    await ChatRoom.setActive(userId, chatRoom);
-
-    delete chatContent.chatRoom;
-
-    chatEventEmitter.emit(`${chatRoomId}`, chatContent);
-
-    return chatContent;
-  }
-
-  async createConnection(chatRoomId: number, res: Response) {
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream; charset=utf-8',
-      'Cache-Control': 'no-cache',
-    });
-
-    const chatListener = (data) => {
-      res.write('data: ' + JSON.stringify(data) + '\n\n');
-    };
-
-    const eventName = `${chatRoomId}`;
-    chatEventEmitter.addListener(eventName, chatListener);
-
-    setTimeout(() => {
-      chatEventEmitter.removeListener(eventName, chatListener);
-      res.write('event: bye\ndata: bye-bye\n\n');
-      res.end();
-    }, 1000 * 60 * 5);
-  }
-
   async leaveChatRoom(chatRoomId: number, userId: number) {
     const chatRoom = await ChatRoom.createQueryBuilder('chatRoom')
       .where(`chatRoom.id=${chatRoomId}`)
@@ -171,5 +116,74 @@ export class ChatService {
     }
 
     return result;
+  }
+
+  async createContent(
+    chatRoomId: number,
+    userId: number,
+    createChatContentDto: CreateChatContentDto
+  ) {
+    const { content } = createChatContentDto;
+
+    const user = await User.createQueryBuilder()
+      .select()
+      .where(`id=${userId}`)
+      .getOne();
+
+    if (!user) return;
+
+    const chatContent = await ChatContent.create({
+      chatRoom: { id: chatRoomId },
+      user,
+      content,
+      createdAt: new Date(),
+    }).save();
+
+    const chatRoom = await ChatRoom.createQueryBuilder('chatRoom')
+      .where(`chatRoom.id=${chatRoomId}`)
+      .leftJoinAndSelect('chatRoom.seller', 'seller')
+      .leftJoinAndSelect('chatRoom.buyer', 'buyer')
+      .getOne();
+
+    const { buyer, seller } = chatRoom;
+
+    chatEventEmitter.emit(`${chatRoomId}-${seller.id}`, chatContent);
+    chatEventEmitter.emit(`${chatRoomId}-${buyer.id}`, chatContent);
+
+    delete chatContent.chatRoom;
+    return chatContent;
+  }
+
+  async createConnection(chatRoomId: number, res: Response, userId: number) {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream; charset=utf-8',
+      'Cache-Control': 'no-cache',
+    });
+
+    const chatListener = (data) => {
+      res.write('data: ' + JSON.stringify(data) + '\n\n');
+    };
+
+    const eventName = `${chatRoomId}-${userId}`;
+    const [prevListener] = chatEventEmitter.listeners(eventName) as any;
+    if (prevListener) {
+      chatEventEmitter.removeListener(eventName, prevListener);
+    }
+    chatEventEmitter.addListener(eventName, chatListener);
+
+    setTimeout(() => {
+      chatEventEmitter.removeListener(eventName, chatListener);
+      res.write('event: bye\ndata: bye-bye\n\n');
+      res.end();
+    }, 1000 * 60 * 5);
+  }
+
+  async updateActiveTime(chatRoomId: number, userId: number) {
+    const chatRoom = await ChatRoom.createQueryBuilder('chatRoom')
+      .where(`chatRoom.id=${chatRoomId}`)
+      .leftJoinAndSelect('chatRoom.seller', 'seller')
+      .leftJoinAndSelect('chatRoom.buyer', 'buyer')
+      .getOne();
+    ChatRoom.setActive(userId, chatRoom);
   }
 }

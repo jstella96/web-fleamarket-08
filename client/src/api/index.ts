@@ -42,6 +42,7 @@ const api = {
   leaveChatRoom: (chatRoomId: number) => instance.post(`/chats/${chatRoomId}/leave`),
   createChat: (chatRoomId: number, chat: CreateChatContentDto) =>
     instance.post<ChatContent>(`/chats/${chatRoomId}`, chat),
+  updateChatActiveTime: (chatRoomId: number) => instance.post<ChatContent>(`/chats/${chatRoomId}/active-time`),
 
   socialLogin: (authorizationCode: string) => instance.post('/social-login', { authorizationCode }),
 

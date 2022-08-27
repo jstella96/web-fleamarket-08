@@ -30,15 +30,17 @@ export default function ChatDetail() {
 
   const closeChat = () => eventSource.current?.close();
 
-  const connectChat = useCallback((chatRoomId: Number) => {
+  const connectChat = useCallback((chatRoomId: number) => {
     eventSource.current = new EventSource(
-      `${process.env.REACT_APP_API_ENDPOINT}/chats/${chatRoomId}/connect`
+      `${process.env.REACT_APP_API_ENDPOINT}/chats/${chatRoomId}/connect`,
+      { withCredentials: true }
     );
 
     eventSource.current.onmessage = (event: MessageEvent<string>) => {
       const data: ChatContentType = JSON.parse(event.data);
       setChats((prev) => [...(prev || []), data]);
       moveScrollToEnd();
+      api.updateChatActiveTime(chatRoomId);
     };
 
     eventSource.current.addEventListener('bye', () => {

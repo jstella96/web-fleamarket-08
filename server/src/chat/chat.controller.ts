@@ -67,7 +67,18 @@ export class ChatController {
   }
 
   @Get(':id/connect')
-  createConnection(@Param('id') id: number, @Res() res: Response) {
-    this.chatService.createConnection(id, res);
+  createConnection(
+    @Param('id') id: number,
+    @Res() res: Response,
+    @Req() request: Request
+  ) {
+    const userId = request['userId'];
+    this.chatService.createConnection(id, res, userId);
+  }
+
+  @Post(':id/active-time')
+  updateActiveTime(@Param('id') id: number, @Req() request: Request) {
+    const userId = request['userId'];
+    this.chatService.updateActiveTime(id, userId);
   }
 }
