@@ -30,8 +30,8 @@ export default function MyPage() {
 }
 
 const Nav = styled.nav`
+  position: fixed;
   ${flexRow};
-
   width: 100%;
   background: ${COLORS.offWhite};
 `;

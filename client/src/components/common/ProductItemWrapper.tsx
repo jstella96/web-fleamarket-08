@@ -22,6 +22,7 @@ export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
   const category = useRecoilValue(categoryState);
   const [hasScrollFinished, setHasScrollFinished] = useState(true);
   const primaryRegionCode = useRecoilValue(getPrimaryRegionCode);
+
   const getProducts = useCallback(async () => {
     const categoryId = type ? undefined : category?.id;
     const { data } = await api.getProducts(
@@ -41,7 +42,7 @@ export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
     setPage(0);
     setProducts([]);
     setHasScrollFinished(true);
-  }, [category, primaryRegionCode]);
+  }, [type, category, primaryRegionCode]);
 
   useInfiniteScroll({ loader: loader, asyncCallback: getProducts });
 
