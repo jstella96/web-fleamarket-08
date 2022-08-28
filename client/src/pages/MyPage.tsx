@@ -4,6 +4,7 @@ import Layout from 'src/components/common/Layout';
 import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
 import COLORS from 'src/constants/colors';
 import MyPageTab from 'src/constants/myPageTab';
+import SIZES from 'src/constants/sizes';
 import { myPageTabState } from 'src/recoil/atoms/myPageTab';
 import { absoluteBottom, flexRow } from 'src/styles/common';
 import styled from 'styled-components';
@@ -12,7 +13,7 @@ export default function MyPage() {
   const [selectedTab, setSelectedTab] = useRecoilState(myPageTabState);
 
   return (
-    <Layout title="메뉴">
+    <Layout title="마이페이지">
       <Nav>
         {Object.values(MyPageTab).map((menuName, index) => (
           <NavButton
@@ -24,7 +25,9 @@ export default function MyPage() {
           </NavButton>
         ))}
       </Nav>
-      <MyPageMenu menu={selectedTab} />
+      <Container>
+        <MyPageMenu menu={selectedTab} />
+      </Container>
     </Layout>
   );
 }
@@ -38,7 +41,7 @@ const Nav = styled.nav`
 
 const NavButton = styled.button`
   position: relative;
-  margin: 0.1rem 2rem;
+  margin: 0 2rem;
   padding: 0.75rem;
   flex: 1;
   transition: border-bottom 0.2s;
@@ -54,6 +57,10 @@ const NavButton = styled.button`
       background-color: ${COLORS.primary1};
     }
   }
+`;
+
+const Container = styled.div`
+  padding-top: ${SIZES.myPageNav};
 `;
 
 interface MyPageMenuProps {

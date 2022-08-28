@@ -22,7 +22,7 @@ export class ChatContent extends BaseEntity {
   @ManyToOne(() => User, (user) => user.chatContents)
   user: User;
 
-  @Column()
+  @Column({ type: 'text' })
   content: string;
 
   @CreateDateColumn()

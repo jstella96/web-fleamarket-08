@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { LogOut } from 'src/assets/icons';
-import ChatContent from 'src/components/chat/ChatContent';
+import ChatContents from 'src/components/chat/ChatContents';
 import ChatForm from 'src/components/chat/ChatForm';
 import ProductInfo from 'src/components/chat/ProductInfo';
 import ConfirmModal from 'src/components/common/ConfirmModal';
@@ -93,13 +93,7 @@ export default function ChatDetail() {
     >
       {product && <ProductInfo product={product} />}
       <Container>
-        {chats?.map((content) => (
-          <ChatContent
-            key={content.id}
-            content={content}
-            isMe={content.user.id === user?.id}
-          />
-        ))}
+        <ChatContents chats={chats} />
         <ChatForm
           onSubmit={async (content) => {
             if (chatRoom) {

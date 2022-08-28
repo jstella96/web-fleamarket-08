@@ -6,10 +6,14 @@ import RegionInputModal from 'src/components/region/RegionInputModal';
 import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
-import { flexRow } from 'src/styles/common';
+import { absoluteCenter, flexRow } from 'src/styles/common';
 import { getRegionName } from 'src/utils/region';
 import styled from 'styled-components';
 import ConfirmModal from '../common/ConfirmModal';
+
+const CLASS_NAMES = {
+  regionDeleteButton: 'region-delete-button',
+};
 
 export default function RegionSelect() {
   const user = useRecoilValue(userState);
@@ -39,24 +43,30 @@ export default function RegionSelect() {
       </Text>
       <ButtonWrapper>
         {user?.userRegions?.map(({ region, isPrimary }) => (
-          <button
-            onClick={() => changePrimaryRegion(region.code)}
-            key={region.code}
-            className={isPrimary ? 'isPrimary' : ''}
-          >
-            {getRegionName(region.name)}
-            <Close
-              onClick={(e) => {
-                e.preventDefault();
-                handleDeleteRegion(region.code);
-              }}
-            />
-          </button>
+          <RegionButtonContainer key={region.code}>
+            <RegionButton
+              onClick={() => changePrimaryRegion(region.code)}
+              className={isPrimary ? 'isPrimary' : ''}
+            >
+              {getRegionName(region.name)}
+            </RegionButton>
+            <RegionDeleteButton>
+              <Close
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDeleteRegion(region.code);
+                }}
+              />
+            </RegionDeleteButton>
+          </RegionButtonContainer>
         ))}
         {user?.userRegions?.length !== 2 && (
-          <button className="add" onClick={() => setShowRegionInputModal(true)}>
+          <RegionButton
+            className="add"
+            onClick={() => setShowRegionInputModal(true)}
+          >
             <Add />
-          </button>
+          </RegionButton>
         )}
       </ButtonWrapper>
 
@@ -100,32 +110,46 @@ const Text = styled.p`
 const ButtonWrapper = styled.div`
   ${flexRow};
   justify-content: center;
-  button {
-    ${flexRow};
-    cursor: pointer;
-    background: ${COLORS.white};
-    border: 1px solid ${COLORS.primary1};
-    color: ${COLORS.primary1};
-    width: 8.5rem;
-    height: 2.25rem;
-    border-radius: 0.5rem;
-    margin: 0 1rem;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    font-size: 0.875rem;
-    &.isPrimary {
-      background: ${COLORS.primary1};
-      border: 1px solid ${COLORS.white};
-      color: ${COLORS.white};
-    }
-    &.add {
-      justify-content: center;
-    }
-  }
+
   svg {
     color: ${COLORS.primary2};
     width: 1rem;
     height: 1rem;
   }
+`;
+
+const RegionButtonContainer = styled.div`
+  position: relative;
+`;
+
+const RegionButton = styled.button`
+  ${flexRow};
+  cursor: pointer;
+  background: ${COLORS.white};
+  border: 1px solid ${COLORS.primary1};
+  color: ${COLORS.primary1};
+  width: 8.5rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  margin: 0 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  font-size: 0.875rem;
+  &.isPrimary {
+    background: ${COLORS.primary1};
+    border: 1px solid ${COLORS.white};
+    color: ${COLORS.white};
+  }
+  &.add {
+    justify-content: center;
+  }
+`;
+
+const RegionDeleteButton = styled.button`
+  ${flexRow};
+  position: absolute;
+  top: 50%;
+  right: 1.625rem;
+  transform: translateY(-50%);
 `;

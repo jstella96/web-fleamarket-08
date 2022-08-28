@@ -1,28 +1,37 @@
 import COLORS from 'src/constants/colors';
 import { flexColumn, flexRow } from 'src/styles/common';
 import { ChatContent as ChatContentType } from 'src/types';
+import { getFullTimeString, getTimeString, isToday } from 'src/utils/date';
 import styled, { css } from 'styled-components/macro';
 
 interface ChatContentProps {
   content: ChatContentType;
   isMe?: boolean;
+  showUser?: boolean;
+  showTime?: boolean;
 }
 
-export default function ChatContent({ content, isMe }: ChatContentProps) {
+export default function ChatContent({
+  content,
+  isMe,
+  showUser,
+  showTime,
+}: ChatContentProps) {
   return (
     <Container isMe={isMe}>
       <UserContainer>
-        {!isMe && <UserName>{content.user.name}</UserName>}
-        <Content isMe={isMe}>{content.content}</Content>
+        {!isMe && showUser && <UserName>{content.user.name}</UserName>}
+        <ContentContainer isMe={isMe}>
+          <Content isMe={isMe}>{content.content}</Content>
+          {showTime && (
+            <ContentDate isMe={isMe}>
+              {isToday(content.createdAt)
+                ? getTimeString(content.createdAt)
+                : getFullTimeString(content.createdAt)}
+            </ContentDate>
+          )}
+        </ContentContainer>
       </UserContainer>
-      <ContentDate>
-        {new Date(content.createdAt).toLocaleDateString('ko', {
-          hour12: false,
-          hour: 'numeric',
-          minute: '2-digit',
-          second: '2-digit',
-        })}
-      </ContentDate>
     </Container>
   );
 }
@@ -39,7 +48,6 @@ const Container = styled.div<{ isMe?: boolean }>`
     isMe &&
     css`
       flex-direction: row-reverse;
-      text-align: end;
     `}
 `;
 
@@ -52,10 +60,23 @@ const UserName = styled.div`
   font-size: 0.875rem;
 `;
 
+const ContentContainer = styled.div<{ isMe?: boolean }>`
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+
+  ${({ isMe }) =>
+    isMe &&
+    css`
+      flex-direction: row-reverse;
+    `}
+`;
+
 const Content = styled.p<{ isMe?: boolean }>`
   background-color: #e6e6e6;
   padding: 0.375rem 0.875rem;
   border-radius: 0.5rem;
+  max-width: 17rem;
 
   ${({ isMe }) =>
     isMe &&
@@ -65,7 +86,14 @@ const Content = styled.p<{ isMe?: boolean }>`
     `}
 `;
 
-const ContentDate = styled.span`
+const ContentDate = styled.span<{ isMe?: boolean }>`
+  min-width: 9rem;
   font-size: 0.875rem;
   color: ${COLORS.grey1};
+
+  ${({ isMe }) =>
+    isMe &&
+    css`
+      text-align: end;
+    `}
 `;

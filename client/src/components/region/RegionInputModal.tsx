@@ -167,6 +167,7 @@ const RegionItem = styled.li<{ isDuplicate: boolean }>`
   line-height: 1.5;
   border-bottom: 1px solid ${COLORS.grey3};
   padding: 0.85rem 0;
+  text-align: start;
 `;
 const Warning = styled.p`
   padding-top: 2rem;
