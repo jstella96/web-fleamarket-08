@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Message } from 'src/assets/icons';
+import api from 'src/api';
+import { Heart, Message, MoreVertical } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
 import { DEFAULT_IMAGE } from 'src/constants/image';
 import { ProductStatus } from 'src/enum/status.enum';
@@ -11,16 +12,18 @@ import { getRelativeTime } from 'src/utils/date';
 import { getRegionName } from 'src/utils/region';
 import styled, { css } from 'styled-components/macro';
 import FormattedPrice from './FormattedPrice';
+import LikeButton from './LikeButton';
 
 interface ProductItemProps {
-  product: Product;
-  rightButton?: ReactNode;
+  productItem: Product;
+  isSeller: boolean;
 }
 
 export default function ProductItem({
-  product,
-  rightButton,
+  productItem,
+  isSeller,
 }: ProductItemProps) {
+  const [product, setProduct] = useState(productItem);
   const {
     id,
     title,
@@ -31,7 +34,20 @@ export default function ProductItem({
     thumbnail,
     likeCount,
     status,
+    isLiked,
   } = product;
+
+  const handleClickLikeButton = (productId: number) => {
+    api.likeProduct(productId);
+    setProduct((prev) => {
+      const nextLikeCount = likeCount + (isLiked ? 1 : -1);
+      return {
+        ...prev,
+        isLiked: !isLiked,
+        likeCount: nextLikeCount,
+      };
+    });
+  };
   return (
     <Container to={`/product/${id}`}>
       <ImageContainer>
@@ -45,7 +61,18 @@ export default function ProductItem({
       <RightPanel>
         <TitleContainer>
           <Title>{title}</Title>
-          <RightButton>{rightButton}</RightButton>
+          <RightButton>
+            {isSeller ? (
+              <MoreVertical />
+            ) : (
+              <LikeButton
+                isLiked={isLiked}
+                onClick={() => {
+                  handleClickLikeButton(id);
+                }}
+              />
+            )}
+          </RightButton>
         </TitleContainer>
         <CenterInfo>
           <RegionAndDate>

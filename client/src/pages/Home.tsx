@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Add } from 'src/assets/icons';
-import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
+import ProductItemList from 'src/components/common/ProductItemList';
 import MainHeader from 'src/components/main/MainHeader';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <Container>
       <MainHeader />
-      <ProductItemWrapper />
+      <ProductItemList />
       <WriteLink to="/write">
         <Add />
       </WriteLink>

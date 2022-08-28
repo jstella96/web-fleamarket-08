@@ -1,28 +1,26 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
-import { MoreVertical } from 'src/assets/icons';
 import { categoryState } from 'src/recoil/atoms/category';
 import { Product } from 'src/types';
-import ProductItem from '../common/ProductItem';
+import ProductItem from './ProductItem';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
-import LikeButton from './LikeButton';
 import ProductSkeleton from './ProductSkeleton';
-import { getPrimaryRegionCode } from 'src/recoil/atoms/user';
+import { getPrimaryRegionCode, userState } from 'src/recoil/atoms/user';
 import { PRODUCT_LIMIT } from 'src/constants/product';
 
-interface ProductItemWrapperProps {
+interface ProductItemListProps {
   type?: 'like' | 'sale';
 }
 
-export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
+export default function ProductItemList({ type }: ProductItemListProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const loader = useRef(null);
   const [page, setPage] = useState(0);
   const category = useRecoilValue(categoryState);
   const [hasScrollFinished, setHasScrollFinished] = useState(true);
   const primaryRegionCode = useRecoilValue(getPrimaryRegionCode);
-
+  const user = useRecoilValue(userState);
   const getProducts = useCallback(async () => {
     const categoryId = type ? undefined : category?.id;
     const { data } = await api.getProducts(
@@ -46,37 +44,13 @@ export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
 
   useInfiniteScroll({ loader: loader, asyncCallback: getProducts });
 
-  const clickLikeButton = (productId: number) => {
-    setProducts((prevProducts) => {
-      return prevProducts.map((product) => {
-        if (product.id === productId) {
-          product.isLiked = !product.isLiked;
-          product.likeCount += product.isLiked ? 1 : -1;
-        }
-        return product;
-      });
-    });
-  };
-
   return (
     <>
       {products.map((product) => (
         <ProductItem
           key={product.id}
-          product={product}
-          rightButton={
-            type === 'sale' ? (
-              <MoreVertical />
-            ) : (
-              <LikeButton
-                isLike={product.isLiked}
-                productId={product.id}
-                onClick={() => {
-                  clickLikeButton(product.id);
-                }}
-              />
-            )
-          }
+          productItem={product}
+          isSeller={user?.id === product.author.id}
         />
       ))}
       {hasScrollFinished ? (

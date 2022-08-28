@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import ChatList from 'src/components/common/ChatList';
 import Layout from 'src/components/common/Layout';
-import ProductItemWrapper from 'src/components/common/ProductItemWrapper';
+import ProductItemList from 'src/components/common/ProductItemList';
 import COLORS from 'src/constants/colors';
 import MyPageTab from 'src/constants/myPageTab';
 import SIZES from 'src/constants/sizes';
@@ -70,15 +70,15 @@ interface MyPageMenuProps {
 function MyPageMenu({ menu }: MyPageMenuProps) {
   switch (menu) {
     case MyPageTab.SalesList:
-      return <ProductItemWrapper type="sale" />;
+      return <ProductItemList type="sale" />;
 
     case MyPageTab.Chat:
       return <ChatList />;
 
     case MyPageTab.WishList:
-      return <ProductItemWrapper type="like" />;
+      return <ProductItemList type="like" />;
 
     default:
-      return <ProductItemWrapper type="sale" />;
+      return <ProductItemList type="sale" />;
   }
 }

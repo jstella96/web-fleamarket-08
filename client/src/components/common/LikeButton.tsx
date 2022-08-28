@@ -2,47 +2,39 @@ import { Heart } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
 import styled, { css } from 'styled-components/macro';
 
-import api from 'src/api';
-import { useRecoilValue } from 'recoil';
-import { userState } from 'src/recoil/atoms/user';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
 interface LikeButtonProps {
-  productId: number;
-  isLike: boolean;
+  isLiked: boolean;
   onClick: () => void;
 }
 
-export default function LikeButton({
-  productId,
-  isLike,
-  onClick,
-}: LikeButtonProps) {
-  const user = useRecoilValue(userState);
-  const navigate = useNavigate();
-  const handleLikeButtonClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    if (!user) {
-      return navigate('/login');
-    }
-    api.likeProduct(productId);
+export default function LikeButton({ isLiked, onClick }: LikeButtonProps) {
+  const [isActive, setIsActive] = useState(isLiked);
 
+  const handleLikeButtonClick = () => {
+    setIsActive((prev) => !prev);
     onClick();
   };
 
   return (
-    <Container isLike={isLike} onClick={handleLikeButtonClick}>
+    <Container
+      isActive={isActive}
+      onClick={(e) => {
+        e.preventDefault();
+        handleLikeButtonClick();
+      }}
+    >
       <Heart></Heart>
     </Container>
   );
 }
 
 const Container = styled.button<{
-  isLike: Boolean;
+  isActive: Boolean;
 }>`
-  ${({ isLike }) => {
-    if (isLike) {
+  ${({ isActive }) => {
+    if (isActive) {
       return css`
         svg {
           color: ${COLORS.primary1};

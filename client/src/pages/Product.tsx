@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
-import { Heart } from 'src/assets/icons';
 import ConfirmModal from 'src/components/common/ConfirmModal';
 import FormattedPrice from 'src/components/common/FormattedPrice';
 import Layout from 'src/components/common/Layout';
+import LikeButton from 'src/components/common/LikeButton';
 import SwipeImage from 'src/components/common/SwipeImage';
 import ProductHeaderButton from 'src/components/product/ProductHeaderButton';
 import ProductStateButton from 'src/components/product/ProductStatusButton';
@@ -103,9 +103,14 @@ export default function Product() {
             </AuthorInfo>
           </Main>
           <Footer>
-            <LikeButton>
-              <Heart />
-            </LikeButton>
+            <LikeButtonContainer>
+              <LikeButton
+                isLiked={product.isLiked}
+                onClick={() => {
+                  api.likeProduct(product.id);
+                }}
+              />
+            </LikeButtonContainer>
             <p>
               <FormattedPrice price={product.price} />
             </p>
@@ -227,7 +232,7 @@ const Footer = styled.div`
   }
 `;
 
-const LikeButton = styled.button`
+const LikeButtonContainer = styled.div`
   ${flexRow}
   border: none;
   background: 0;
