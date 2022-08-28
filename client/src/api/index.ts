@@ -6,6 +6,7 @@ import {
   ChatContent,
   ChatDetail,
   ChatRoom,
+  Location,
   Product,
   ProductDetail,
   Region,
@@ -57,6 +58,8 @@ const api = {
   logout: () => instance.post('/logout'),
 
   getSignedUrls: (fileNemes: string[]) => instance.post<AwsUploadInfo[]>('/aws/signed-url', fileNemes),
+
+  getLocation: (coords: string) => instance.get<Location>('/regions/location', { params: { coords } }),
 };
 
 export default api;

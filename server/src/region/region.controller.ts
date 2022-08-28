@@ -11,4 +11,9 @@ export class RegionController {
   findAll(@Query('value') value: string) {
     return this.regionService.findAll(value);
   }
+
+  @Get('location')
+  getLocation(@Query('coords') coords: string) {
+    return this.regionService.getLocation(coords);
+  }
 }

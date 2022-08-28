@@ -102,16 +102,9 @@ export interface ChatDetail {
   product: Product;
 }
 
-export interface KaKaoRegion {
-  region_type: string;
+export interface Location {
   code: string;
-  address_name: string;
-  region_1depth_name: string;
-  region_2depth_name: string;
-  region_3depth_name: string;
-  region_4depth_name: string;
-  x: number;
-  y: number;
+  name: string;
 }
 
 export interface AwsUploadInfo {

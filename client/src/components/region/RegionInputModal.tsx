@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import api from 'src/api';
 import COLORS from 'src/constants/colors';
-import { getMyLocation, fillterRegion } from 'src/utils/location';
+import { getMyLocation } from 'src/utils/location';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
-import { KaKaoRegion, Region, UserRegion } from 'src/types';
+import { Location, Region, UserRegion } from 'src/types';
 import styled, { css } from 'styled-components';
 import Modal from '../common/Modal';
 import Loading from '../common/Loading';
@@ -48,10 +48,8 @@ export default function RegionInputModal({
     }
   };
 
-  const regionSerchCb = (result: KaKaoRegion[], status: string) => {
-    const region = fillterRegion(result, status);
-    if (!region) return;
-    setInputValue(region);
+  const regionSerchCb = (location: Location) => {
+    setInputValue(location.name);
   };
 
   return (
