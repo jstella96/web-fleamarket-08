@@ -7,6 +7,7 @@ import { flexColumn } from 'src/styles/common';
 import { productImage } from 'src/styles/productLayouts';
 import { Product } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
+import { getRegionName } from 'src/utils/region';
 import styled from 'styled-components/macro';
 import FormattedPrice from './FormattedPrice';
 
@@ -46,7 +47,7 @@ export default function ProductItem({
         </TitleContainer>
         <CenterInfo>
           <RegionAndDate>
-            <span>{region.name}</span>
+            <span>{getRegionName(region.name)}</span>
             <span>∙</span>
             <span>{getRelativeTime(createdAt)}</span>
           </RegionAndDate>

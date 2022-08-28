@@ -7,6 +7,7 @@ import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
 import { flexRow } from 'src/styles/common';
+import { getRegionName } from 'src/utils/region';
 import styled from 'styled-components';
 import ConfirmModal from '../common/ConfirmModal';
 
@@ -43,7 +44,7 @@ export default function RegionSelect() {
             key={region.code}
             className={isPrimary ? 'isPrimary' : ''}
           >
-            {region.name}
+            {getRegionName(region.name)}
             <Close
               onClick={(e) => {
                 e.preventDefault();

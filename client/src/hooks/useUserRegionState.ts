@@ -2,6 +2,7 @@ import { useRecoilState } from 'recoil';
 import api from 'src/api';
 import { userState } from 'src/recoil/atoms/user';
 import { Region } from 'src/types';
+import { getRegionName } from 'src/utils/region';
 
 export const useUserRigionState = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -45,7 +46,7 @@ export const useUserRigionState = () => {
     const primaryRegion = user?.userRegions.find(
       (region) => region.isPrimary === true
     );
-    return primaryRegion?.region.name || '동네를 설정해주세요';
+    return getRegionName(primaryRegion?.region.name) || '동네를 설정해주세요';
   };
 
   return {

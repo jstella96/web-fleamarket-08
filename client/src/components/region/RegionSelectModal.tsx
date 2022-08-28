@@ -5,6 +5,7 @@ import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
 import { fixedEntire, flexCenter } from 'src/styles/common';
+import { getRegionName } from 'src/utils/region';
 import styled, { css } from 'styled-components';
 
 interface RegionSelectModalProps {
@@ -37,7 +38,7 @@ export default function RegionSelectModal({
                 close();
               }}
             >
-              {region.name}
+              {getRegionName(region.name)}
             </button>
           ))}
         <Link to="/region">내 동네 설정하기</Link>
