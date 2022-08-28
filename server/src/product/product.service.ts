@@ -81,7 +81,10 @@ export class ProductService {
   }
 
   async findOne(id: number, userId: number) {
-    return await Product.getOne(id, userId);
+    const product = await Product.getOne(id, userId);
+    product.views = product.views + 1;
+    Product.update({ id: id }, { views: product.views });
+    return product;
   }
 
   async update(id: number, productDto: ProductDto, userId: number) {
