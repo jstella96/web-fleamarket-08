@@ -22,10 +22,14 @@ export default function Header() {
 
   return (
     <Container>
-      <Link to="/category" state={{ backgroundLocation: location }}>
-        <Category />
+      <CategoryLink to="/category" state={{ backgroundLocation: location }}>
+        {category ? (
+          <img src={category?.iconUrl} alt={category?.name} />
+        ) : (
+          <Category />
+        )}
         <CategoryName>{category?.name}</CategoryName>
-      </Link>
+      </CategoryLink>
 
       <Location
         onClick={() => setShowRegionSelectModal(!showRegionSelectModal)}
@@ -66,6 +70,15 @@ const Container = styled.header`
   border-radius: 0 0 1rem 1rem;
   color: ${COLORS.white};
   z-index: 100;
+`;
+
+const CategoryLink = styled(Link)`
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 1.5rem;
+  }
 `;
 
 const Location = styled.div`

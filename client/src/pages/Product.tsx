@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import ConfirmModal from 'src/components/common/ConfirmModal';
@@ -17,6 +17,7 @@ import { userState } from 'src/recoil/atoms/user';
 import { fixedBottom, flexColumn, flexRow } from 'src/styles/common';
 import { ProductDetail } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
+import { getRegionName } from 'src/utils/region';
 import styled, { css } from 'styled-components/macro';
 
 export default function Product() {
@@ -29,7 +30,6 @@ export default function Product() {
   );
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
   useEffect(() => {
     const initProduct = async () => {
       if (id === undefined) return;
@@ -59,7 +59,7 @@ export default function Product() {
       transparent={true}
     >
       {product && (
-        <>
+        <Container>
           <ImageContainer>
             {product.images.length > 0 ? (
               <SwipeImage
@@ -99,7 +99,7 @@ export default function Product() {
             <AuthorInfo>
               <p>판매자 정보</p>
               <p>{product.author.name}</p>
-              <span>{product.region.name}</span>
+              <span>{getRegionName(product.region.name)}</span>
             </AuthorInfo>
           </Main>
           <Footer>
@@ -118,12 +118,11 @@ export default function Product() {
               to={`${
                 isSeller ? `/chat/${product.id}` : `/chat-detail/${product.id}`
               }`}
-              state={location}
             >
               {isSeller ? '채팅목록보기' : '문의하기'}
             </ChatLink>
           </Footer>
-        </>
+        </Container>
       )}
       {showDeleteConfirm && (
         <ConfirmModal
@@ -139,6 +138,11 @@ export default function Product() {
     </Layout>
   );
 }
+
+const Container = styled.div`
+  padding-bottom: ${SIZES.productFooter};
+`;
+
 const TitleText = styled.h2`
   display: flex;
   font-size: 1.3rem;
@@ -177,7 +181,7 @@ const Main = styled.div`
   ${flexColumn};
   gap: 1rem;
   padding: 1rem;
-  min-height: calc(100% - ${SIZES.productImage} - ${SIZES.productFooter});
+  min-height: calc(100vh - ${SIZES.productImage} - ${SIZES.productFooter});
 `;
 
 const TitleContainer = styled.div`

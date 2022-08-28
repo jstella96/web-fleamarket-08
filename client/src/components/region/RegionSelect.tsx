@@ -6,14 +6,10 @@ import RegionInputModal from 'src/components/region/RegionInputModal';
 import COLORS from 'src/constants/colors';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { userState } from 'src/recoil/atoms/user';
-import { absoluteCenter, flexRow } from 'src/styles/common';
+import { flexRow } from 'src/styles/common';
 import { getRegionName } from 'src/utils/region';
 import styled from 'styled-components';
 import ConfirmModal from '../common/ConfirmModal';
-
-const CLASS_NAMES = {
-  regionDeleteButton: 'region-delete-button',
-};
 
 export default function RegionSelect() {
   const user = useRecoilValue(userState);

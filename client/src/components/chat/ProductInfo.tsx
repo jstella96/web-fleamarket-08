@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
 import { Product } from 'src/types';
@@ -10,10 +11,10 @@ interface ProductInfoProps {
 }
 
 export default function ProductInfo({ product }: ProductInfoProps) {
-  const { thumbnail, title, price, status } = product;
+  const { thumbnail, title, price, status, id } = product;
 
   return (
-    <Container>
+    <Container to={`/product/${id}`}>
       <LeftPanel>
         <ProductImage src={thumbnail?.imageUrl} />
         <div>
@@ -28,7 +29,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   );
 }
 
-const Container = styled.div`
+const Container = styled(Link)`
   position: fixed;
   top: ${SIZES.headerHegight};
   display: flex;

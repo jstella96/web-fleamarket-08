@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'src/recoil/atoms/user';
 import { ChatContent as ChatContentType } from 'src/types';
@@ -11,16 +10,15 @@ interface ChatContentsProps {
 
 export default function ChatContents({ chats }: ChatContentsProps) {
   const user = useRecoilValue(userState);
-  const prevContent = useRef<ChatContentType>();
 
   return (
     <>
       {chats?.map((content, index) => {
+        const prevContent = chats[index - 1];
+        console.log(prevContent);
         const showUser =
-          prevContent.current?.user.id !== content.user.id ||
-          !isSameMinute(prevContent.current?.createdAt, content.createdAt);
-
-        prevContent.current = content;
+          prevContent?.user.id !== content.user.id ||
+          !isSameMinute(prevContent?.createdAt, content.createdAt);
 
         const nextContent = chats[index + 1];
         const showTime =

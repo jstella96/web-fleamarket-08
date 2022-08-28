@@ -1,4 +1,3 @@
-import { Heart } from 'src/assets/icons';
 import { flexRow } from 'src/styles/common';
 import styled from 'styled-components/macro';
 
@@ -12,10 +11,7 @@ export default function FormattedPrice({ price }: PriceProps) {
   return (
     <Container>
       {priceNum === 0 ? (
-        <span>
-          나눔
-          <Heart />
-        </span>
+        <span>️나눔❤️</span>
       ) : (
         `${Number(price).toLocaleString()}원`
       )}
