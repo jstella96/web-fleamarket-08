@@ -19,9 +19,7 @@ function useInfiniteScroll({ loader, asyncCallback }: useInfiniteScrollProps) {
     let observer: IntersectionObserver;
 
     if (loader.current) {
-      observer = new IntersectionObserver(onIntersect, {
-        threshold: 0.2,
-      });
+      observer = new IntersectionObserver(onIntersect, { rootMargin: '150px' });
       observer.observe(loader.current);
     }
 

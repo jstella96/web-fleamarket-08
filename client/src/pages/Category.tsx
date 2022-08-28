@@ -30,7 +30,7 @@ export default function Category() {
           <CategoryButton
             key={category.id}
             onClick={() => {
-              setCategory(category || DEFAULT_IMAGE);
+              setCategory(category);
               navigate('/');
             }}
           >

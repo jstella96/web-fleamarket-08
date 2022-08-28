@@ -1,14 +1,15 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { MoreVertical } from 'src/assets/icons';
 import { categoryState } from 'src/recoil/atoms/category';
-
 import { Product } from 'src/types';
 import ProductItem from '../common/ProductItem';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
 import LikeButton from './LikeButton';
 import ProductSkeleton from './ProductSkeleton';
+import { getPrimaryRegionCode } from 'src/recoil/atoms/user';
+import { PRODUCT_LIMIT } from 'src/constants/product';
 
 interface ProductItemWrapperProps {
   type?: 'like' | 'sale';
@@ -20,16 +21,27 @@ export default function ProductItemWrapper({ type }: ProductItemWrapperProps) {
   const [page, setPage] = useState(0);
   const category = useRecoilValue(categoryState);
   const [hasScrollFinished, setHasScrollFinished] = useState(true);
-
+  const primaryRegionCode = useRecoilValue(getPrimaryRegionCode);
   const getProducts = useCallback(async () => {
     const categoryId = type ? undefined : category?.id;
-    const { data } = await api.getProducts(type, categoryId, page);
-    if (data.length === 0) setHasScrollFinished(false);
-    setPage(page + 1);
+    const { data } = await api.getProducts(
+      type,
+      categoryId,
+      page,
+      primaryRegionCode
+    );
+    if (data.length < PRODUCT_LIMIT) setHasScrollFinished(false);
+    setPage((prev) => prev + 1);
     setProducts((prev) => {
       return [...prev, ...data];
     });
-  }, [type, category, page]);
+  }, [type, category, page, primaryRegionCode]);
+
+  useEffect(() => {
+    setPage(0);
+    setProducts([]);
+    setHasScrollFinished(true);
+  }, [category, primaryRegionCode]);
 
   useInfiniteScroll({ loader: loader, asyncCallback: getProducts });
 

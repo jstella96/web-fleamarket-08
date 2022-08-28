@@ -30,6 +30,7 @@ export class ProductController {
     return this.productService.create(productDto, userId);
   }
 
+  @ApiQuery({ name: 'regionCode', type: Number, required: false })
   @ApiQuery({ name: 'type', type: String, required: false })
   @ApiQuery({ name: 'categoryId', type: String, required: false })
   @ApiQuery({ name: 'page', type: Number, required: false })
@@ -38,6 +39,7 @@ export class ProductController {
     @Query('type') type: string,
     @Query('categoryId') categoryId: number,
     @Query('page') page: number,
+    @Query('regionCode') regionCode: number,
     @Req() request: Request
   ) {
     const userId = request['userId'];
@@ -48,7 +50,8 @@ export class ProductController {
       userId,
       type === 'sale',
       categoryId,
-      page
+      page,
+      regionCode
     );
   }
 

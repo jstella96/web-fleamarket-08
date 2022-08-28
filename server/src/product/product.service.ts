@@ -46,16 +46,26 @@ export class ProductService {
     userId: number,
     isSale?: boolean,
     categoryId?: number,
-    page?: number
+    page?: number,
+    regionCode?: number
   ) {
-    const products = await Product.getProductQuery(userId)
+    let productsQuery = Product.getProductQuery(userId)
       .select(['product', 'author', 'thumbnail', 'isLiked', 'region'])
-      .where(isSale ? `author.id=${userId}` : '')
-      .where(!isSale && categoryId ? `category.id=${categoryId}` : '')
+      .where(isSale ? `author.id=${userId}` : '');
+
+    if (categoryId) {
+      productsQuery = productsQuery.andWhere(`category.id=${categoryId}`);
+    }
+    if (regionCode) {
+      productsQuery = productsQuery.andWhere(`region.code=${regionCode}`);
+    }
+
+    productsQuery = productsQuery
       .skip(page * PRODUCT_LIMIT)
       .take(PRODUCT_LIMIT)
-      .orderBy('product.id', 'DESC')
-      .getMany();
+      .orderBy('product.id', 'DESC');
+
+    const products = await productsQuery.getMany();
 
     return products.map((product) => ({
       ...product,
