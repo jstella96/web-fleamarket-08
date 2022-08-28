@@ -8,13 +8,15 @@ import FormattedPrice from 'src/components/common/FormattedPrice';
 import Layout from 'src/components/common/Layout';
 import SwipeImage from 'src/components/common/SwipeImage';
 import ProductHeaderButton from 'src/components/product/ProductHeaderButton';
+import ProductStateButton from 'src/components/product/ProductStatusButton';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
+import { ProductStatus } from 'src/enum/status.enum';
 import { userState } from 'src/recoil/atoms/user';
 import { fixedBottom, flexColumn, flexRow } from 'src/styles/common';
 import { ProductDetail } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 export default function Product() {
   const user = useRecoilValue(userState);
@@ -27,7 +29,6 @@ export default function Product() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
   useEffect(() => {
     const initProduct = async () => {
       if (id === undefined) return;
@@ -64,9 +65,18 @@ export default function Product() {
             ></SwipeImage>
           </ImageContainer>
           <Main>
-            <p>{product.status}</p>
+            {isSeller && (
+              <ProductStateButton status={product.status} id={product.id} />
+            )}
             <TitleContainer>
-              <Title>{product.title}</Title>
+              <TitleText>
+                {!isSeller && product.status !== ProductStatus.판매중 && (
+                  <TitleLabel status={product.status}>
+                    {product.status}
+                  </TitleLabel>
+                )}
+                <Title>{product.title}</Title>
+              </TitleText>
               <ProductInfo>
                 <span>{product.category.name}</span>
                 <span>∙</span>
@@ -119,6 +129,25 @@ export default function Product() {
     </Layout>
   );
 }
+const TitleText = styled.h2`
+  display: flex;
+  font-size: 1.3rem;
+  font-weight: normal;
+  gap: 0.3rem;
+`;
+const TitleLabel = styled.div<{ status: ProductStatus }>`
+  ${({ status }) => {
+    if (status === ProductStatus.예약중)
+      return css`
+        color: ${COLORS.orange};
+      `;
+    if (status === ProductStatus.거래완료)
+      return css`
+        color: ${COLORS.grey3};
+      `;
+  }}
+`;
+const Title = styled.div``;
 
 const ImageContainer = styled.div`
   background: ${COLORS.grey3};
@@ -134,11 +163,6 @@ const Main = styled.div`
 const TitleContainer = styled.div`
   ${flexColumn};
   gap: 0.5rem;
-`;
-
-const Title = styled.h2`
-  font-size: 1.25rem;
-  font-weight: normal;
 `;
 
 const ProductInfo = styled.p`

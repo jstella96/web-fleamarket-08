@@ -77,6 +77,11 @@ export class ProductController {
     return this.productService.update(id, productDto, userId);
   }
 
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: number, @Body() body: { status: string }) {
+    return this.productService.updateStatus(id, body.status);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: number, @Req() request: Request) {
     const userId = request['userId'];

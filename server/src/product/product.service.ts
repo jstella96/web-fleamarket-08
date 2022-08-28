@@ -87,6 +87,10 @@ export class ProductService {
     return product;
   }
 
+  async updateStatus(id: number, status: string) {
+    return await Product.update({ id: id }, { status: status });
+  }
+
   async update(id: number, productDto: ProductDto, userId: number) {
     const { title, content, imageUrls, price, categoryId } = productDto;
 

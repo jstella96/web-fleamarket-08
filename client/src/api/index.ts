@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ProductStatus } from 'src/enum/status.enum';
 import {
   AwsUploadInfo,
   Category,
@@ -34,6 +35,8 @@ const api = {
   getProduct: (productId: number) => instance.get<ProductDetail>(`/products/${productId}`),
   updateProduct: (productId: number, product: Partial<ProductDto>) =>
     instance.patch<ProductDetail>(`/products/${productId}`, product),
+  updateStatus: (productId: number, status: ProductStatus) =>
+    instance.patch<ProductDetail>(`/products/${productId}/status`, { status: status }),
   deleteProduct: (productId: number) => instance.delete(`products/${productId}`),
   likeProduct: (productId: number) => instance.post(`/products/${productId}/like`),
 

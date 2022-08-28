@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { Heart, Message } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
 import { DEFAULT_IMAGE } from 'src/constants/image';
+import { ProductStatus } from 'src/enum/status.enum';
 import { flexColumn } from 'src/styles/common';
 import { productImage } from 'src/styles/productLayouts';
 import { Product } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import { getRegionName } from 'src/utils/region';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import FormattedPrice from './FormattedPrice';
 
 interface ProductItemProps {
@@ -29,6 +30,7 @@ export default function ProductItem({
     chatCount,
     thumbnail,
     likeCount,
+    status,
   } = product;
   return (
     <Container to={`/product/${id}`}>
@@ -57,12 +59,19 @@ export default function ProductItem({
         </CenterInfo>
         <CountsContainer>
           <span>
-            <Heart />
-            {likeCount}
+            {status !== ProductStatus.판매중 && (
+              <Status status={status}>{status}</Status>
+            )}
           </span>
           <span>
-            <Message />
-            {chatCount}
+            <span>
+              <Heart />
+              {likeCount}
+            </span>
+            <span>
+              <Message />
+              {chatCount}
+            </span>
           </span>
         </CountsContainer>
       </RightPanel>
@@ -126,10 +135,26 @@ const RegionAndDate = styled.p`
 const Price = styled.p`
   font-size: 0.875rem;
 `;
-
+const Status = styled.div<{ status: ProductStatus }>`
+  ${({ status }) => {
+    if (status === ProductStatus.예약중)
+      return css`
+        background: ${COLORS.orange};
+        color: ${COLORS.offWhite};
+      `;
+    if (status === ProductStatus.거래완료)
+      return css`
+        background: ${COLORS.grey3};
+        color: ${COLORS.offWhite};
+      `;
+  }}
+  border-radius: 0.315rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.71rem;
+`;
 const CountsContainer = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   gap: 0.25rem;
   color: ${COLORS.grey1};
 

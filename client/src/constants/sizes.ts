@@ -6,7 +6,9 @@ const SIZES = {
   writeFooter: '3.625rem',
   chatFooter: '4.125rem',
   chatProductInfo: '4.5625rem',
+  productStatusWidth: '7.6rem',
   myPageNav: '2.6875rem',
+
 };
 
 export default SIZES;

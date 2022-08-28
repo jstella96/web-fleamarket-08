@@ -1,3 +1,5 @@
+import { ProductStatus } from 'src/enum/status.enum';
+
 export interface Region {
   code: number;
   name: string;
@@ -34,7 +36,7 @@ export interface Product {
   title: string;
   price: string;
   content: string;
-  status: string;
+  status: ProductStatus;
   views: number;
   author: User;
   thumbnail: Thumbnail;
@@ -57,7 +59,7 @@ export interface ProductDetail {
   title: string;
   price: string;
   content: string;
-  status: string;
+  status: ProductStatus;
   views: number;
   author: User;
   isLiked: boolean;

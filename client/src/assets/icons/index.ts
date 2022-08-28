@@ -1,7 +1,7 @@
 export { ReactComponent as Add } from './add.svg';
 export { ReactComponent as Category } from './category.svg';
 export { ReactComponent as Check } from './check.svg';
-export { ReactComponent as Chevron } from './chevron-down.svg';
+export { ReactComponent as ChevronDown } from './chevron-down.svg';
 export { ReactComponent as ChevronLeft } from './chevron-left.svg';
 export { ReactComponent as ChevronRight } from './chevron-right.svg';
 export { ReactComponent as Close } from './close.svg';
