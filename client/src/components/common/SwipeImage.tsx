@@ -1,11 +1,14 @@
-import { Swiper, SwiperSlide } from 'swiper/react'; // basic
+import { useState } from 'react';
+import { Close } from 'src/assets/icons';
+import COLORS from 'src/constants/colors';
+import SIZES from 'src/constants/sizes';
+import styled from 'styled-components';
 import SwiperCore, { Navigation, Pagination } from 'swiper';
 import 'swiper/css'; //basic
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import styled from 'styled-components';
-import COLORS from 'src/constants/colors';
-import SIZES from 'src/constants/sizes';
+import { Swiper, SwiperSlide } from 'swiper/react'; // basic
+import Modal from './Modal';
 
 SwiperCore.use([Navigation, Pagination]);
 
@@ -14,13 +17,28 @@ interface SwipeImageProps {
 }
 
 export default function SwipeImage({ imageUrls }: SwipeImageProps) {
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string>();
+
   return (
     <SwiperStyle scrollbar slidesPerView={1} pagination>
       {imageUrls.map((imageUrl, index) => (
         <SwiperSlide key={index}>
-          <Image imageUrl={imageUrl} />
+          <Image
+            imageUrl={imageUrl}
+            onClick={() => setSelectedImageUrl(imageUrl)}
+          />
         </SwiperSlide>
       ))}
+      {selectedImageUrl && (
+        <Modal close={() => setSelectedImageUrl('')} variant="dark">
+          <ImageContainer>
+            <CloseButton onClick={() => setSelectedImageUrl('')}>
+              <Close />
+            </CloseButton>
+            <img src={selectedImageUrl} alt="상품 사진" />
+          </ImageContainer>
+        </Modal>
+      )}
     </SwiperStyle>
   );
 }
@@ -38,7 +56,8 @@ const Image = styled.div<{
       rgba(0, 0, 0, 0.24) 100%
     ),
     url(${({ imageUrl }) => imageUrl});
-  background-size: 100% 100%;
+  background-position: center;
+  background-size: cover;
 `;
 
 const SwiperStyle = styled(Swiper)`
@@ -46,5 +65,23 @@ const SwiperStyle = styled(Swiper)`
   .swiper-pagination-bullet-active {
     color: ${COLORS.offWhite};
     background: ${COLORS.offWhite};
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: ${COLORS.white};
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  img {
+    width: 100%;
   }
 `;

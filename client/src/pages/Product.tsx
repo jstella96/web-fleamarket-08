@@ -10,6 +10,7 @@ import SwipeImage from 'src/components/common/SwipeImage';
 import ProductHeaderButton from 'src/components/product/ProductHeaderButton';
 import ProductStateButton from 'src/components/product/ProductStatusButton';
 import COLORS from 'src/constants/colors';
+import { DEFAULT_IMAGE } from 'src/constants/image';
 import SIZES from 'src/constants/sizes';
 import { ProductStatus } from 'src/enum/status.enum';
 import { userState } from 'src/recoil/atoms/user';
@@ -60,9 +61,13 @@ export default function Product() {
       {product && (
         <>
           <ImageContainer>
-            <SwipeImage
-              imageUrls={product.images.map((image) => image.imageUrl)}
-            ></SwipeImage>
+            {product.images.length > 0 ? (
+              <SwipeImage
+                imageUrls={product.images.map((image) => image.imageUrl)}
+              />
+            ) : (
+              <img src={DEFAULT_IMAGE} alt={`상품 기본 이미지`} />
+            )}
           </ImageContainer>
           <Main>
             {isSeller && (
@@ -150,7 +155,17 @@ const TitleLabel = styled.div<{ status: ProductStatus }>`
 const Title = styled.div``;
 
 const ImageContainer = styled.div`
-  background: ${COLORS.grey3};
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.24) 0%,
+    rgba(0, 0, 0, 0) 16.52%,
+    rgba(0, 0, 0, 0) 87.36%,
+    rgba(0, 0, 0, 0.24) 100%
+  );
+
+  img {
+    width: 100%;
+  }
 `;
 
 const Main = styled.div`
