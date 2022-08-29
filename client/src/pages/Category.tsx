@@ -19,7 +19,7 @@ export default function Category() {
         <CategoryButton
           onClick={() => {
             setCategory(null);
-            navigate('/');
+            navigate('/home');
           }}
         >
           <img src={DEFAULT_IMAGE} alt={`전체 선택 이미지`} />
@@ -31,7 +31,7 @@ export default function Category() {
             key={category.id}
             onClick={() => {
               setCategory(category);
-              navigate('/');
+              navigate('/home');
             }}
           >
             <img src={category.iconUrl} alt={`${category.name} 이미지`} />

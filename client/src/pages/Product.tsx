@@ -180,6 +180,7 @@ const ProductInfo = styled.p`
 `;
 
 const Content = styled.p`
+  white-space: pre-wrap;
   flex-grow: 1;
 `;
 
