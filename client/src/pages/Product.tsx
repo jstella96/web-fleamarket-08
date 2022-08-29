@@ -30,8 +30,6 @@ export default function Product() {
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-
   useEffect(() => {
     const initProduct = async () => {
       if (id === undefined) return;
