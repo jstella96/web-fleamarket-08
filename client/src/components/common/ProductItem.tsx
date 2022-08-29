@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from 'src/api';
-import { Heart, Message, MoreVertical } from 'src/assets/icons';
+import { Heart, Message } from 'src/assets/icons';
 import COLORS from 'src/constants/colors';
 import { DEFAULT_IMAGE } from 'src/constants/image';
 import { ProductStatus } from 'src/enum/status.enum';
@@ -11,17 +11,20 @@ import { Product } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import { getRegionName } from 'src/utils/region';
 import styled, { css } from 'styled-components/macro';
+import ProductMenuButton from '../product/ProductMenuButton';
 import FormattedPrice from './FormattedPrice';
 import LikeButton from './LikeButton';
 
 interface ProductItemProps {
   productItem: Product;
   isSeller: boolean;
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 export default function ProductItem({
   productItem,
   isSeller,
+  setProducts,
 }: ProductItemProps) {
   const [product, setProduct] = useState(productItem);
   const {
@@ -40,12 +43,17 @@ export default function ProductItem({
   const handleClickLikeButton = (productId: number) => {
     api.likeProduct(productId);
     setProduct((prev) => {
-      const nextLikeCount = likeCount + (isLiked ? 1 : -1);
+      const nextLikeCount = likeCount + (isLiked ? -1 : 1);
       return {
         ...prev,
         isLiked: !isLiked,
         likeCount: nextLikeCount,
       };
+    });
+  };
+  const deleteProduct = () => {
+    setProducts((prev) => {
+      return prev.filter((product) => product.id !== id);
     });
   };
   return (
@@ -63,7 +71,7 @@ export default function ProductItem({
           <Title>{title}</Title>
           <RightButton>
             {isSeller ? (
-              <MoreVertical />
+              <ProductMenuButton id={id} deleteProduct={deleteProduct} />
             ) : (
               <LikeButton
                 isLiked={isLiked}
@@ -147,11 +155,6 @@ const RightButton = styled.div`
   border: 0;
   background: 0;
   color: ${COLORS.grey1};
-
-  button {
-    display: flex;
-    padding: 0;
-  }
 `;
 
 const RegionAndDate = styled.p`

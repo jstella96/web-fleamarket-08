@@ -8,6 +8,7 @@ const SIZES = {
   chatProductInfo: '4.5625rem',
   productStatusWidth: '7.6rem',
   myPageNav: '2.6875rem',
+  dropDownWidth: 16 * 7.6,
 };
 
 export default SIZES;

@@ -21,6 +21,7 @@ export default function ProductItemList({ type }: ProductItemListProps) {
   const [hasScrollFinished, setHasScrollFinished] = useState(true);
   const primaryRegionCode = useRecoilValue(getPrimaryRegionCode);
   const user = useRecoilValue(userState);
+
   const getProducts = useCallback(async () => {
     const categoryId = type ? undefined : category?.id;
     const { data } = await api.getProducts(
@@ -51,6 +52,7 @@ export default function ProductItemList({ type }: ProductItemListProps) {
           key={product.id}
           productItem={product}
           isSeller={user?.id === product.author.id}
+          setProducts={setProducts}
         />
       ))}
       {hasScrollFinished ? (

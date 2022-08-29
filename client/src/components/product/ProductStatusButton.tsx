@@ -18,12 +18,27 @@ export default function ProductStatusButton({
 }: ProductStatusButtonProps) {
   const [showDropDownModal, setShowDropDownModal] = useState(false);
   const [nowStatus, setNowStatus] = useState(status);
+  const [top, setTop] = useState(0);
+  const [left, setLeft] = useState(0);
+
+  const handleClickMenuButton = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const clikedButton = (e.target as Element).closest('button');
+    if (!clikedButton) return;
+    const relativeTop =
+      clikedButton.getBoundingClientRect().top + clikedButton.clientHeight;
+    const relativeRight = clikedButton.getBoundingClientRect().right;
+    setTop(relativeTop);
+    setLeft(relativeRight - SIZES.dropDownWidth);
+  };
 
   return (
     <>
       <ProductStatusContainer
         showDropDownModal={showDropDownModal}
-        onClick={() => {
+        onClick={(e) => {
+          handleClickMenuButton(e);
           setShowDropDownModal(true);
         }}
       >
@@ -42,8 +57,8 @@ export default function ProductStatusButton({
             };
           })}
           close={() => setShowDropDownModal(false)}
-          left={16}
-          top={380}
+          left={left}
+          top={top}
           width={SIZES.productStatusWidth}
         ></DropDownModal>
       )}

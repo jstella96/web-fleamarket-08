@@ -1,7 +1,6 @@
 import COLORS from 'src/constants/colors';
 import styled from 'styled-components';
 import Modal from './Modal';
-
 interface ConfirmModalProps {
   message: string;
   close: () => void;

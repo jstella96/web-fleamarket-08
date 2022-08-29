@@ -2,12 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import api from 'src/api';
-import ConfirmModal from 'src/components/common/ConfirmModal';
 import FormattedPrice from 'src/components/common/FormattedPrice';
 import Layout from 'src/components/common/Layout';
 import LikeButton from 'src/components/common/LikeButton';
 import SwipeImage from 'src/components/common/SwipeImage';
-import ProductHeaderButton from 'src/components/product/ProductHeaderButton';
+import ProductMenuButton from 'src/components/product/ProductMenuButton';
 import ProductStateButton from 'src/components/product/ProductStatusButton';
 import COLORS from 'src/constants/colors';
 import { DEFAULT_IMAGE } from 'src/constants/image';
@@ -28,15 +27,17 @@ export default function Product() {
     () => user?.id === product?.author.id,
     [user, product]
   );
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   const navigate = useNavigate();
+
+  const location = useLocation();
+
   useEffect(() => {
     const initProduct = async () => {
       if (id === undefined) return;
       const { data } = await api.getProduct(Number(id));
       setProduct(data);
     };
-
     initProduct();
   }, [id]);
 
@@ -50,10 +51,7 @@ export default function Product() {
     <Layout
       rightButton={
         isSeller && (
-          <ProductHeaderButton
-            id={id}
-            deleteProduct={() => setShowDeleteConfirm(true)}
-          />
+          <ProductMenuButton id={+id!} deleteProduct={deleteProduct} />
         )
       }
       transparent={true}
@@ -123,17 +121,6 @@ export default function Product() {
             </ChatLink>
           </Footer>
         </Container>
-      )}
-      {showDeleteConfirm && (
-        <ConfirmModal
-          message="포스팅을 삭제하시겠습니까?"
-          close={() => {
-            setShowDeleteConfirm(false);
-          }}
-          onClickConfirmButton={() => {
-            deleteProduct();
-          }}
-        ></ConfirmModal>
       )}
     </Layout>
   );
