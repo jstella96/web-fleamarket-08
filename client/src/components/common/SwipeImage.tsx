@@ -55,7 +55,7 @@ const Image = styled.div<{
       rgba(0, 0, 0, 0) 87.36%,
       rgba(0, 0, 0, 0.24) 100%
     ),
-    url(${({ imageUrl }) => imageUrl});
+    url(${({ imageUrl }) => `"${imageUrl}"`});
   background-position: center;
   background-size: cover;
 `;
