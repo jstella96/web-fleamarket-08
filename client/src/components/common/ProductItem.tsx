@@ -51,10 +51,11 @@ export default function ProductItem({
       };
     });
   };
-  const deleteProduct = () => {
+  const deleteProduct = async () => {
     setProducts((prev) => {
       return prev.filter((product) => product.id !== id);
     });
+    await api.deleteProduct(id);
   };
   return (
     <Container to={`/product/${id}`}>
