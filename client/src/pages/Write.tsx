@@ -163,7 +163,7 @@ const InputsContainer = styled.div`
   p,
   textarea {
     ${flexRow}
-    padding: 1.5rem 0;
+    padding: 1.5rem  0.5rem;
     border: none;
     border-bottom: 1px solid ${COLORS.grey3};
     font-size: 1rem;

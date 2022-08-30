@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import api from 'src/api';
 import COLORS from 'src/constants/colors';
-import { getMyLocation } from 'src/utils/location';
 import { useUserRigionState } from 'src/hooks/useUserRegionState';
-import { Location, Region, UserRegion } from 'src/types';
+import { Region, UserRegion } from 'src/types';
 import styled, { css } from 'styled-components';
-import Modal from '../common/Modal';
 import Loading from '../common/Loading';
+import Modal from '../common/Modal';
 
 interface RegionInputModalProps {
   close: () => void;
@@ -48,9 +47,9 @@ export default function RegionInputModal({
     }
   };
 
-  const regionSerchCb = (location: Location) => {
-    setInputValue(location.name);
-  };
+  // const regionSerchCb = (location: Location) => {
+  //   setInputValue(location.name);
+  // };
 
   return (
     <Modal close={close}>
@@ -61,14 +60,14 @@ export default function RegionInputModal({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         ></Input>
-        <MyRegionSearchButton
+        {/* <MyRegionSearchButton
           onClick={() => {
             setIsLoding(true);
             getMyLocation(regionSerchCb);
           }}
         >
           현재 위치로 검색
-        </MyRegionSearchButton>
+        </MyRegionSearchButton> */}
         <SearchResult>
           {!isLoding && printResultText()}
           <Regions>
@@ -113,14 +112,14 @@ const Section = styled.section`
   border-radius: 0.6rem;
   justify-content: space-between;
 `;
-const MyRegionSearchButton = styled.button`
-  text-align: center;
-  padding-top: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  color: ${COLORS.primary1};
-  margin: 0.2rem;
-`;
+// const MyRegionSearchButton = styled.button`
+//   text-align: center;
+//   padding-top: 0.5rem;
+//   font-weight: 600;
+//   font-size: 1rem;
+//   color: ${COLORS.primary1};
+//   margin: 0.2rem;
+// `;
 const SearchResult = styled.main`
   padding: 0.25rem;
   height: 18rem;
