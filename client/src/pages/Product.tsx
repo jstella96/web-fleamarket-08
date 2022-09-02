@@ -6,8 +6,8 @@ import FormattedPrice from 'src/components/common/FormattedPrice';
 import Layout from 'src/components/common/Layout';
 import LikeButton from 'src/components/common/LikeButton';
 import SwipeImage from 'src/components/common/SwipeImage';
-import ProductMenuButton from 'src/components/product/ProductMenuButton';
-import ProductStateButton from 'src/components/product/ProductStatusButton';
+import ProductMenuDropdown from 'src/components/product/ProductMenuDropdown';
+import ProductStatusDropdown from 'src/components/product/ProductStatusDropdown';
 import COLORS from 'src/constants/colors';
 import { DEFAULT_IMAGE } from 'src/constants/image';
 import SIZES from 'src/constants/sizes';
@@ -49,7 +49,7 @@ export default function Product() {
     <Layout
       rightButton={
         isSeller && (
-          <ProductMenuButton id={+id!} deleteProduct={deleteProduct} />
+          <ProductMenuDropdown id={+id!} deleteProduct={deleteProduct} />
         )
       }
       transparent={true}
@@ -67,7 +67,7 @@ export default function Product() {
           </ImageContainer>
           <Main>
             {isSeller && (
-              <ProductStateButton status={product.status} id={product.id} />
+              <ProductStatusDropdown status={product.status} id={product.id} />
             )}
             <TitleContainer>
               <TitleText>

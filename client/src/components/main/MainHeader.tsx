@@ -1,24 +1,22 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { Category, MapPin, Menu, User } from 'src/assets/icons';
+import { Category, Menu, User } from 'src/assets/icons';
 
 import COLORS from 'src/constants/colors';
-import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { categoryState } from 'src/recoil/atoms/category';
 
 import { userState } from 'src/recoil/atoms/user';
 import { fixedTop, flexRow } from 'src/styles/common';
 import styled from 'styled-components/macro';
 import RegionSelectModal from '../region/RegionSelectModal';
+import RegionDropdown from 'src/components/main/RegionDropdown';
 
 export default function Header() {
   const [showRegionSelectModal, setShowRegionSelectModal] = useState(false);
   const user = useRecoilValue(userState);
   const category = useRecoilValue(categoryState);
-  let location = useLocation();
-
-  const { getPrimaryRegionName } = useUserRigionState();
+  const location = useLocation();
 
   return (
     <Container>
@@ -30,14 +28,9 @@ export default function Header() {
         )}
         <CategoryName>{category?.name}</CategoryName>
       </CategoryLink>
-
-      <Location
-        onClick={() => setShowRegionSelectModal(!showRegionSelectModal)}
-      >
-        <MapPin />
-        {getPrimaryRegionName()}
+      <Location>
+        <RegionDropdown />
       </Location>
-
       <RightPanel>
         <Link
           to={`${user ? '/profile' : '/login'}`}
@@ -81,20 +74,6 @@ const CategoryLink = styled(Link)`
   }
 `;
 
-const Location = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-
-  svg {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-`;
-
 const CategoryName = styled.span`
   font-size: 0.7rem;
   margin-left: 0.3rem;
@@ -103,4 +82,13 @@ const CategoryName = styled.span`
 const RightPanel = styled.div`
   display: flex;
   gap: 1rem;
+`;
+const Location = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 `;

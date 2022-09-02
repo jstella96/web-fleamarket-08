@@ -6,9 +6,10 @@ const SIZES = {
   writeFooter: '3.625rem',
   chatFooter: '4.125rem',
   chatProductInfo: '4.5625rem',
-  productStatusWidth: '7.6rem',
+  productStatusWidth: 16 * 7.6,
   myPageNav: '2.6875rem',
-  dropDownWidth: 16 * 7.6,
+  dropDownWidth: 16 * 8,
+  productMenuWidth: 16 * 6,
 };
 
 export default SIZES;

@@ -4,14 +4,15 @@ import api from 'src/api';
 import { ChevronRight, MapPin } from 'src/assets/icons';
 import Layout from 'src/components/common/Layout';
 import ImageUploader from 'src/components/common/ImageUploader';
-import useCategories from 'src/components/hooks/useCategories';
+import useCategories from 'src/hooks/useCategories';
 import CategoryModal from 'src/components/write/categoryModal';
 import COLORS from 'src/constants/colors';
 import SIZES from 'src/constants/sizes';
-import { useUserRigionState } from 'src/hooks/useUserRegionState';
 import { Category, ProductDetail } from 'src/types';
 import styled from 'styled-components/macro';
 import { fixedBottom, flexColumn, flexRow } from 'src/styles/common';
+import { useRecoilValue } from 'recoil';
+import { getPrimaryRegionName } from 'src/recoil/selectors/user.selector';
 
 const MAX_PRICE = 100000000;
 
@@ -24,8 +25,10 @@ export default function Write() {
   const navigate = useNavigate();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const { getPrimaryRegionName } = useUserRigionState();
-  const [region, setRegion] = useState(() => getPrimaryRegionName());
+
+  const primaryRegionName = useRecoilValue(getPrimaryRegionName)
+  const [region, setRegion] = useState(primaryRegionName);
+
   const { id } = useParams();
   useEffect(() => {
     const initProduct = async () => {

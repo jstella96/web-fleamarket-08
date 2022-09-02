@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import Layout from 'src/components/common/Layout';
-import useCategories from 'src/components/hooks/useCategories';
+import useCategories from 'src/hooks/useCategories';
 import { categoryState } from 'src/recoil/atoms/category';
 import styled from 'styled-components/macro';
 

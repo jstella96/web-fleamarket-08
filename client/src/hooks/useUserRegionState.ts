@@ -1,14 +1,14 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { userState } from 'src/recoil/atoms/user';
+import { getPrimaryRegionCode } from 'src/recoil/selectors/user.selector';
 import { Region } from 'src/types';
-import { getRegionName } from 'src/utils/region';
 
 export const useUserRigionState = () => {
   const [user, setUser] = useRecoilState(userState);
+  const primaryRegionCode = useRecoilValue(getPrimaryRegionCode)
 
   const changePrimaryRegion = async (regionCode: number) => {
-    const primaryRegionCode = getPrimaryRegionCode();
     if (regionCode === primaryRegionCode) return;
     await api.changeUserPrimaryRegion(regionCode);
     setNewUser();
@@ -22,7 +22,6 @@ export const useUserRigionState = () => {
     setNewUser();
   };
 
-  //다른곳에 가야할거 같다.
   const setNewUser = async () => {
     const { data: newUser } = await api.getUser();
     setUser(newUser);
@@ -32,29 +31,11 @@ export const useUserRigionState = () => {
     await api.setUserRegion(region.code);
     await setNewUser();
   };
-  //이게 selecter
-  const getPrimaryRegionCode = () => {
-    if (!user?.userRegions) return 0;
-    const primaryRegion = user?.userRegions.find(
-      (region) => region.isPrimary === true
-    );
-    return primaryRegion?.region.code || 0;
-  };
-
-  const getPrimaryRegionName = () => {
-    if (!user?.userRegions) return '로그인해주세요';
-    const primaryRegion = user?.userRegions.find(
-      (region) => region.isPrimary === true
-    );
-    return getRegionName(primaryRegion?.region.name) || '동네를 설정해주세요';
-  };
 
   return {
     changePrimaryRegion,
     setNewUser,
     deleteRegion,
     submitRegion,
-    getPrimaryRegionName,
-    getPrimaryRegionCode,
   };
 };

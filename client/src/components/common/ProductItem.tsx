@@ -11,7 +11,7 @@ import { Product } from 'src/types';
 import { getRelativeTime } from 'src/utils/date';
 import { getRegionName } from 'src/utils/region';
 import styled, { css } from 'styled-components/macro';
-import ProductMenuButton from '../product/ProductMenuButton';
+import ProductMenuDropdown from '../product/ProductMenuDropdown';
 import FormattedPrice from './FormattedPrice';
 import LikeButton from './LikeButton';
 
@@ -72,7 +72,7 @@ export default function ProductItem({
           <Title>{title}</Title>
           <RightButton>
             {isSeller ? (
-              <ProductMenuButton id={id} deleteProduct={deleteProduct} />
+              <ProductMenuDropdown id={id} deleteProduct={deleteProduct} />
             ) : (
               <LikeButton
                 isLiked={isLiked}

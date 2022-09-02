@@ -3,11 +3,12 @@ import { useRecoilValue } from 'recoil';
 import api from 'src/api';
 import { categoryState } from 'src/recoil/atoms/category';
 import { Product } from 'src/types';
-import ProductItem from './ProductItem';
-import useInfiniteScroll from '../hooks/useInfiniteScroll';
-import ProductSkeleton from './ProductSkeleton';
-import { getPrimaryRegionCode, userState } from 'src/recoil/atoms/user';
+import { userState } from 'src/recoil/atoms/user';
 import { PRODUCT_LIMIT } from 'src/constants/product';
+import { getPrimaryRegionCode } from 'src/recoil/selectors/user.selector';
+import useInfiniteScroll from 'src/hooks/useInfiniteScroll';
+import ProductSkeleton from './ProductSkeleton';
+import ProductItem from './ProductItem';
 
 interface ProductItemListProps {
   type?: 'like' | 'sale';
