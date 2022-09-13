@@ -20,7 +20,7 @@
 
 ### 메인 페이지 & 무한 스크롤, 스켈레톤 로딩
 
-<img height="600px" align=top src="https://user-images.githubusercontent.com/49304239/188263121-a02c162c-04df-475f-a1ed-93faf1a34426.png"/>
+<img height="600px" align=top src="https://user-images.githubusercontent.com/76844355/189949241-81d1f264-150f-4336-8d9e-27e4ae3d9746.png"/>
 
 <img height="600px" align=top src="https://user-images.githubusercontent.com/76844355/186744685-d2c56b85-6dd2-4c07-84db-ccb3edc0065d.gif"/>
 
